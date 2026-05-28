@@ -5,6 +5,8 @@ Interactive reduced-order model for circular, rectangular, and elliptical atomiz
 Live app: https://ferminfm.github.io/ideal-momentum-jet-explorer/  
 Source: https://github.com/ferminfm/ideal-momentum-jet-explorer
 
+Author: Fermín Franco-Medrano — Ensenada Campus, Autonomous University of Baja California / Institute of Mathematics for Industry, Kyushu University
+
 ## What This Is
 
 Ideal Momentum Jet Explorer is a browser-based scientific computing app for exploring a conservative locally homogeneous two-phase jet closure. It evaluates how prescribed nozzle geometry and area growth affect bulk velocity, composite density, dynamic pressure, and entrainment.
@@ -67,6 +69,15 @@ For `rho* < 1e-8`, the implementation uses the limiting behavior `vhat ~= 1`, `r
 - Normalized gas entrainment rate, `mhat_g(zeta)`.
 - Generalized entrainment coefficient, `K_A(zeta)`.
 - Rectangular or elliptical expanding control-volume geometry in 3D.
+- Axis-switching location when the two cross-stream dimensions become equal within the sampled range.
+
+## Interactive Features
+
+- Saved parameter URLs: the current geometry, density ratio, dimensions, half-angles, plot options, overlay selection, and 3D cross-section controls are encoded in the query string.
+- CSV export: sampled model states can be downloaded for reproducible figures and follow-up analysis.
+- Velocity overlays: the app includes overlay infrastructure and one disabled-by-default synthetic example curve. No measured/literature numeric dataset is bundled yet, so overlays must not be interpreted as validation unless a documented public dataset is added later.
+- Citation panel: copy references in plain text, BibTeX, LaTeX snippet, or Word/APA-style format.
+- 3D cross-section tools: inspect a selected downstream cross-section and highlight the computed axis-switching section when it exists.
 
 ## What It Does Not Compute
 
@@ -127,7 +138,7 @@ GitHub Pages sites are public. Keep private PDFs, unpublished manuscripts, crede
 
 ## Roadmap
 
-- Add saved parameter URLs for reproducible figures.
-- Add CSV export for sampled state variables.
+- Add documented public velocity-overlay datasets when permissible numerical data are available.
+- Add profile-resolved or phase-fraction validation datasets when public data are available.
+- Add optional bundle splitting for Plotly and Three.js to reduce initial JavaScript payload.
 - Add a concise derivation note for the density and entrainment branches.
-- Add comparison overlays for measured or literature velocity curves when public data are available.

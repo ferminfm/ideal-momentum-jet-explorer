@@ -8,6 +8,7 @@
 
 - GitHub repository: `https://github.com/ferminfm/ideal-momentum-jet-explorer`
 - GitHub Pages app: `https://ferminfm.github.io/ideal-momentum-jet-explorer/`
+- Maintainer affiliation: Fermín Franco-Medrano — Ensenada Campus, Autonomous University of Baja California / Institute of Mathematics for Industry, Kyushu University
 
 ## Local Commands
 
@@ -24,15 +25,25 @@
 - Remote: `origin` -> `https://github.com/ferminfm/ideal-momentum-jet-explorer.git`
 - GitHub Pages workflow: `.github/workflows/deploy.yml`
 - Vite project base: `/ideal-momentum-jet-explorer/`
-- Latest commit hash: see `git log --oneline -1` after the polish commit is created.
+- Latest commit hash: recorded after the feature pass commit and push.
 
 ## Validation Status
 
-- `npm run test`: passed, 1 test file and 5 tests.
+- `npm run test`: passed, 3 test files and 14 tests.
 - `npm run build`: passed with no TypeScript errors. Vite reported the expected large-bundle warning because Plotly and Three.js are bundled client-side.
 - `npm run lint`: passed.
 - `npm run smoke:visual`: passed on desktop and mobile; Plotly line output and Three.js canvas pixel checks both rendered.
-- Public placeholder scan: no matches for `OWNER`, `portfolio project`, `showcase project`, or `placeholder` in the requested public/source/doc paths.
+- Public wording scan: no matches for stale repository owner tokens or internal positioning phrases in the requested public/source/doc paths.
+
+## Feature Pass Summary
+
+- Added saved parameter URLs using query-string encoding for model, plot, overlay, and 3D cross-section state.
+- Added CSV export for sampled state variables.
+- Added velocity overlay infrastructure with a clearly labeled synthetic example and no measured-data validation claim.
+- Added a citation panel with copy buttons for plain text, BibTeX, LaTeX, and Word/APA-style references.
+- Added selected cross-section controls and computed axis-switching highlighting in the 3D viewer.
+- Replaced initial dimension text boxes with slider-first controls.
+- Updated affiliation text in the UI and metadata.
 
 ## Public-Facing Polish Summary
 
@@ -51,11 +62,13 @@
 - Plotly plots for normalized area, velocity, density, dynamic pressure, gas entrainment, and `K_A`.
 - Three.js control-volume viewer with translucent rectangular or elliptical frustum geometry.
 - GitHub Pages deployment through GitHub Actions.
+- Saved share URLs, CSV export, citation copying, velocity-overlay infrastructure, and 3D cross-section inspection.
 
 ## Known Limitations
 
 - Spreading half-angles are prescribed inputs; the model does not predict them.
 - Axis switching, vortex dynamics, breakup, turbulence, losses, and droplet-size distributions are outside the reduced-order model.
 - Composite density needs independent phase-fraction or concentration validation.
+- No measured/literature velocity overlay dataset is bundled yet; the current overlay option is synthetic and only demonstrates the plotting mechanism.
 - The initial JavaScript bundle is large because Plotly and Three.js are bundled client-side; code-splitting is a reasonable future optimization.
 - GitHub Pages is public; private manuscripts, PDFs, credentials, and non-public datasets must stay out of committed assets.

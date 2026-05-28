@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   generateJetSeries,
+  computeAxisSwitchingZeta,
   getEquivalentDiameter,
   getGeometryState,
   getInitialArea,
@@ -136,6 +137,66 @@ describe('ideal momentum jet model', () => {
       for (const state of series.states) {
         expect(Object.values(state).every(Number.isFinite)).toBe(true)
       }
+    }
+  })
+
+  it('computes axis-switching zeta for an AR=2 rectangular case', () => {
+    const params: JetParameters = {
+      ...baseRectangular,
+      thetaDeg: 9.61,
+      phiDeg: 5.75,
+      zetaMax: 50,
+      geometry: {
+        geometry: 'rectangular',
+        width: Math.sqrt(2),
+        height: 1 / Math.sqrt(2),
+      },
+    }
+
+    const zeta = computeAxisSwitchingZeta(params)
+    expect(zeta).not.toBeNull()
+    expect(zeta).toBeGreaterThan(0)
+    expect(zeta).toBeLessThan(params.zetaMax)
+
+    const state = getGeometryState(params, zeta ?? 0)
+    expectClose(state.primarySpan, state.secondarySpan, 1e-8)
+  })
+
+  it('returns null for symmetric square cases and switching outside the sampled range', () => {
+    expect(computeAxisSwitchingZeta(baseRectangular)).toBeNull()
+
+    const params: JetParameters = {
+      ...baseRectangular,
+      thetaDeg: 9.61,
+      phiDeg: 5.75,
+      zetaMax: 2,
+      geometry: {
+        geometry: 'rectangular',
+        width: Math.sqrt(2),
+        height: 1 / Math.sqrt(2),
+      },
+    }
+
+    expect(computeAxisSwitchingZeta(params)).toBeNull()
+  })
+
+  it('keeps model states finite at dimension slider extrema', () => {
+    const sliderExtremeCases: JetParameters[] = [
+      {
+        ...baseRectangular,
+        geometry: { geometry: 'rectangular', width: 0.25, height: 4 },
+      },
+      {
+        ...baseRectangular,
+        geometry: { geometry: 'elliptical', majorAxis: 4, minorAxis: 0.25 },
+      },
+    ]
+
+    for (const params of sliderExtremeCases) {
+      const series = generateJetSeries(params)
+      expect(series.states.every((state) => Object.values(state).every(Number.isFinite))).toBe(
+        true,
+      )
     }
   })
 })

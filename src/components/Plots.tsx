@@ -1,9 +1,18 @@
 import { useMemo, useState, type ComponentType } from 'react'
 import PlotModule from 'react-plotly.js'
+import {
+  VELOCITY_OVERLAYS,
+  VELOCITY_OVERLAY_NONE,
+  getVelocityOverlay,
+} from '../data/velocityOverlays'
 import type { JetSeries, JetState } from '../model/jetModel'
 
 interface PlotsProps {
   series: JetSeries
+  densityLogScale: boolean
+  overlayId: string
+  onDensityLogScaleChange: (value: boolean) => void
+  onOverlayChange: (overlayId: string) => void
 }
 
 interface PlotDefinition {
@@ -66,18 +75,24 @@ const Plot = (
   PlotModule
 ) as ComponentType<Record<string, unknown>>
 
-export function Plots({ series }: PlotsProps) {
+export function Plots({
+  series,
+  densityLogScale,
+  overlayId,
+  onDensityLogScaleChange,
+  onOverlayChange,
+}: PlotsProps) {
   const [activeId, setActiveId] = useState(PLOT_DEFINITIONS[0].id)
-  const [densityLogScale, setDensityLogScale] = useState(false)
   const activePlot =
     PLOT_DEFINITIONS.find((definition) => definition.id === activeId) ??
     PLOT_DEFINITIONS[0]
+  const selectedOverlay = getVelocityOverlay(overlayId)
 
   const plotData = useMemo(() => {
     const x = series.states.map((state) => state.axialZeta)
     const y = series.states.map(activePlot.getValue)
 
-    return [
+    const traces: Array<Record<string, unknown>> = [
       {
         x,
         y,
@@ -90,7 +105,28 @@ export function Plots({ series }: PlotsProps) {
         hovertemplate: 'zeta=%{x:.3f}<br>value=%{y:.5g}<extra></extra>',
       },
     ]
-  }, [activePlot, series.states])
+
+    if (activePlot.id === 'velocity' && selectedOverlay) {
+      traces.push({
+        x: selectedOverlay.points.map((point) => point.zeta),
+        y: selectedOverlay.points.map((point) => point.vhat),
+        type: 'scatter',
+        mode: 'markers',
+        name: selectedOverlay.label,
+        marker: {
+          color: selectedOverlay.publicData ? '#94424e' : '#b35a2a',
+          size: 9,
+          symbol: selectedOverlay.publicData ? 'circle' : 'diamond-open',
+          line: { width: 1.5 },
+        },
+        hovertemplate:
+          'zeta=%{x:.3f}<br>vhat=%{y:.5g}<br>' +
+          `${selectedOverlay.label}<br>${selectedOverlay.source}<extra></extra>`,
+      })
+    }
+
+    return traces
+  }, [activePlot, selectedOverlay, series.states])
 
   const yAxisType = activePlot.id === 'density' && densityLogScale ? 'log' : 'linear'
 
@@ -106,7 +142,7 @@ export function Plots({ series }: PlotsProps) {
             <input
               type="checkbox"
               checked={densityLogScale}
-              onChange={(event) => setDensityLogScale(event.target.checked)}
+              onChange={(event) => onDensityLogScaleChange(event.target.checked)}
             />
             Log density
           </label>
@@ -124,6 +160,28 @@ export function Plots({ series }: PlotsProps) {
             {definition.label}
           </button>
         ))}
+      </div>
+
+      <div className="overlay-controls">
+        <label className="field">
+          <span>Velocity overlay</span>
+          <select
+            value={overlayId}
+            onChange={(event) => onOverlayChange(event.target.value)}
+          >
+            <option value={VELOCITY_OVERLAY_NONE}>None</option>
+            {VELOCITY_OVERLAYS.map((overlay) => (
+              <option key={overlay.id} value={overlay.id}>
+                {overlay.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <p className="helper-text">
+          {selectedOverlay
+            ? selectedOverlay.notes
+            : 'No public measured velocity dataset is bundled yet. Overlays are optional comparison aids and may test only reduced model branches.'}
+        </p>
       </div>
 
       <Plot

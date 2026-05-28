@@ -6,6 +6,7 @@ This project is a static Vite app. GitHub Pages can serve the built files direct
 
 - GitHub repository: https://github.com/ferminfm/ideal-momentum-jet-explorer
 - GitHub Pages app: https://ferminfm.github.io/ideal-momentum-jet-explorer/
+- Maintainer affiliation: Fermín Franco-Medrano — Ensenada Campus, Autonomous University of Baja California / Institute of Mathematics for Industry, Kyushu University
 
 ## Local Checks
 

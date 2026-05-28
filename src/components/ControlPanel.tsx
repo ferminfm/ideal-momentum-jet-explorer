@@ -5,7 +5,8 @@ import { formatNumber, formatScientific } from '../utils/format'
 
 interface ControlPanelProps {
   params: JetParameters
-  onChange: (params: JetParameters) => void
+  selectedPresetId: string
+  onChange: (params: JetParameters, presetId?: string) => void
 }
 
 function updateGeometry(params: JetParameters, geometry: 'rectangular' | 'elliptical'): JetParameters {
@@ -42,11 +43,11 @@ function updateGeometry(params: JetParameters, geometry: 'rectangular' | 'ellipt
   }
 }
 
-function coercePositive(value: number, fallback: number): number {
-  return Number.isFinite(value) && value > 0 ? value : fallback
+function clampDimension(value: number): number {
+  return Math.min(4, Math.max(0.25, value))
 }
 
-export function ControlPanel({ params, onChange }: ControlPanelProps) {
+export function ControlPanel({ params, selectedPresetId, onChange }: ControlPanelProps) {
   const densityLog = Math.log10(params.densityRatio)
   const initialArea = getInitialArea(params.geometry)
   const equivalentDiameter = getEquivalentDiameter(params.geometry)
@@ -60,7 +61,8 @@ export function ControlPanel({ params, onChange }: ControlPanelProps) {
   const ellipticalMinorAxis =
     params.geometry.geometry === 'elliptical' ? params.geometry.minorAxis : 1
 
-  const setParams = (next: JetParameters) => onChange(cloneParams(next))
+  const setParams = (next: JetParameters, presetId?: string) =>
+    onChange(cloneParams(next), presetId)
 
   return (
     <section className="panel control-panel" aria-labelledby="controls-title">
@@ -115,28 +117,31 @@ export function ControlPanel({ params, onChange }: ControlPanelProps) {
             <label className="field">
               <span>B0 width</span>
               <input
-                type="number"
-                min="0.05"
-                step="0.05"
+                type="range"
+                min="0.25"
+                max="4"
+                step="0.01"
                 value={rectangularWidth}
                 onChange={(event) =>
                   setParams({
                     ...params,
                     geometry: {
                       geometry: 'rectangular',
-                      width: coercePositive(Number(event.target.value), rectangularWidth),
+                      width: clampDimension(Number(event.target.value)),
                       height: rectangularHeight,
                     },
                   })
                 }
               />
+              <output>{formatNumber(rectangularWidth, 2)}</output>
             </label>
             <label className="field">
               <span>H0 height</span>
               <input
-                type="number"
-                min="0.05"
-                step="0.05"
+                type="range"
+                min="0.25"
+                max="4"
+                step="0.01"
                 value={rectangularHeight}
                 onChange={(event) =>
                   setParams({
@@ -144,11 +149,12 @@ export function ControlPanel({ params, onChange }: ControlPanelProps) {
                     geometry: {
                       geometry: 'rectangular',
                       width: rectangularWidth,
-                      height: coercePositive(Number(event.target.value), rectangularHeight),
+                      height: clampDimension(Number(event.target.value)),
                     },
                   })
                 }
               />
+              <output>{formatNumber(rectangularHeight, 2)}</output>
             </label>
           </>
         ) : (
@@ -156,31 +162,31 @@ export function ControlPanel({ params, onChange }: ControlPanelProps) {
             <label className="field">
               <span>a0 full major axis</span>
               <input
-                type="number"
-                min="0.05"
-                step="0.05"
+                type="range"
+                min="0.25"
+                max="4"
+                step="0.01"
                 value={ellipticalMajorAxis}
                 onChange={(event) =>
                   setParams({
                     ...params,
                     geometry: {
                       geometry: 'elliptical',
-                      majorAxis: coercePositive(
-                        Number(event.target.value),
-                        ellipticalMajorAxis,
-                      ),
+                      majorAxis: clampDimension(Number(event.target.value)),
                       minorAxis: ellipticalMinorAxis,
                     },
                   })
                 }
               />
+              <output>{formatNumber(ellipticalMajorAxis, 2)}</output>
             </label>
             <label className="field">
               <span>b0 full minor axis</span>
               <input
-                type="number"
-                min="0.05"
-                step="0.05"
+                type="range"
+                min="0.25"
+                max="4"
+                step="0.01"
                 value={ellipticalMinorAxis}
                 onChange={(event) =>
                   setParams({
@@ -188,14 +194,12 @@ export function ControlPanel({ params, onChange }: ControlPanelProps) {
                     geometry: {
                       geometry: 'elliptical',
                       majorAxis: ellipticalMajorAxis,
-                      minorAxis: coercePositive(
-                        Number(event.target.value),
-                        ellipticalMinorAxis,
-                      ),
+                      minorAxis: clampDimension(Number(event.target.value)),
                     },
                   })
                 }
               />
+              <output>{formatNumber(ellipticalMinorAxis, 2)}</output>
             </label>
           </>
         )}
@@ -290,8 +294,9 @@ export function ControlPanel({ params, onChange }: ControlPanelProps) {
             <button
               key={preset.id}
               type="button"
+              className={selectedPresetId === preset.id ? 'active' : ''}
               title={preset.description}
-              onClick={() => setParams(preset.params)}
+              onClick={() => setParams(preset.params, preset.id)}
             >
               {preset.name}
             </button>

@@ -223,3 +223,40 @@ export function getAspectRatio(geometry: GeometryConfig): number {
 
   return geometry.majorAxis / geometry.minorAxis
 }
+
+export function computeAxisSwitchingZeta(params: JetParameters): number | null {
+  validateParameters(params)
+
+  const equivalentDiameter = getEquivalentDiameter(params.geometry)
+  const theta = degreesToRadians(params.thetaDeg)
+  const phi = degreesToRadians(params.phiDeg)
+  const tolerance = 1e-12
+  let dimensionOne0: number
+  let dimensionTwo0: number
+  let dimensionOneSlope: number
+  let dimensionTwoSlope: number
+
+  if (params.geometry.geometry === 'rectangular') {
+    dimensionOne0 = params.geometry.width
+    dimensionTwo0 = params.geometry.height
+    dimensionOneSlope = 2 * equivalentDiameter * Math.tan(phi)
+    dimensionTwoSlope = 2 * equivalentDiameter * Math.tan(theta)
+  } else {
+    dimensionOne0 = params.geometry.majorAxis
+    dimensionTwo0 = params.geometry.minorAxis
+    dimensionOneSlope = 2 * equivalentDiameter * Math.tan(theta)
+    dimensionTwoSlope = 2 * equivalentDiameter * Math.tan(phi)
+  }
+
+  const denominator = dimensionOneSlope - dimensionTwoSlope
+  if (Math.abs(denominator) < tolerance) {
+    return null
+  }
+
+  const zeta = (dimensionTwo0 - dimensionOne0) / denominator
+  if (!Number.isFinite(zeta) || zeta <= tolerance || zeta > params.zetaMax) {
+    return null
+  }
+
+  return zeta
+}

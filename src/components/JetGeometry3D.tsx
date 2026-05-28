@@ -2,11 +2,22 @@ import { Canvas } from '@react-three/fiber'
 import { Line, OrbitControls } from '@react-three/drei'
 import { useMemo } from 'react'
 import * as THREE from 'three'
-import type { JetSeries, JetState } from '../model/jetModel'
+import {
+  computeAxisSwitchingZeta,
+  getJetState,
+  type JetSeries,
+  type JetState,
+} from '../model/jetModel'
 import { formatDegrees, formatNumber } from '../utils/format'
 
 interface JetGeometry3DProps {
   series: JetSeries
+  crossSectionZeta: number
+  showSelectedCrossSection: boolean
+  showAxisSwitchingSection: boolean
+  onCrossSectionZetaChange: (zeta: number) => void
+  onShowSelectedCrossSectionChange: (value: boolean) => void
+  onShowAxisSwitchingSectionChange: (value: boolean) => void
 }
 
 function sampleStates(states: JetState[], count: number): JetState[] {
@@ -149,7 +160,47 @@ function createDropletGeometry(series: JetSeries, scale: number) {
   return geometry
 }
 
-function JetMesh({ series }: JetGeometry3DProps) {
+function createCrossSectionPoints(state: JetState, scale: number, segments: number) {
+  const z = state.axialZ * scale
+
+  if (segments === 4) {
+    const halfWidth = (state.primarySpan * scale) / 2
+    const halfHeight = (state.secondarySpan * scale) / 2
+
+    return [
+      [-halfWidth, -halfHeight, z],
+      [halfWidth, -halfHeight, z],
+      [halfWidth, halfHeight, z],
+      [-halfWidth, halfHeight, z],
+      [-halfWidth, -halfHeight, z],
+    ] as Array<[number, number, number]>
+  }
+
+  return Array.from({ length: segments + 1 }, (_, index) => {
+    const angle = (index / segments) * Math.PI * 2
+    return [
+      Math.cos(angle) * (state.primarySpan * scale) / 2,
+      Math.sin(angle) * (state.secondarySpan * scale) / 2,
+      z,
+    ] as [number, number, number]
+  })
+}
+
+interface JetMeshProps {
+  series: JetSeries
+  crossSectionZeta: number
+  showSelectedCrossSection: boolean
+  showAxisSwitchingSection: boolean
+  axisSwitchingZeta: number | null
+}
+
+function JetMesh({
+  series,
+  crossSectionZeta,
+  showSelectedCrossSection,
+  showAxisSwitchingSection,
+  axisSwitchingZeta,
+}: JetMeshProps) {
   const sampledStates = useMemo(() => sampleStates(series.states, 36), [series.states])
   const scale = useMemo(() => getSceneScale(series.states), [series.states])
   const surfaceGeometry = useMemo(() => {
@@ -166,6 +217,21 @@ function JetMesh({ series }: JetGeometry3DProps) {
   const terminal = series.states[series.states.length - 1]
   const axisEnd = terminal.axialZ * scale + 0.6
   const inlet = series.states[0]
+  const crossSectionSegments = series.params.geometry.geometry === 'rectangular' ? 4 : 96
+  const selectedState = getJetState(series.params, crossSectionZeta)
+  const selectedIsSwitching =
+    axisSwitchingZeta !== null && Math.abs(axisSwitchingZeta - crossSectionZeta) < 0.05
+  const selectedCrossSectionPoints = createCrossSectionPoints(
+    selectedState,
+    scale,
+    crossSectionSegments,
+  )
+  const switchingState =
+    axisSwitchingZeta === null ? null : getJetState(series.params, axisSwitchingZeta)
+  const switchingCrossSectionPoints =
+    switchingState === null
+      ? null
+      : createCrossSectionPoints(switchingState, scale, crossSectionSegments)
 
   return (
     <>
@@ -224,17 +290,109 @@ function JetMesh({ series }: JetGeometry3DProps) {
         color="#1d2a35"
         lineWidth={1}
       />
-      <OrbitControls makeDefault enableDamping dampingFactor={0.08} />
+      {showSelectedCrossSection ? (
+        <Line
+          points={selectedCrossSectionPoints}
+          color={selectedIsSwitching ? '#b35a2a' : '#174b66'}
+          lineWidth={3}
+        />
+      ) : null}
+      {showAxisSwitchingSection && switchingCrossSectionPoints ? (
+        <Line points={switchingCrossSectionPoints} color="#c25732" lineWidth={4} />
+      ) : null}
+      <OrbitControls
+        makeDefault
+        enableDamping
+        dampingFactor={0.08}
+        enablePan
+        enableZoom
+        enableRotate
+      />
     </>
   )
 }
 
-export function JetGeometry3D({ series }: JetGeometry3DProps) {
+export function JetGeometry3D({
+  series,
+  crossSectionZeta,
+  showSelectedCrossSection,
+  showAxisSwitchingSection,
+  onCrossSectionZetaChange,
+  onShowSelectedCrossSectionChange,
+  onShowAxisSwitchingSectionChange,
+}: JetGeometry3DProps) {
+  const axisSwitchingZeta = computeAxisSwitchingZeta(series.params)
+  const selectedState = getJetState(series.params, crossSectionZeta)
+  const canJumpToAxisSwitching = axisSwitchingZeta !== null
+
   return (
     <section className="panel geometry-panel" aria-labelledby="geometry-title">
       <div className="section-heading">
         <p className="eyebrow">3D geometry</p>
         <h2 id="geometry-title">Expanding control volume</h2>
+      </div>
+      <div className="geometry-controls">
+        <label className="field">
+          <span>Cross-section zeta</span>
+          <input
+            type="range"
+            min="0"
+            max={series.params.zetaMax}
+            step="0.05"
+            value={crossSectionZeta}
+            onChange={(event) => onCrossSectionZetaChange(Number(event.target.value))}
+          />
+          <output>{formatNumber(crossSectionZeta, 2)}</output>
+        </label>
+        <label className="toggle-control">
+          <input
+            type="checkbox"
+            checked={showSelectedCrossSection}
+            onChange={(event) => onShowSelectedCrossSectionChange(event.target.checked)}
+          />
+          Show selected cross-section
+        </label>
+        <label className="toggle-control">
+          <input
+            type="checkbox"
+            checked={showAxisSwitchingSection}
+            onChange={(event) => onShowAxisSwitchingSectionChange(event.target.checked)}
+          />
+          Highlight axis-switching section
+        </label>
+        <button
+          type="button"
+          className="secondary-action"
+          disabled={!canJumpToAxisSwitching}
+          onClick={() => {
+            if (axisSwitchingZeta !== null) {
+              onCrossSectionZetaChange(axisSwitchingZeta)
+            }
+          }}
+        >
+          Jump to axis switching
+        </button>
+      </div>
+      <div className="cross-section-readout">
+        <div>
+          <span>Selected dimensions</span>
+          <strong>
+            {formatNumber(selectedState.primarySpan, 3)} x{' '}
+            {formatNumber(selectedState.secondarySpan, 3)}
+          </strong>
+        </div>
+        <div>
+          <span>Ahat at selected zeta</span>
+          <strong>{formatNumber(selectedState.normalizedArea, 3)}</strong>
+        </div>
+        <div>
+          <span>Axis switching</span>
+          <strong>
+            {axisSwitchingZeta === null
+              ? 'none in range'
+              : `zeta ${formatNumber(axisSwitchingZeta, 2)}`}
+          </strong>
+        </div>
       </div>
       <div className="viewer-shell">
         <Canvas
@@ -243,11 +401,18 @@ export function JetGeometry3D({ series }: JetGeometry3DProps) {
           gl={{ antialias: true, preserveDrawingBuffer: true }}
         >
           <color attach="background" args={['#f8fbfd']} />
-          <JetMesh series={series} />
+          <JetMesh
+            series={series}
+            crossSectionZeta={crossSectionZeta}
+            showSelectedCrossSection={showSelectedCrossSection}
+            showAxisSwitchingSection={showAxisSwitchingSection}
+            axisSwitchingZeta={axisSwitchingZeta}
+          />
         </Canvas>
         <div className="viewer-overlay" aria-hidden="true">
           <span>z-axis</span>
           <span>A(z) surface</span>
+          <span>Drag to rotate · scroll to zoom · right-drag/shift-drag to pan</span>
           <span>
             theta {formatDegrees(series.params.thetaDeg)} / phi{' '}
             {formatDegrees(series.params.phiDeg)}

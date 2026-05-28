@@ -2,6 +2,8 @@ import type { ReactNode } from 'react'
 
 const GITHUB_URL = 'https://github.com/ferminfm/ideal-momentum-jet-explorer'
 const MODEL_NOTES_URL = `${GITHUB_URL}#scientific-model`
+const AUTHOR_AFFILIATION =
+  'Fermín Franco-Medrano — Ensenada Campus, Autonomous University of Baja California / Institute of Mathematics for Industry, Kyushu University'
 
 interface LayoutProps {
   children: ReactNode
@@ -23,12 +25,7 @@ export function Layout({ children }: LayoutProps) {
             density, dynamic pressure, and entrainment in a conservative locally homogeneous
             two-phase jet model.
           </p>
-          <p className="author-line">
-            Fermín Franco-Medrano
-            <span>
-              Institute of Mathematics for Industry, Kyushu University / Faculty of Science, UABC
-            </span>
-          </p>
+          <p className="author-line">{AUTHOR_AFFILIATION}</p>
         </div>
         <div className="header-actions" aria-label="Project links">
           <a className="repo-link" href={GITHUB_URL} target="_blank" rel="noreferrer">
