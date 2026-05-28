@@ -118,3 +118,5 @@ The GitHub Pages app responded with HTTP 200 at `https://ferminfm.github.io/idea
 - Added dashed/dotted horizontal reference traces and a compact readout on the `K_A` plot.
 - Added tests for near-field equality at `zeta=0`, symmetric far-field behavior, AR=2 directional rates, zero/one-direction growth, slider extrema, and reference trace preparation.
 - Validation before commit: `npm run test`, `npm run build`, `npm run lint`, `npm run smoke:visual`, and a targeted local `K_A` interaction smoke passed.
+- Feature commit: `15c934134903699201940537d9c40df3b74389c2`.
+- Deployment: pushed to `origin/main`; GitHub Actions run `26600532972` completed successfully. The live Pages app returned HTTP 200 and passed visual plus `K_A` interaction smoke checks.

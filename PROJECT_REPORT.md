@@ -25,8 +25,8 @@
 - Remote: `origin` -> `https://github.com/ferminfm/ideal-momentum-jet-explorer.git`
 - GitHub Pages workflow: `.github/workflows/deploy.yml`
 - Vite project base: `/ideal-momentum-jet-explorer/`
-- Latest deployed feature commit: `6eab8af61fbd17bdb4b538f0f1e8601c7346abe2`
-- Latest verified deployment run: GitHub Actions run `26599473219`, completed successfully.
+- Latest deployed feature commit: `15c934134903699201940537d9c40df3b74389c2`
+- Latest verified deployment run: GitHub Actions run `26600532972`, completed successfully.
 - Live Pages check: `curl -I https://ferminfm.github.io/ideal-momentum-jet-explorer/` returned HTTP 200.
 
 ## Validation Status
@@ -37,6 +37,7 @@
 - `npm run smoke:visual`: passed on desktop and mobile; Plotly line output and Three.js canvas pixel checks both rendered.
 - Live interaction smoke: passed for add saved case, change geometry, hide/show saved case, settings tooltip, and remove saved case.
 - Local `K_A` reference interaction smoke: passed for reference lines, slider update to zero growth, and saved comparison overlay coexistence.
+- Live `K_A` reference interaction smoke: passed for reference lines, slider update to zero growth, and saved comparison overlay coexistence.
 - Public wording scan: no matches for stale repository owner tokens or internal positioning phrases in the requested public/source/doc paths.
 
 ## Feature Pass Summary
