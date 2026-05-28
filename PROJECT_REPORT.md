@@ -25,16 +25,17 @@
 - Remote: `origin` -> `https://github.com/ferminfm/ideal-momentum-jet-explorer.git`
 - GitHub Pages workflow: `.github/workflows/deploy.yml`
 - Vite project base: `/ideal-momentum-jet-explorer/`
-- Latest deployed feature commit: `642130111e519ddaa9d9032ca02684e551847af8`
-- Latest verified deployment run: GitHub Actions run `26601438813`, completed successfully.
+- Latest deployed feature commit: `fdacbc3f7bbef1c3a19ed22cdd08e2ca6787bf3f`
+- Latest verified deployment run: GitHub Actions run `26602572873`, completed successfully.
 - Live Pages check: `curl -I https://ferminfm.github.io/ideal-momentum-jet-explorer/` returned HTTP 200.
 
 ## Validation Status
 
-- `npm run test`: passed, 7 test files and 35 tests after adding comparison-case, plot-trace, URL, CSV, language-state, math formatter, entrainment-coefficient reference, and traveling-element helper coverage.
+- `npm run test`: passed, 9 test files and 37 tests after adding comparison-case, plot-trace, URL, CSV, language-state, math formatter, entrainment-coefficient reference, traveling-element helper, equation-panel, and symbols-glossary coverage.
 - `npm run build`: passed with no TypeScript errors. Vite reported the expected large-bundle warning because Plotly and Three.js are bundled client-side.
 - `npm run lint`: passed.
 - `npm run smoke:visual`: passed on desktop and mobile; Plotly line output and Three.js canvas pixel checks both rendered.
+- Live `npm run smoke:visual` with `SMOKE_URL=https://ferminfm.github.io/ideal-momentum-jet-explorer/`: passed on desktop and mobile.
 - Live interaction smoke: passed for add saved case, change geometry, hide/show saved case, settings tooltip, and remove saved case.
 - Local `K_A` reference interaction smoke: passed for reference lines, slider update to zero growth, and saved comparison overlay coexistence.
 - Live `K_A` reference interaction smoke: passed for reference lines, slider update to zero growth, and saved comparison overlay coexistence.
@@ -64,6 +65,17 @@
 - Replaced code-style variable labels in the public UI with mathematical rendering for hats, Greek symbols, subscripts, and equation labels.
 - Added a lightweight local math-label component and plain-text formatter for Plotly axis and hover labels.
 - Kept the app dependency set unchanged; no CDN or server-side math rendering is required.
+
+## Equation Rendering And Symbols Glossary Summary
+
+- Starting commit for this pass: `2cf86c814be794e519d5c357d460c7f1b32e2024`.
+- Feature commit for this pass: `fdacbc3f7bbef1c3a19ed22cdd08e2ca6787bf3f`.
+- Added direct KaTeX rendering for static equations and symbols.
+- Removed the fragile CSS-positioned hat and dot overlay from the visible math-token renderer.
+- Increased display-equation font sizing and added overflow-safe KaTeX styling for narrow screens.
+- Added a compact multilingual symbols glossary covering `zeta`, `De`, `rho*`, normalized state variables, nozzle dimensions, spreading angles, `A0`, and `A(z)`.
+- Added active plot-variable descriptions and concise parameter tooltip definitions.
+- Added component tests for the equation panel and symbols glossary.
 
 ## Control Range Updates
 

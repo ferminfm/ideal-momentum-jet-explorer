@@ -131,3 +131,19 @@ The GitHub Pages app responded with HTTP 200 at `https://ferminfm.github.io/idea
 - Validation before commit: `npm run test`, `npm run build`, `npm run lint`, `npm run smoke:visual`, and a targeted local traveling-element interaction smoke passed.
 - Feature commit: `642130111e519ddaa9d9032ca02684e551847af8`.
 - Deployment: pushed to `origin/main`; GitHub Actions run `26601438813` completed successfully. The live Pages app returned HTTP 200 and passed visual plus traveling-element interaction smoke checks.
+
+## 2026-05-29 Equation Rendering And Symbols Glossary Pass
+
+- Start time: `2026-05-29T06:13:40+09:00`.
+- Starting commit: `2cf86c814be794e519d5c357d460c7f1b32e2024`.
+- Feature commit: `fdacbc3f7bbef1c3a19ed22cdd08e2ca6787bf3f`.
+- Branch: `main`.
+- Files changed: `README.md`, `package.json`, `package-lock.json`, `src/App.tsx`, `src/main.tsx`, `src/styles.css`, `src/i18n/translations.ts`, `src/components/ControlPanel.tsx`, `src/components/EquationPanel.tsx`, `src/components/MathFormula.tsx`, `src/components/MathText.tsx`, `src/components/Plots.tsx`, `src/components/SymbolsGlossary.tsx`, `src/components/EquationPanel.test.tsx`, and `src/components/SymbolsGlossary.test.tsx`.
+- Added direct KaTeX rendering for static equation and symbol strings, replacing the previous CSS-positioned hat overlay used by `MathText`.
+- Increased display-equation sizing and added overflow-safe KaTeX CSS for narrow screens.
+- Added a compact multilingual symbols glossary below the equation panel.
+- Added active plot-variable descriptions and concise parameter tooltip definitions.
+- Validation: `npm run test` passed with 9 test files and 37 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile.
+- Live deployment: feature commit pushed to `origin/main`; GitHub Actions run `26602572873` completed successfully; `curl -I https://ferminfm.github.io/ideal-momentum-jet-explorer/` returned HTTP 200; live `SMOKE_URL=https://ferminfm.github.io/ideal-momentum-jet-explorer/ npm run smoke:visual` passed.
+- Known warning: Vite/browser smoke still reports the existing `THREE.Clock` deprecation warning from the 3D stack; no MathJax/KaTeX hat-rendering warnings remained after switching to direct KaTeX rendering.
+- Remaining TODO: consider future bundle splitting for Plotly, Three.js, and KaTeX assets if initial load size becomes a priority.
