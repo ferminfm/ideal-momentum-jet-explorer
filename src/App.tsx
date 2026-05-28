@@ -9,6 +9,7 @@ import { JetGeometry3D } from './components/JetGeometry3D'
 import { Layout } from './components/Layout'
 import { MathText } from './components/MathText'
 import { Plots } from './components/Plots'
+import { SymbolsGlossary } from './components/SymbolsGlossary'
 import { TRANSLATIONS, type Language, type UiText } from './i18n/translations'
 import {
   MAX_COMPARISON_CASES,
@@ -188,6 +189,7 @@ function App() {
             onDownloadCsv={() => downloadJetCsv(series, appState.comparisonCases)}
           />
           <EquationPanel text={text} />
+          <SymbolsGlossary text={text} />
         </aside>
         <section className="main-rail">
           <TerminalStateSummary series={series} text={text} />

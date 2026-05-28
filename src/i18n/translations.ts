@@ -57,6 +57,17 @@ const ENGLISH_TEXT = {
     phi: 'phi half-angle',
     zetaMax: 'zeta max = z / De',
     samplePoints: 'Sample points',
+    definitions: {
+      densityRatio: 'Ambient-to-liquid density ratio rho* = rho_g / rho_l.',
+      dimensions:
+        'Initial nozzle dimensions in normalized units; rectangular uses B0,H0 and elliptical uses full axes a0,b0.',
+      theta:
+        'Prescribed directional spreading half-angle in degrees for H or the elliptical major-axis direction.',
+      phi:
+        'Prescribed directional spreading half-angle in degrees for B or the elliptical minor-axis direction.',
+      zetaMax: 'Maximum normalized downstream distance z / De shown in plots and 3D view.',
+      samplePoints: 'Number of axial samples used for curves, exports, and hover values.',
+    },
     derivedGeometryAria: 'Derived geometry values',
     presets: 'Presets',
     presetsCopy: {
@@ -131,6 +142,70 @@ const ENGLISH_TEXT = {
     coefficientReferences:
       'On the K_A plot, dashed and dotted horizontal lines show K_A(0) and the far-field asymptote K_A(∞); for positive two-direction area growth, K_A(∞)=sqrt(lambda_1 lambda_2).',
   },
+  symbols: {
+    eyebrow: 'Notation',
+    title: 'Symbols glossary',
+    note:
+      'State variables are bulk/top-hat quantities; spreading half-angles are prescribed inputs.',
+    entries: {
+      zeta: {
+        symbol: String.raw`\zeta=z/D_e`,
+        meaning: 'normalized axial distance',
+      },
+      equivalentDiameter: {
+        symbol: String.raw`D_e=(4A_0/\pi)^{1/2}`,
+        meaning: 'equivalent diameter based on nozzle exit area',
+      },
+      densityRatio: {
+        symbol: String.raw`\rho^\ast=\rho_g/\rho_l`,
+        meaning: 'ambient-to-liquid density ratio',
+      },
+      area: {
+        symbol: String.raw`\widehat{A}=A/A_0`,
+        meaning: 'normalized cross-sectional area',
+      },
+      velocity: {
+        symbol: String.raw`\widehat{v}=v/v_0`,
+        meaning: 'normalized bulk velocity',
+      },
+      density: {
+        symbol: String.raw`\widehat{\rho}=\rho/\rho_l`,
+        meaning: 'normalized composite density',
+      },
+      pressure: {
+        symbol: String.raw`\widehat{p}=p/p_0`,
+        meaning: 'normalized dynamic-pressure proxy',
+      },
+      gasEntrainment: {
+        symbol: String.raw`\widehat{\dot m}_g`,
+        meaning: 'normalized entrained gas mass rate',
+      },
+      coefficient: {
+        symbol: String.raw`K_A`,
+        meaning: 'generalized entrainment coefficient',
+      },
+      rectangularDimensions: {
+        symbol: String.raw`B_0,H_0`,
+        meaning: 'initial rectangular width and height',
+      },
+      ellipticalDimensions: {
+        symbol: String.raw`a_0,b_0`,
+        meaning: 'initial full elliptical major and minor axes',
+      },
+      angles: {
+        symbol: String.raw`\theta,\phi`,
+        meaning: 'prescribed spreading half-angles',
+      },
+      initialArea: {
+        symbol: String.raw`A_0`,
+        meaning: 'nozzle exit area',
+      },
+      areaHistory: {
+        symbol: String.raw`A(z)`,
+        meaning: 'prescribed downstream area history',
+      },
+    },
+  },
   plots: {
     eyebrow: 'Interactive plots',
     title: 'State variables along zeta',
@@ -152,14 +227,41 @@ const ENGLISH_TEXT = {
         'Dashed and dotted lines show the near-field value and far-field asymptote for the current settings.',
     },
     definitions: {
-      area: { label: 'Ahat', yTitle: 'Normalized area, Ahat' },
-      velocity: { label: 'vhat', yTitle: 'Bulk velocity, vhat' },
-      density: { label: 'rhohat', yTitle: 'Composite density, rhohat' },
-      pressure: { label: 'phat', yTitle: 'Dynamic pressure, phat' },
-      entrainment: { label: 'mhat_g', yTitle: 'Gas entrainment rate, mhat_g' },
+      area: {
+        label: 'Ahat',
+        symbol: String.raw`\widehat{A}`,
+        yTitle: 'Normalized area, Ahat',
+        description: 'normalized area growth, A/A0',
+      },
+      velocity: {
+        label: 'vhat',
+        symbol: String.raw`\widehat{v}`,
+        yTitle: 'Bulk velocity, vhat',
+        description: 'bulk velocity normalized by nozzle-exit velocity',
+      },
+      density: {
+        label: 'rhohat',
+        symbol: String.raw`\widehat{\rho}`,
+        yTitle: 'Composite density, rhohat',
+        description: 'composite density normalized by the liquid density',
+      },
+      pressure: {
+        label: 'phat',
+        symbol: String.raw`\widehat{p}`,
+        yTitle: 'Dynamic pressure, phat',
+        description: 'dynamic-pressure proxy, 1/Ahat',
+      },
+      entrainment: {
+        label: 'mhat_g',
+        symbol: String.raw`\widehat{\dot m}_g`,
+        yTitle: 'Gas entrainment rate, mhat_g',
+        description: 'normalized entrained gas mass rate',
+      },
       coefficient: {
         label: 'K_A',
+        symbol: String.raw`K_A`,
         yTitle: 'Generalized entrainment coefficient, K_A',
+        description: 'generalized entrainment coefficient',
       },
     },
     overlays: {
@@ -276,6 +378,17 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       phi: 'phi 半角',
       zetaMax: 'zeta max = z / De',
       samplePoints: 'サンプル点数',
+      definitions: {
+        densityRatio: '周囲気体と液体の密度比 rho* = rho_g / rho_l。',
+        dimensions:
+          '正規化単位の初期ノズル寸法。矩形では B0,H0、楕円では全軸 a0,b0 を使います。',
+        theta:
+          'H 方向または楕円長軸方向に対して規定する広がり半角（度）。',
+        phi:
+          'B 方向または楕円短軸方向に対して規定する広がり半角（度）。',
+        zetaMax: 'プロットと 3D 表示で示す最大正規化下流距離 z / De。',
+        samplePoints: '曲線、CSV、ホバー値に用いる軸方向サンプル数。',
+      },
       derivedGeometryAria: '導出された形状量',
       presets: 'プリセット',
       presetsCopy: {
@@ -348,6 +461,70 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       coefficientReferences:
         'K_A プロットでは、破線と点線の水平線が K_A(0) と遠方漸近値 K_A(∞) を示します。正の二方向面積成長では K_A(∞)=sqrt(lambda_1 lambda_2) です。',
     },
+    symbols: {
+      eyebrow: '記号',
+      title: '記号一覧',
+      note:
+        '状態量はバルク／トップハット量です。広がり半角は規定された入力です。',
+      entries: {
+        zeta: {
+          symbol: String.raw`\zeta=z/D_e`,
+          meaning: '正規化された軸方向距離',
+        },
+        equivalentDiameter: {
+          symbol: String.raw`D_e=(4A_0/\pi)^{1/2}`,
+          meaning: 'ノズル出口面積に基づく等価直径',
+        },
+        densityRatio: {
+          symbol: String.raw`\rho^\ast=\rho_g/\rho_l`,
+          meaning: '周囲気体と液体の密度比',
+        },
+        area: {
+          symbol: String.raw`\widehat{A}=A/A_0`,
+          meaning: '正規化断面積',
+        },
+        velocity: {
+          symbol: String.raw`\widehat{v}=v/v_0`,
+          meaning: '正規化バルク速度',
+        },
+        density: {
+          symbol: String.raw`\widehat{\rho}=\rho/\rho_l`,
+          meaning: '正規化混合密度',
+        },
+        pressure: {
+          symbol: String.raw`\widehat{p}=p/p_0`,
+          meaning: '正規化動圧の指標',
+        },
+        gasEntrainment: {
+          symbol: String.raw`\widehat{\dot m}_g`,
+          meaning: '正規化された気相エントレインメント質量流量',
+        },
+        coefficient: {
+          symbol: String.raw`K_A`,
+          meaning: '一般化エントレインメント係数',
+        },
+        rectangularDimensions: {
+          symbol: String.raw`B_0,H_0`,
+          meaning: '矩形出口の初期幅と高さ',
+        },
+        ellipticalDimensions: {
+          symbol: String.raw`a_0,b_0`,
+          meaning: '楕円出口の初期全長軸と全短軸',
+        },
+        angles: {
+          symbol: String.raw`\theta,\phi`,
+          meaning: '規定された広がり半角',
+        },
+        initialArea: {
+          symbol: String.raw`A_0`,
+          meaning: 'ノズル出口面積',
+        },
+        areaHistory: {
+          symbol: String.raw`A(z)`,
+          meaning: '規定された下流方向の面積履歴',
+        },
+      },
+    },
     plots: {
       eyebrow: '対話型プロット',
       title: 'zeta 方向の状態変数',
@@ -369,12 +546,42 @@ export const TRANSLATIONS: Record<Language, UiText> = {
           '破線と点線は、現在の設定に対する近傍値と遠方漸近値を示します。',
       },
       definitions: {
-        area: { label: 'Ahat', yTitle: '正規化面積, Ahat' },
-        velocity: { label: 'vhat', yTitle: 'バルク速度, vhat' },
-        density: { label: 'rhohat', yTitle: '混合密度, rhohat' },
-        pressure: { label: 'phat', yTitle: '動圧, phat' },
-        entrainment: { label: 'mhat_g', yTitle: '気相エントレインメント率, mhat_g' },
-        coefficient: { label: 'K_A', yTitle: '一般化エントレインメント係数, K_A' },
+        area: {
+          label: 'Ahat',
+          symbol: String.raw`\widehat{A}`,
+          yTitle: '正規化面積, Ahat',
+          description: '正規化された面積成長 A/A0',
+        },
+        velocity: {
+          label: 'vhat',
+          symbol: String.raw`\widehat{v}`,
+          yTitle: 'バルク速度, vhat',
+          description: 'ノズル出口速度で正規化したバルク速度',
+        },
+        density: {
+          label: 'rhohat',
+          symbol: String.raw`\widehat{\rho}`,
+          yTitle: '混合密度, rhohat',
+          description: '液体密度で正規化した混合密度',
+        },
+        pressure: {
+          label: 'phat',
+          symbol: String.raw`\widehat{p}`,
+          yTitle: '動圧, phat',
+          description: '動圧の指標 1/Ahat',
+        },
+        entrainment: {
+          label: 'mhat_g',
+          symbol: String.raw`\widehat{\dot m}_g`,
+          yTitle: '気相エントレインメント率, mhat_g',
+          description: '正規化された気相エントレインメント質量流量',
+        },
+        coefficient: {
+          label: 'K_A',
+          symbol: String.raw`K_A`,
+          yTitle: '一般化エントレインメント係数, K_A',
+          description: '一般化エントレインメント係数',
+        },
       },
       overlays: {
         'synthetic-equal-density-reference': {
@@ -486,6 +693,17 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       phi: 'semiángulo phi',
       zetaMax: 'zeta máximo = z / De',
       samplePoints: 'Puntos de muestreo',
+      definitions: {
+        densityRatio: 'Relación de densidades ambiente-líquido rho* = rho_g / rho_l.',
+        dimensions:
+          'Dimensiones iniciales de la boquilla en unidades normalizadas; rectangular usa B0,H0 y elíptica usa ejes completos a0,b0.',
+        theta:
+          'Semiángulo direccional prescrito, en grados, para H o la dirección del eje mayor elíptico.',
+        phi:
+          'Semiángulo direccional prescrito, en grados, para B o la dirección del eje menor elíptico.',
+        zetaMax: 'Distancia máxima normalizada aguas abajo z / De en gráficas y vista 3D.',
+        samplePoints: 'Número de muestras axiales usadas para curvas, exportación CSV y valores de hover.',
+      },
       derivedGeometryAria: 'Valores geométricos derivados',
       presets: 'Preajustes',
       presetsCopy: {
@@ -564,6 +782,70 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       coefficientReferences:
         'En la gráfica de K_A, las líneas horizontales discontinua y punteada muestran K_A(0) y la asíntota lejana K_A(∞); para crecimiento positivo en dos direcciones, K_A(∞)=sqrt(lambda_1 lambda_2).',
     },
+    symbols: {
+      eyebrow: 'Notación',
+      title: 'Glosario de símbolos',
+      note:
+        'Las variables de estado son cantidades bulk/top-hat; los semiángulos de expansión son entradas prescritas.',
+      entries: {
+        zeta: {
+          symbol: String.raw`\zeta=z/D_e`,
+          meaning: 'distancia axial normalizada',
+        },
+        equivalentDiameter: {
+          symbol: String.raw`D_e=(4A_0/\pi)^{1/2}`,
+          meaning: 'diámetro equivalente basado en el área de salida',
+        },
+        densityRatio: {
+          symbol: String.raw`\rho^\ast=\rho_g/\rho_l`,
+          meaning: 'relación de densidades ambiente-líquido',
+        },
+        area: {
+          symbol: String.raw`\widehat{A}=A/A_0`,
+          meaning: 'área transversal normalizada',
+        },
+        velocity: {
+          symbol: String.raw`\widehat{v}=v/v_0`,
+          meaning: 'velocidad media normalizada',
+        },
+        density: {
+          symbol: String.raw`\widehat{\rho}=\rho/\rho_l`,
+          meaning: 'densidad compuesta normalizada',
+        },
+        pressure: {
+          symbol: String.raw`\widehat{p}=p/p_0`,
+          meaning: 'indicador normalizado de presión dinámica',
+        },
+        gasEntrainment: {
+          symbol: String.raw`\widehat{\dot m}_g`,
+          meaning: 'tasa normalizada de masa de gas arrastrada',
+        },
+        coefficient: {
+          symbol: String.raw`K_A`,
+          meaning: 'coeficiente generalizado de arrastre',
+        },
+        rectangularDimensions: {
+          symbol: String.raw`B_0,H_0`,
+          meaning: 'ancho y altura iniciales de la salida rectangular',
+        },
+        ellipticalDimensions: {
+          symbol: String.raw`a_0,b_0`,
+          meaning: 'ejes mayor y menor completos iniciales de la salida elíptica',
+        },
+        angles: {
+          symbol: String.raw`\theta,\phi`,
+          meaning: 'semiángulos de expansión prescritos',
+        },
+        initialArea: {
+          symbol: String.raw`A_0`,
+          meaning: 'área de salida de la boquilla',
+        },
+        areaHistory: {
+          symbol: String.raw`A(z)`,
+          meaning: 'historia de área prescrita aguas abajo',
+        },
+      },
+    },
     plots: {
       eyebrow: 'Gráficas interactivas',
       title: 'Variables de estado a lo largo de zeta',
@@ -585,14 +867,41 @@ export const TRANSLATIONS: Record<Language, UiText> = {
           'Las líneas discontinua y punteada muestran el valor de campo cercano y la asíntota lejana para la configuración actual.',
       },
       definitions: {
-        area: { label: 'Ahat', yTitle: 'Área normalizada, Ahat' },
-        velocity: { label: 'vhat', yTitle: 'Velocidad media, vhat' },
-        density: { label: 'rhohat', yTitle: 'Densidad compuesta, rhohat' },
-        pressure: { label: 'phat', yTitle: 'Presión dinámica, phat' },
-        entrainment: { label: 'mhat_g', yTitle: 'Tasa de arrastre de gas, mhat_g' },
+        area: {
+          label: 'Ahat',
+          symbol: String.raw`\widehat{A}`,
+          yTitle: 'Área normalizada, Ahat',
+          description: 'crecimiento de área normalizada, A/A0',
+        },
+        velocity: {
+          label: 'vhat',
+          symbol: String.raw`\widehat{v}`,
+          yTitle: 'Velocidad media, vhat',
+          description: 'velocidad media normalizada por la velocidad de salida',
+        },
+        density: {
+          label: 'rhohat',
+          symbol: String.raw`\widehat{\rho}`,
+          yTitle: 'Densidad compuesta, rhohat',
+          description: 'densidad compuesta normalizada por la densidad líquida',
+        },
+        pressure: {
+          label: 'phat',
+          symbol: String.raw`\widehat{p}`,
+          yTitle: 'Presión dinámica, phat',
+          description: 'indicador de presión dinámica, 1/Ahat',
+        },
+        entrainment: {
+          label: 'mhat_g',
+          symbol: String.raw`\widehat{\dot m}_g`,
+          yTitle: 'Tasa de arrastre de gas, mhat_g',
+          description: 'tasa normalizada de masa de gas arrastrada',
+        },
         coefficient: {
           label: 'K_A',
+          symbol: String.raw`K_A`,
           yTitle: 'Coeficiente generalizado de arrastre, K_A',
+          description: 'coeficiente generalizado de arrastre',
         },
       },
       overlays: {

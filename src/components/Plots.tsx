@@ -18,6 +18,7 @@ import {
   buildEntrainmentReferenceTraces,
   buildModelCurveTraces,
 } from '../utils/plotTraces'
+import { InlineMath } from './MathFormula'
 import { MathText } from './MathText'
 
 interface PlotsProps {
@@ -180,12 +181,17 @@ export function Plots({
             key={definition.id}
             type="button"
             className={definition.id === activeId ? 'active' : ''}
+            title={text.plots.definitions[definition.id].description}
             onClick={() => setActiveId(definition.id)}
           >
             <MathText text={text.plots.definitions[definition.id].label} />
           </button>
         ))}
       </div>
+
+      <p className="active-variable-description">
+        <InlineMath math={activePlotCopy.symbol} /> - {activePlotCopy.description}
+      </p>
 
       <div className="overlay-controls">
         <label className="field">

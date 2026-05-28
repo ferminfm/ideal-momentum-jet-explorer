@@ -319,64 +319,26 @@ main {
 .math {
   color: #657887;
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   font-weight: 600;
 }
 
 .math-inline {
-  display: inline-block;
-  font-family: "STIX Two Math", "Cambria Math", "Noto Serif Math", "Times New Roman", serif;
-  font-style: italic;
+  align-items: baseline;
+  display: inline-flex;
   font-weight: 600;
-  line-height: 1;
+  line-height: 1.2;
   text-transform: none;
   white-space: nowrap;
 }
 
-.math-inline sub,
-.math-inline sup {
-  font-size: 0.68em;
-  line-height: 0;
+.math-inline .katex,
+.math .katex {
+  font-size: 1em;
 }
 
 .math-upright {
   font-style: normal;
-}
-
-.math-greek {
-  font-family: "STIX Two Math", "Cambria Math", "Noto Serif Math", "Times New Roman", serif;
-}
-
-.math-overhat,
-.math-overdot {
-  display: inline-block;
-  position: relative;
-}
-
-.math-overhat {
-  padding-top: 0.1em;
-}
-
-.math-overhat::before {
-  content: "ˆ";
-  font-size: 0.82em;
-  font-style: normal;
-  left: 50%;
-  line-height: 1;
-  position: absolute;
-  top: -0.46em;
-  transform: translateX(-50%);
-}
-
-.math-overdot::before {
-  content: ".";
-  font-size: 0.85em;
-  font-style: normal;
-  left: 50%;
-  line-height: 1;
-  position: absolute;
-  top: -0.52em;
-  transform: translateX(-50%);
 }
 
 .metrics-strip,
@@ -608,7 +570,7 @@ main {
   gap: 0.75rem;
 }
 
-.equation-list p {
+.equation-item {
   border-left: 3px solid #7da6bd;
   margin: 0;
   padding-left: 0.75rem;
@@ -617,18 +579,69 @@ main {
 .equation {
   color: #0f2e42;
   display: block;
-  font-family: "STIX Two Math", "Cambria Math", "Noto Serif Math", "Times New Roman", serif;
-  font-size: 0.83rem;
-  font-weight: 750;
-  line-height: 1.45;
+  font-size: 1.08rem;
+  line-height: 1.5;
   margin-bottom: 0.25rem;
-  overflow-wrap: anywhere;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 0.08rem;
+}
+
+.equation .katex-display {
+  margin: 0;
+  text-align: left;
+}
+
+.equation .katex {
+  font-size: 1.12rem;
 }
 
 .equation + span,
 .interpretation-panel p {
   color: #536a7b;
   font-size: 0.9rem;
+}
+
+.symbols-glossary {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.symbol-grid {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: 1fr;
+}
+
+.symbol-row {
+  align-items: start;
+  background: #f8fbfd;
+  border: 1px solid #e2ebf1;
+  border-radius: 6px;
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: minmax(7.5rem, 0.62fr) 1fr;
+  padding: 0.5rem 0.55rem;
+}
+
+.symbol-token {
+  color: #0f2e42;
+  font-size: 0.96rem;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.symbol-row p,
+.symbols-note,
+.active-variable-description {
+  color: #536a7b;
+  font-size: 0.84rem;
+  margin: 0;
+}
+
+.symbols-note {
+  border-top: 1px solid #e2ebf1;
+  padding-top: 0.65rem;
 }
 
 .summary-bar {
@@ -657,7 +670,7 @@ main {
 .plot-tabs {
   flex-wrap: wrap;
   gap: 0.2rem;
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.45rem;
 }
 
 .plot-tabs button {
@@ -666,6 +679,10 @@ main {
 
 .compact-tabs button {
   flex: 1 1 6rem;
+}
+
+.active-variable-description {
+  margin-bottom: 0.8rem;
 }
 
 .overlay-controls {
@@ -952,6 +969,10 @@ main {
 
   .panel {
     padding: 0.95rem;
+  }
+
+  .symbol-row {
+    grid-template-columns: 1fr;
   }
 
   .viewer-shell {

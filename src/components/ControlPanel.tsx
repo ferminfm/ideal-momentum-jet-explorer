@@ -95,7 +95,7 @@ export function ControlPanel({ params, selectedPresetId, text, onChange }: Contr
       </div>
 
       <div className="control-grid">
-        <label className="field">
+        <label className="field" title={text.controls.definitions.densityRatio}>
           <span>
             <MathText text={text.controls.densityRatio} />{' '}
             <span className="math">
@@ -120,7 +120,7 @@ export function ControlPanel({ params, selectedPresetId, text, onChange }: Contr
 
         {params.geometry.geometry === 'rectangular' ? (
           <>
-            <label className="field">
+            <label className="field" title={text.controls.definitions.dimensions}>
               <span>
                 <MathText text={text.controls.width} />
               </span>
@@ -143,7 +143,7 @@ export function ControlPanel({ params, selectedPresetId, text, onChange }: Contr
               />
               <output>{formatNumber(rectangularWidth, 2)}</output>
             </label>
-            <label className="field">
+            <label className="field" title={text.controls.definitions.dimensions}>
               <span>
                 <MathText text={text.controls.height} />
               </span>
@@ -169,7 +169,7 @@ export function ControlPanel({ params, selectedPresetId, text, onChange }: Contr
           </>
         ) : (
           <>
-            <label className="field">
+            <label className="field" title={text.controls.definitions.dimensions}>
               <span>
                 <MathText text={text.controls.majorAxis} />
               </span>
@@ -192,7 +192,7 @@ export function ControlPanel({ params, selectedPresetId, text, onChange }: Contr
               />
               <output>{formatNumber(ellipticalMajorAxis, 2)}</output>
             </label>
-            <label className="field">
+            <label className="field" title={text.controls.definitions.dimensions}>
               <span>
                 <MathText text={text.controls.minorAxis} />
               </span>
@@ -218,7 +218,7 @@ export function ControlPanel({ params, selectedPresetId, text, onChange }: Contr
           </>
         )}
 
-        <label className="field">
+        <label className="field" title={text.controls.definitions.theta}>
           <span>
             <MathText text={text.controls.theta} />
           </span>
@@ -237,7 +237,7 @@ export function ControlPanel({ params, selectedPresetId, text, onChange }: Contr
           />
           <output>{formatNumber(params.thetaDeg, 2)} deg</output>
         </label>
-        <label className="field">
+        <label className="field" title={text.controls.definitions.phi}>
           <span>
             <MathText text={text.controls.phi} />
           </span>
@@ -256,7 +256,7 @@ export function ControlPanel({ params, selectedPresetId, text, onChange }: Contr
           />
           <output>{formatNumber(params.phiDeg, 2)} deg</output>
         </label>
-        <label className="field">
+        <label className="field" title={text.controls.definitions.zetaMax}>
           <span>
             <MathText text={text.controls.zetaMax} />
           </span>
@@ -275,7 +275,7 @@ export function ControlPanel({ params, selectedPresetId, text, onChange }: Contr
           />
           <output>{formatNumber(params.zetaMax, 0)}</output>
         </label>
-        <label className="field">
+        <label className="field" title={text.controls.definitions.samplePoints}>
           <span>{text.controls.samplePoints}</span>
           <input
             type="range"
