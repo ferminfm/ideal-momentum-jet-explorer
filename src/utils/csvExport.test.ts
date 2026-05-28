@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { createComparisonCase } from '../model/comparisonCases'
 import { generateJetSeries, type JetParameters } from '../model/jetModel'
 import { buildJetCsv } from './csvExport'
 
@@ -20,7 +21,7 @@ describe('CSV export', () => {
     const csv = buildJetCsv(generateJetSeries(params))
     const header = csv.split('\n')[0]
 
-    expect(header).toContain('index,zeta,z_over_De,Ahat,dAhat_dzeta')
+    expect(header).toContain('caseLabel,index,zeta,z_over_De,Ahat,dAhat_dzeta')
     expect(header).toContain('vhat,rhohat,phat,mghat,KA')
     expect(header).toContain('geometry,rhoStar,thetaDeg,phiDeg,B0,H0,a0,b0')
   })
@@ -35,12 +36,30 @@ describe('CSV export', () => {
     const csv = buildJetCsv(generateJetSeries(params))
     const firstRow = csv.split('\n')[1].split(',')
 
-    expect(firstRow[0]).toBe('0')
-    expect(Number(firstRow[1])).toBeCloseTo(0)
-    expect(Number(firstRow[3])).toBeCloseTo(1)
-    expect(Number(firstRow[5])).toBeCloseTo(1)
+    expect(firstRow[0]).toBe('Current')
+    expect(firstRow[1]).toBe('0')
+    expect(Number(firstRow[2])).toBeCloseTo(0)
+    expect(Number(firstRow[4])).toBeCloseTo(1)
     expect(Number(firstRow[6])).toBeCloseTo(1)
     expect(Number(firstRow[7])).toBeCloseTo(1)
-    expect(Number(firstRow[8])).toBeCloseTo(0)
+    expect(Number(firstRow[8])).toBeCloseTo(1)
+    expect(Number(firstRow[9])).toBeCloseTo(0)
+  })
+
+  it('exports current and visible comparison cases with case labels', () => {
+    const visibleCase = createComparisonCase(params, {
+      label: 'Visible comparison',
+      visible: true,
+    })
+    const hiddenCase = createComparisonCase(params, {
+      label: 'Hidden comparison',
+      visible: false,
+    })
+    const csv = buildJetCsv(generateJetSeries(params), [visibleCase, hiddenCase])
+    const rows = csv.split('\n')
+
+    expect(rows).toHaveLength(params.samples * 2 + 1)
+    expect(rows.some((row) => row.startsWith('Visible comparison,'))).toBe(true)
+    expect(rows.some((row) => row.startsWith('Hidden comparison,'))).toBe(false)
   })
 })

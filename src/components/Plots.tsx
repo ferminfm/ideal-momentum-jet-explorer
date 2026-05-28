@@ -6,12 +6,15 @@ import {
   getVelocityOverlay,
 } from '../data/velocityOverlays'
 import type { UiText } from '../i18n/translations'
+import type { ComparisonCase } from '../model/comparisonCases'
 import type { JetSeries, JetState } from '../model/jetModel'
 import { toMathPlainText } from '../utils/mathPlainText'
+import { buildModelCurveTraces } from '../utils/plotTraces'
 import { MathText } from './MathText'
 
 interface PlotsProps {
   series: JetSeries
+  comparisonCases: ComparisonCase[]
   densityLogScale: boolean
   overlayId: string
   text: UiText
@@ -23,7 +26,6 @@ type PlotId = keyof UiText['plots']['definitions']
 
 interface PlotDefinition {
   id: PlotId
-  color: string
   logAllowed?: boolean
   getValue: (state: JetState) => number
 }
@@ -31,33 +33,27 @@ interface PlotDefinition {
 const PLOT_DEFINITIONS: PlotDefinition[] = [
   {
     id: 'area',
-    color: '#236b8e',
     getValue: (state) => state.normalizedArea,
   },
   {
     id: 'velocity',
-    color: '#3b6f48',
     getValue: (state) => state.velocityHat,
   },
   {
     id: 'density',
-    color: '#6f5fa8',
     logAllowed: true,
     getValue: (state) => state.densityHat,
   },
   {
     id: 'pressure',
-    color: '#5d7182',
     getValue: (state) => state.pressureHat,
   },
   {
     id: 'entrainment',
-    color: '#b35a2a',
     getValue: (state) => state.gasEntrainmentHat,
   },
   {
     id: 'coefficient',
-    color: '#94424e',
     getValue: (state) => state.entrainmentCoefficient,
   },
 ]
@@ -69,6 +65,7 @@ const Plot = (
 
 export function Plots({
   series,
+  comparisonCases,
   densityLogScale,
   overlayId,
   text,
@@ -86,22 +83,14 @@ export function Plots({
     : undefined
 
   const plotData = useMemo(() => {
-    const x = series.states.map((state) => state.axialZeta)
-    const y = series.states.map(activePlot.getValue)
-
-    const traces: Array<Record<string, unknown>> = [
-      {
-        x,
-        y,
-        type: 'scatter',
-        mode: 'lines',
-        line: {
-          color: activePlot.color,
-          width: 3,
-        },
-        hovertemplate: `${toMathPlainText(text.plots.hoverZeta)}=%{x:.3f}<br>${text.plots.hoverValue}=%{y:.5g}<extra></extra>`,
-      },
-    ]
+    const traces = buildModelCurveTraces({
+      series,
+      comparisonCases,
+      getValue: activePlot.getValue,
+      hoverZeta: text.plots.hoverZeta,
+      hoverValue: text.plots.hoverValue,
+      currentLabel: text.comparison.currentLabel,
+    })
 
     if (activePlot.id === 'velocity' && selectedOverlay) {
       const overlayLabel = selectedOverlayCopy?.label ?? selectedOverlay.label
@@ -128,9 +117,11 @@ export function Plots({
     return traces
   }, [
     activePlot,
+    comparisonCases,
     selectedOverlay,
     selectedOverlayCopy,
-    series.states,
+    series,
+    text.comparison.currentLabel,
     text.plots.hoverValue,
     text.plots.hoverZeta,
   ])
@@ -198,7 +189,7 @@ export function Plots({
         data={plotData}
         layout={{
           autosize: true,
-          margin: { l: 66, r: 24, t: 24, b: 58 },
+          margin: { l: 66, r: 24, t: 54, b: 58 },
           paper_bgcolor: 'rgba(255,255,255,0)',
           plot_bgcolor: '#fbfcfd',
           font: {
@@ -218,6 +209,16 @@ export function Plots({
             gridcolor: '#dfe7ee',
           },
           hovermode: 'closest',
+          showlegend: true,
+          legend: {
+            orientation: 'h',
+            x: 0,
+            y: 1.08,
+            xanchor: 'left',
+            yanchor: 'bottom',
+            bgcolor: 'rgba(255,255,255,0.8)',
+            font: { size: 11 },
+          },
         }}
         config={{
           responsive: true,

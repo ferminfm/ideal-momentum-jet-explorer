@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { createComparisonCase } from '../model/comparisonCases'
 import { PRESET_CUSTOM, createDefaultExplorerState } from '../types/appState'
 import {
   decodeStateFromQuery,
@@ -20,6 +21,13 @@ describe('URL state helpers', () => {
     state.densityLogScale = true
     state.overlayId = 'synthetic-equal-density-reference'
     state.crossSectionZeta = 12.5
+    state.comparisonCases = [
+      createComparisonCase(state.params, {
+        id: 'saved-case',
+        label: 'Saved case',
+        visible: true,
+      }),
+    ]
 
     const decoded = decodeStateFromQuery(encodeStateToQuery(state).toString())
     const sanitized = mergeStateWithDefaults(sanitizeDecodedState(decoded))
@@ -34,6 +42,9 @@ describe('URL state helpers', () => {
     expect(sanitized.densityLogScale).toBe(true)
     expect(sanitized.overlayId).toBe('synthetic-equal-density-reference')
     expect(sanitized.crossSectionZeta).toBeCloseTo(12.5)
+    expect(sanitized.comparisonCases).toHaveLength(1)
+    expect(sanitized.comparisonCases[0].id).toBe('saved-case')
+    expect(sanitized.comparisonCases[0].label).toBe('Saved case')
   })
 
   it('sanitizes invalid and out-of-range query parameters', () => {

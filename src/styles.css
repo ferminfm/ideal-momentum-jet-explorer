@@ -212,6 +212,10 @@ main {
   margin-bottom: 1rem;
 }
 
+.compact-heading {
+  margin-bottom: 0.75rem;
+}
+
 .section-heading h2 {
   color: #132334;
   font-size: 1.05rem;
@@ -464,6 +468,16 @@ main {
   padding: 0.45rem 0.75rem;
 }
 
+.primary-action:disabled,
+.secondary-action:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.full-width-action {
+  width: 100%;
+}
+
 .primary-action {
   background: #174b66;
   border: 1px solid #174b66;
@@ -476,13 +490,9 @@ main {
   color: #174b66;
 }
 
-.secondary-action:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
 .helper-text,
-.copy-status {
+.copy-status,
+.warning-text {
   color: #536a7b;
   font-size: 0.84rem;
   margin: 0;
@@ -492,6 +502,105 @@ main {
   color: #1d6a4d;
   font-weight: 750;
   margin-top: 0.55rem;
+}
+
+.warning-text {
+  color: #a44a20;
+  font-weight: 750;
+  margin-top: 0.55rem;
+}
+
+.comparison-add-panel {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.comparison-heading {
+  align-items: center;
+}
+
+.comparison-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  justify-content: flex-end;
+}
+
+.comparison-actions .secondary-action {
+  min-height: 2.05rem;
+  padding: 0.35rem 0.55rem;
+}
+
+.danger-action {
+  border-color: #d7a996;
+  color: #94424e;
+}
+
+.comparison-case-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.comparison-case {
+  align-items: center;
+  background: #f8fbfd;
+  border: 1px solid #dce7ef;
+  border-radius: 8px;
+  display: flex;
+  gap: 0.45rem;
+  min-width: min(20rem, 100%);
+  padding: 0.45rem 0.5rem;
+}
+
+.comparison-case-toggle {
+  align-items: center;
+  color: #273847;
+  display: flex;
+  flex: 1;
+  font-size: 0.84rem;
+  font-weight: 750;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.comparison-case-toggle input {
+  accent-color: #236b8e;
+}
+
+.comparison-swatch {
+  border: 1px solid rgba(29, 42, 53, 0.2);
+  border-radius: 999px;
+  flex: 0 0 auto;
+  height: 0.85rem;
+  width: 0.85rem;
+}
+
+.comparison-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.icon-button {
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #cddbe5;
+  border-radius: 6px;
+  color: #365164;
+  display: inline-flex;
+  font-size: 1rem;
+  font-weight: 800;
+  height: 1.8rem;
+  justify-content: center;
+  line-height: 1;
+  width: 1.8rem;
+}
+
+.icon-button:hover {
+  background: #f2e8e5;
+  border-color: #d7a996;
+  color: #94424e;
 }
 
 .equation-list {

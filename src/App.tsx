@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { CitationPanel } from './components/CitationPanel'
+import { ComparisonAddPanel, ComparisonPanel } from './components/ComparisonPanel'
 import { ControlPanel } from './components/ControlPanel'
 import { EquationPanel } from './components/EquationPanel'
 import { ExportPanel } from './components/ExportPanel'
@@ -9,6 +10,14 @@ import { Layout } from './components/Layout'
 import { MathText } from './components/MathText'
 import { Plots } from './components/Plots'
 import { TRANSLATIONS, type Language, type UiText } from './i18n/translations'
+import {
+  MAX_COMPARISON_CASES,
+  clearComparisonCases,
+  createComparisonCase,
+  removeComparisonCase,
+  setAllComparisonCasesVisibility,
+  setComparisonCaseVisibility,
+} from './model/comparisonCases'
 import { generateJetSeries, type JetParameters } from './model/jetModel'
 import { cloneParams } from './model/presets'
 import { PRESET_CUSTOM, type ExplorerState } from './types/appState'
@@ -79,6 +88,7 @@ function App() {
     )
   })
   const [shareStatus, setShareStatus] = useState('')
+  const [comparisonNotice, setComparisonNotice] = useState('')
   const { params } = appState
   const text = TRANSLATIONS[appState.language]
   const series = useMemo(() => generateJetSeries(params), [params])
@@ -121,6 +131,36 @@ function App() {
     setAppState((current) => ({ ...current, language }))
   }
 
+  function showComparisonNotice(message: string) {
+    setComparisonNotice(message)
+    window.setTimeout(() => setComparisonNotice(''), 2000)
+  }
+
+  function addCurrentComparisonCase() {
+    setAppState((current) => {
+      if (current.comparisonCases.length >= MAX_COMPARISON_CASES) {
+        return current
+      }
+
+      return {
+        ...current,
+        comparisonCases: [
+          ...current.comparisonCases,
+          createComparisonCase(current.params, {
+            presetId: current.selectedPresetId,
+            index: current.comparisonCases.length,
+          }),
+        ],
+      }
+    })
+
+    if (appState.comparisonCases.length >= MAX_COMPARISON_CASES) {
+      showComparisonNotice(text.comparison.maxWarning)
+    } else {
+      showComparisonNotice(text.comparison.added)
+    }
+  }
+
   return (
     <Layout
       language={appState.language}
@@ -135,18 +175,69 @@ function App() {
             text={text}
             onChange={updateParams}
           />
+          <ComparisonAddPanel
+            caseCount={appState.comparisonCases.length}
+            notice={comparisonNotice}
+            text={text}
+            onAdd={addCurrentComparisonCase}
+          />
           <ExportPanel
             shareStatus={shareStatus}
             text={text}
             onCopyShareUrl={() => void copyShareableUrl()}
-            onDownloadCsv={() => downloadJetCsv(series)}
+            onDownloadCsv={() => downloadJetCsv(series, appState.comparisonCases)}
           />
           <EquationPanel text={text} />
         </aside>
         <section className="main-rail">
           <TerminalStateSummary series={series} text={text} />
+          <ComparisonPanel
+            cases={appState.comparisonCases}
+            text={text}
+            onToggle={(id, visible) =>
+              setAppState((current) => ({
+                ...current,
+                comparisonCases: setComparisonCaseVisibility(
+                  current.comparisonCases,
+                  id,
+                  visible,
+                ),
+              }))
+            }
+            onRemove={(id) =>
+              setAppState((current) => ({
+                ...current,
+                comparisonCases: removeComparisonCase(current.comparisonCases, id),
+              }))
+            }
+            onClear={() =>
+              setAppState((current) => ({
+                ...current,
+                comparisonCases: clearComparisonCases(),
+              }))
+            }
+            onShowAll={() =>
+              setAppState((current) => ({
+                ...current,
+                comparisonCases: setAllComparisonCasesVisibility(
+                  current.comparisonCases,
+                  true,
+                ),
+              }))
+            }
+            onHideAll={() =>
+              setAppState((current) => ({
+                ...current,
+                comparisonCases: setAllComparisonCasesVisibility(
+                  current.comparisonCases,
+                  false,
+                ),
+              }))
+            }
+          />
           <Plots
             series={series}
+            comparisonCases={appState.comparisonCases}
             densityLogScale={appState.densityLogScale}
             overlayId={appState.overlayId}
             text={text}

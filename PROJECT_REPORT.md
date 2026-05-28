@@ -29,7 +29,7 @@
 
 ## Validation Status
 
-- `npm run test`: passed, 4 test files and 17 tests after adding URL language-state and math formatter coverage.
+- `npm run test`: passed, 6 test files and 24 tests after adding comparison-case, plot-trace, URL, CSV, language-state, and math formatter coverage.
 - `npm run build`: passed with no TypeScript errors. Vite reported the expected large-bundle warning because Plotly and Three.js are bundled client-side.
 - `npm run lint`: passed.
 - `npm run smoke:visual`: passed on desktop and mobile; Plotly line output and Three.js canvas pixel checks both rendered.
@@ -68,6 +68,14 @@
 - Localized the main app title and author/affiliation line for Japanese and Spanish interface modes.
 - Japanese author display uses `フランコ＝メドラノ・フェルミン`.
 
+## Saved Model-Case Comparison Summary
+
+- Added saved model-case comparison overlays for all model-generated plot variables.
+- Saved cases are frozen parameter snapshots with regenerated sampled curves; they do not change when sliders move.
+- Added comparison controls for show/hide, show all, hide all, clear all, remove, color swatches, and settings tooltips.
+- Added compact URL serialization for saved comparison cases so shareable URLs restore current state and saved model cases.
+- CSV export now includes `caseLabel` and exports the current curve plus all visible saved comparison cases.
+
 ## Public-Facing Polish Summary
 
 - Replaced source-code links with `https://github.com/ferminfm/ideal-momentum-jet-explorer`.
@@ -83,9 +91,11 @@
 - Presets for circular, square, aspect-ratio 2, Gutmark-like equal-density, liquid-in-air, and equal-density cases.
 - Interactive controls for geometry, density ratio, initial dimensions, spreading half-angles, zeta range, and sample count.
 - Plotly plots for normalized area, velocity, density, dynamic pressure, gas entrainment, and `K_A`.
+- Saved model-case comparison overlays on all Plotly model variables.
 - Three.js control-volume viewer with translucent rectangular or elliptical frustum geometry.
 - GitHub Pages deployment through GitHub Actions.
 - Saved share URLs, CSV export, citation copying, velocity-overlay infrastructure, and 3D cross-section inspection.
+- Compact URL restoration for saved model comparisons.
 - English, Japanese, and Spanish interface modes with language state encoded in reproducible URLs.
 
 ## Known Limitations

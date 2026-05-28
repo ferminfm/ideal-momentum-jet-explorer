@@ -97,3 +97,12 @@ Pending commit, push, and GitHub Pages workflow verification.
 
 - Localized the visible app title and author/affiliation line in Japanese and Spanish.
 - Japanese author display uses `フランコ＝メドラノ・フェルミン`.
+
+## 2026-05-29 Saved Model-Case Comparison Pass
+
+- Starting commit: `8bfb8a0682b4ea323481d9bfc4a4307ddb4bb314`.
+- Added frozen saved model-case snapshots with fixed parameters and regenerated sampled curves.
+- Added comparison controls for add, show/hide, show all, hide all, clear all, remove, color swatches, and settings tooltips.
+- Added model comparison traces to all Plotly variables while keeping measured velocity overlays separate.
+- Added compact URL serialization for saved model cases and CSV export with `caseLabel` for current plus visible saved cases.
+- Added tests for comparison case creation, immutable snapshots, toggle/remove/clear behavior, URL round-trip, plot traces, and comparison CSV export.

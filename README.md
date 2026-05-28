@@ -75,8 +75,9 @@ For `rho* < 1e-8`, the implementation uses the limiting behavior `vhat ~= 1`, `r
 
 - English, Japanese, and Spanish interface controls for public teaching and research use.
 - Mathematical label rendering for hats, Greek symbols, subscripts, and equation-style variable names in the app interface.
-- Saved parameter URLs: the current geometry, density ratio, dimensions, half-angles, plot options, overlay selection, and 3D cross-section controls are encoded in the query string.
-- CSV export: sampled model states can be downloaded for reproducible figures and follow-up analysis.
+- Saved model-case comparisons: click **Add current case to comparison** to freeze the current curve, then move the sliders to compare the live case against saved model-generated curves.
+- Saved parameter URLs: the current geometry, density ratio, dimensions, half-angles, plot options, overlay selection, saved comparison cases, and 3D cross-section controls are encoded in the query string.
+- CSV export: sampled model states can be downloaded for reproducible figures and follow-up analysis. The CSV includes a `caseLabel` column for the current curve and visible saved comparison cases.
 - Velocity overlays: the app includes overlay infrastructure and one disabled-by-default synthetic example curve. No measured/literature numeric dataset is bundled yet, so overlays must not be interpreted as validation unless a documented public dataset is added later.
 - Citation panel: copy references in plain text, BibTeX, LaTeX snippet, or Word/APA-style format.
 - 3D cross-section tools: inspect a selected downstream cross-section and highlight the computed axis-switching section when it exists.

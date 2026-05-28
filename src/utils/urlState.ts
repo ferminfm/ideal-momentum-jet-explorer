@@ -1,5 +1,10 @@
 import { VELOCITY_OVERLAYS } from '../data/velocityOverlays'
 import type { Language } from '../i18n/translations'
+import {
+  deserializeComparisonCases,
+  serializeComparisonCases,
+  type ComparisonCase,
+} from '../model/comparisonCases'
 import type { JetParameters } from '../model/jetModel'
 import { PRESETS, cloneParams } from '../model/presets'
 import {
@@ -34,6 +39,7 @@ export interface DecodedUrlState {
   selectedPresetId?: string
   densityLogScale?: boolean
   overlayId?: string
+  comparisonCases?: ComparisonCase[]
   crossSectionZeta?: number
   showSelectedCrossSection?: boolean
   showAxisSwitchingSection?: boolean
@@ -106,6 +112,10 @@ export function encodeStateToQuery(state: ExplorerState): URLSearchParams {
 
   query.set('densityLog', state.densityLogScale ? '1' : '0')
   query.set('overlay', state.overlayId)
+  const comparisonCases = serializeComparisonCases(state.comparisonCases)
+  if (comparisonCases !== undefined) {
+    query.set('cases', comparisonCases)
+  }
   setNumber(query, 'crossSectionZeta', state.crossSectionZeta)
   query.set('showSection', state.showSelectedCrossSection ? '1' : '0')
   query.set('showAxisSwitchingSection', state.showAxisSwitchingSection ? '1' : '0')
@@ -132,6 +142,7 @@ export function decodeStateFromQuery(search: string): DecodedUrlState {
     selectedPresetId: query.get('preset') ?? undefined,
     densityLogScale: boolValue(query.get('densityLog')),
     overlayId: query.get('overlay') ?? undefined,
+    comparisonCases: deserializeComparisonCases(query.get('cases') ?? undefined),
     crossSectionZeta: finiteNumber(query.get('crossSectionZeta')),
     showSelectedCrossSection: boolValue(query.get('showSection')),
     showAxisSwitchingSection: boolValue(query.get('showAxisSwitchingSection')),
@@ -217,6 +228,7 @@ export function sanitizeDecodedState(decoded: DecodedUrlState): Partial<Explorer
     overlayId: VELOCITY_OVERLAYS.some((overlay) => overlay.id === decoded.overlayId)
       ? decoded.overlayId
       : OVERLAY_NONE,
+    comparisonCases: decoded.comparisonCases ?? base.comparisonCases,
     crossSectionZeta:
       decoded.crossSectionZeta === undefined
         ? Math.min(base.crossSectionZeta, zetaMax)

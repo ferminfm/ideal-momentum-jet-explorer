@@ -1,6 +1,8 @@
+import type { ComparisonCase } from '../model/comparisonCases'
 import type { JetSeries } from '../model/jetModel'
 
 const CSV_COLUMNS = [
+  'caseLabel',
   'index',
   'zeta',
   'z_over_De',
@@ -33,7 +35,19 @@ function csvValue(value: string | number): string {
   return value
 }
 
-export function buildJetCsv(series: JetSeries): string {
+export function buildJetCsv(series: JetSeries, comparisonCases: ComparisonCase[] = []): string {
+  const visibleCases = comparisonCases.filter((comparisonCase) => comparisonCase.visible)
+  const rows = [
+    ...buildRows('Current', series),
+    ...visibleCases.flatMap((comparisonCase) =>
+      buildRows(comparisonCase.label, comparisonCase.series),
+    ),
+  ]
+
+  return [CSV_COLUMNS, ...rows].map((row) => row.join(',')).join('\n')
+}
+
+function buildRows(caseLabel: string, series: JetSeries): string[][] {
   const { params } = series
   const geometry = params.geometry.geometry
   const B0 = geometry === 'rectangular' ? params.geometry.width : ''
@@ -41,8 +55,9 @@ export function buildJetCsv(series: JetSeries): string {
   const a0 = geometry === 'elliptical' ? params.geometry.majorAxis : ''
   const b0 = geometry === 'elliptical' ? params.geometry.minorAxis : ''
 
-  const rows = series.states.map((state, index) =>
+  return series.states.map((state, index) =>
     [
+      caseLabel,
       index.toString(),
       state.axialZeta,
       state.axialZeta,
@@ -63,8 +78,6 @@ export function buildJetCsv(series: JetSeries): string {
       b0,
     ].map(csvValue),
   )
-
-  return [CSV_COLUMNS, ...rows].map((row) => row.join(',')).join('\n')
 }
 
 export function createCsvFilename(series: JetSeries, date = new Date()): string {
@@ -72,8 +85,8 @@ export function createCsvFilename(series: JetSeries, date = new Date()): string 
   return `ideal-momentum-jet_${series.params.geometry.geometry}_${timestamp}.csv`
 }
 
-export function downloadJetCsv(series: JetSeries): void {
-  const csv = buildJetCsv(series)
+export function downloadJetCsv(series: JetSeries, comparisonCases: ComparisonCase[] = []): void {
+  const csv = buildJetCsv(series, comparisonCases)
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
