@@ -11,7 +11,7 @@ export const DEFAULT_LANGUAGE: Language = 'en'
 const ENGLISH_AFFILIATION =
   'Fermín Franco-Medrano — Ensenada Campus, Autonomous University of Baja California / Institute of Mathematics for Industry, Kyushu University'
 const JAPANESE_AFFILIATION =
-  'フランコ＝メドラノ・フェルミン｜バハ・カリフォルニア自治大学エンセナダキャンパス / 九州大学マス・フォア・インダストリ研究所'
+  'フランコ＝メドラノ・フェルミン｜バハ・カリフォルニア自治大学エンセナダ校 / 九州大学マス・フォア・インダストリ研究所'
 const SPANISH_AFFILIATION =
   'Fermín Franco-Medrano — Campus Ensenada, Universidad Autónoma de Baja California / Instituto de Matemáticas para la Industria, Universidad de Kyushu'
 
