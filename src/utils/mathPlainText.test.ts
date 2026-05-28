@@ -8,6 +8,7 @@ describe('math plain-text formatter', () => {
     )
     expect(toMathPlainText('rho* = rho_g / rho_l')).toBe('ρ* = ρ_g / ρ_l')
     expect(toMathPlainText('zeta = z / De')).toBe('ζ = z / Dₑ')
+    expect(toMathPlainText('lambda_1, lambda_2, beta, eta')).toBe('λ₁, λ₂, β, η')
   })
 
   it('does not format variable tokens inside ordinary words', () => {

@@ -53,6 +53,24 @@ export interface JetSeries {
   states: JetState[]
 }
 
+export interface DirectionalGrowthRates {
+  lambda1: number
+  lambda2: number
+  lambda1Label: string
+  lambda2Label: string
+}
+
+export interface EntrainmentCoefficientLimits {
+  nearField: number
+  farField: number
+  lambda1: number
+  lambda2: number
+  lambda1Label: string
+  lambda2Label: string
+  nearFieldLabel: string
+  farFieldLabel: string
+}
+
 const LOW_DENSITY_LIMIT = 1e-8
 
 export function degreesToRadians(value: number): number {
@@ -95,6 +113,52 @@ export function getInitialArea(geometry: GeometryConfig): number {
 
 export function getEquivalentDiameter(geometry: GeometryConfig): number {
   return Math.sqrt((4 * getInitialArea(geometry)) / Math.PI)
+}
+
+export function getDirectionalGrowthRates(params: JetParameters): DirectionalGrowthRates {
+  validateParameters(params)
+
+  const equivalentDiameter = getEquivalentDiameter(params.geometry)
+  const theta = degreesToRadians(params.thetaDeg)
+  const phi = degreesToRadians(params.phiDeg)
+
+  if (params.geometry.geometry === 'rectangular') {
+    return {
+      lambda1: (2 * equivalentDiameter * Math.tan(phi)) / params.geometry.width,
+      lambda2: (2 * equivalentDiameter * Math.tan(theta)) / params.geometry.height,
+      lambda1Label: 'beta',
+      lambda2Label: 'eta',
+    }
+  }
+
+  return {
+    lambda1: (2 * equivalentDiameter * Math.tan(theta)) / params.geometry.majorAxis,
+    lambda2: (2 * equivalentDiameter * Math.tan(phi)) / params.geometry.minorAxis,
+    lambda1Label: 'alpha',
+    lambda2Label: 'gamma',
+  }
+}
+
+export function computeEntrainmentCoefficientLimits(
+  params: JetParameters,
+): EntrainmentCoefficientLimits {
+  const { lambda1, lambda2, lambda1Label, lambda2Label } =
+    getDirectionalGrowthRates(params)
+  const densityRatio = params.densityRatio
+  const nearField =
+    (Math.sqrt(densityRatio) * (lambda1 + lambda2)) / (1 + densityRatio)
+  const farField = lambda1 > 0 && lambda2 > 0 ? Math.sqrt(lambda1 * lambda2) : 0
+
+  return {
+    nearField: finiteOrZero(nearField),
+    farField: finiteOrZero(farField),
+    lambda1: finiteOrZero(lambda1),
+    lambda2: finiteOrZero(lambda2),
+    lambda1Label,
+    lambda2Label,
+    nearFieldLabel: 'K_A(0)',
+    farFieldLabel: 'K_A(∞)',
+  }
 }
 
 export function getGeometryState(params: JetParameters, zeta: number): GeometryState {
@@ -259,4 +323,8 @@ export function computeAxisSwitchingZeta(params: JetParameters): number | null {
   }
 
   return zeta
+}
+
+function finiteOrZero(value: number): number {
+  return Number.isFinite(value) ? value : 0
 }

@@ -1,5 +1,9 @@
 import type { ComparisonCase } from '../model/comparisonCases'
-import type { JetSeries, JetState } from '../model/jetModel'
+import type {
+  EntrainmentCoefficientLimits,
+  JetSeries,
+  JetState,
+} from '../model/jetModel'
 import { toMathPlainText } from './mathPlainText'
 
 interface BuildModelTraceOptions {
@@ -56,4 +60,56 @@ export function buildModelCurveTraces({
   }
 
   return traces
+}
+
+export function buildEntrainmentReferenceTraces(
+  series: JetSeries,
+  limits: EntrainmentCoefficientLimits,
+  labels: {
+    nearField: string
+    farField: string
+  },
+): Array<Record<string, unknown>> {
+  const firstState = series.states[0]
+  const lastState = series.states[series.states.length - 1]
+  const xStart = firstState?.axialZeta ?? 0
+  const xEnd = lastState?.axialZeta ?? series.params.zetaMax
+  const lambdaDetail = `${toMathPlainText(limits.lambda1Label)}=${formatHoverNumber(
+    limits.lambda1,
+  )}, ${toMathPlainText(limits.lambda2Label)}=${formatHoverNumber(
+    limits.lambda2,
+  )}, ${toMathPlainText('rho*')}=${formatHoverNumber(series.params.densityRatio)}`
+
+  return [
+    {
+      x: [xStart, xEnd],
+      y: [limits.nearField, limits.nearField],
+      type: 'scatter',
+      mode: 'lines',
+      name: labels.nearField,
+      line: {
+        color: '#4e7896',
+        width: 2,
+        dash: 'dash',
+      },
+      hovertemplate: `${toMathPlainText('K_A')}(0)=%{y:.5g}<br>${lambdaDetail}<extra>${labels.nearField}</extra>`,
+    },
+    {
+      x: [xStart, xEnd],
+      y: [limits.farField, limits.farField],
+      type: 'scatter',
+      mode: 'lines',
+      name: labels.farField,
+      line: {
+        color: '#b35a2a',
+        width: 2,
+        dash: 'dot',
+      },
+      hovertemplate: `${toMathPlainText('K_A')}(∞)=%{y:.5g}<br>${lambdaDetail}<extra>${labels.farField}</extra>`,
+    },
+  ]
+}
+
+function formatHoverNumber(value: number): string {
+  return Number.isFinite(value) ? value.toPrecision(5) : 'n/a'
 }

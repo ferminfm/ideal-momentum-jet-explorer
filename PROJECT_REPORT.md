@@ -31,11 +31,12 @@
 
 ## Validation Status
 
-- `npm run test`: passed, 6 test files and 24 tests after adding comparison-case, plot-trace, URL, CSV, language-state, and math formatter coverage.
+- `npm run test`: passed, 6 test files and 30 tests after adding comparison-case, plot-trace, URL, CSV, language-state, math formatter, and entrainment-coefficient reference coverage.
 - `npm run build`: passed with no TypeScript errors. Vite reported the expected large-bundle warning because Plotly and Three.js are bundled client-side.
 - `npm run lint`: passed.
 - `npm run smoke:visual`: passed on desktop and mobile; Plotly line output and Three.js canvas pixel checks both rendered.
 - Live interaction smoke: passed for add saved case, change geometry, hide/show saved case, settings tooltip, and remove saved case.
+- Local `K_A` reference interaction smoke: passed for reference lines, slider update to zero growth, and saved comparison overlay coexistence.
 - Public wording scan: no matches for stale repository owner tokens or internal positioning phrases in the requested public/source/doc paths.
 
 ## Feature Pass Summary
@@ -78,6 +79,15 @@
 - Added comparison controls for show/hide, show all, hide all, clear all, remove, color swatches, and settings tooltips.
 - Added compact URL serialization for saved comparison cases so shareable URLs restore current state and saved model cases.
 - CSV export now includes `caseLabel` and exports the current curve plus all visible saved comparison cases.
+
+## Entrainment Coefficient Reference Summary
+
+- Starting commit for this pass: `9eec6267647bd3eb12ca269a10d464161d2356f9`.
+- Added model helpers for directional area-growth rates and entrainment-coefficient reference values.
+- The `K_A` plot now shows current-case horizontal reference lines for the exact near-field value `K_A(0)` and the far-field asymptote `K_A(∞)`.
+- Added a compact `K_A` readout for `K_A(0)`, `K_A(∞)`, `lambda_1`, and `lambda_2`.
+- Saved comparison-case tooltips now include the near-field and far-field coefficient references for the frozen case.
+- Far-field references use `K_A(∞)=sqrt(lambda_1 lambda_2)` only when both directional growth rates are positive; otherwise the app reports zero for the current model.
 
 ## Public-Facing Polish Summary
 

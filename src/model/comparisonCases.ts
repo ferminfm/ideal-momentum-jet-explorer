@@ -1,4 +1,5 @@
 import {
+  computeEntrainmentCoefficientLimits,
   computeAxisSwitchingZeta,
   generateJetSeries,
   getAspectRatio,
@@ -106,6 +107,7 @@ export function makeComparisonLabel(params: JetParameters, presetId?: string): s
 export function describeComparisonCase(comparisonCase: ComparisonCase): string {
   const { params, series } = comparisonCase
   const axisSwitchingZeta = computeAxisSwitchingZeta(params)
+  const coefficientLimits = computeEntrainmentCoefficientLimits(params)
   const lines = [
     comparisonCase.label,
     `geometry: ${params.geometry.geometry}`,
@@ -130,6 +132,8 @@ export function describeComparisonCase(comparisonCase: ComparisonCase): string {
     `zeta max: ${formatCompact(params.zetaMax)}`,
     `sample count: ${params.samples}`,
     `De: ${formatCompact(series.equivalentDiameter, 4)}`,
+    `K_A(0): ${formatCompact(coefficientLimits.nearField, 5)}`,
+    `K_A(∞): ${formatCompact(coefficientLimits.farField, 5)}`,
     `axis switching: ${
       axisSwitchingZeta === null ? 'none in range' : `zeta ${formatCompact(axisSwitchingZeta)}`
     }`,

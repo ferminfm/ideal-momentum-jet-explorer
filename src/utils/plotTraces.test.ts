@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { createComparisonCase } from '../model/comparisonCases'
-import { generateJetSeries, type JetParameters } from '../model/jetModel'
-import { buildModelCurveTraces } from './plotTraces'
+import {
+  computeEntrainmentCoefficientLimits,
+  generateJetSeries,
+  type JetParameters,
+} from '../model/jetModel'
+import { buildEntrainmentReferenceTraces, buildModelCurveTraces } from './plotTraces'
 
 const params: JetParameters = {
   densityRatio: 0.001,
@@ -40,5 +44,22 @@ describe('plot trace helpers', () => {
 
     expect(traces).toHaveLength(2)
     expect(traces.map((trace) => trace.name)).toEqual(['Current', 'Visible case'])
+  })
+
+  it('builds near-field and far-field coefficient reference traces', () => {
+    const series = generateJetSeries(params)
+    const limits = computeEntrainmentCoefficientLimits(params)
+    const traces = buildEntrainmentReferenceTraces(series, limits, {
+      nearField: 'Near-field K_A(0)',
+      farField: 'Far-field K_A(∞)',
+    })
+
+    expect(traces).toHaveLength(2)
+    expect(traces.map((trace) => trace.name)).toEqual([
+      'Near-field K_A(0)',
+      'Far-field K_A(∞)',
+    ])
+    expect(traces[0].y).toEqual([limits.nearField, limits.nearField])
+    expect(traces[1].y).toEqual([limits.farField, limits.farField])
   })
 })

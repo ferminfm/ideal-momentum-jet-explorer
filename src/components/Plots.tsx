@@ -7,9 +7,17 @@ import {
 } from '../data/velocityOverlays'
 import type { UiText } from '../i18n/translations'
 import type { ComparisonCase } from '../model/comparisonCases'
-import type { JetSeries, JetState } from '../model/jetModel'
+import {
+  computeEntrainmentCoefficientLimits,
+  type JetSeries,
+  type JetState,
+} from '../model/jetModel'
+import { formatNumber } from '../utils/format'
 import { toMathPlainText } from '../utils/mathPlainText'
-import { buildModelCurveTraces } from '../utils/plotTraces'
+import {
+  buildEntrainmentReferenceTraces,
+  buildModelCurveTraces,
+} from '../utils/plotTraces'
 import { MathText } from './MathText'
 
 interface PlotsProps {
@@ -81,6 +89,11 @@ export function Plots({
   const selectedOverlayCopy = selectedOverlay
     ? text.plots.overlays[selectedOverlay.id as keyof typeof text.plots.overlays]
     : undefined
+  const coefficientLimits = useMemo(
+    () => computeEntrainmentCoefficientLimits(series.params),
+    [series.params],
+  )
+  const showCoefficientReferences = activePlot.id === 'coefficient'
 
   const plotData = useMemo(() => {
     const traces = buildModelCurveTraces({
@@ -114,16 +127,28 @@ export function Plots({
       })
     }
 
+    if (activePlot.id === 'coefficient') {
+      traces.push(
+        ...buildEntrainmentReferenceTraces(series, coefficientLimits, {
+          nearField: text.plots.referenceValues.nearFieldLimit,
+          farField: text.plots.referenceValues.farFieldLimit,
+        }),
+      )
+    }
+
     return traces
   }, [
     activePlot,
     comparisonCases,
+    coefficientLimits,
     selectedOverlay,
     selectedOverlayCopy,
     series,
     text.comparison.currentLabel,
     text.plots.hoverValue,
     text.plots.hoverZeta,
+    text.plots.referenceValues.farFieldLimit,
+    text.plots.referenceValues.nearFieldLimit,
   ])
 
   const yAxisType = activePlot.id === 'density' && densityLogScale ? 'log' : 'linear'
@@ -184,6 +209,38 @@ export function Plots({
             : text.plots.defaultOverlayNote}
         </p>
       </div>
+
+      {showCoefficientReferences ? (
+        <div className="coefficient-reference-strip" aria-label={text.plots.referenceValues.title}>
+          <div>
+            <span>
+              <MathText text={text.plots.referenceValues.nearFieldLimit} />
+            </span>
+            <strong>{formatNumber(coefficientLimits.nearField, 5)}</strong>
+          </div>
+          <div>
+            <span>
+              <MathText text={text.plots.referenceValues.farFieldLimit} />
+            </span>
+            <strong>{formatNumber(coefficientLimits.farField, 5)}</strong>
+          </div>
+          <div>
+            <span>
+              <MathText text={`lambda_1=${coefficientLimits.lambda1Label}`} />
+            </span>
+            <strong>{formatNumber(coefficientLimits.lambda1, 5)}</strong>
+          </div>
+          <div>
+            <span>
+              <MathText text={`lambda_2=${coefficientLimits.lambda2Label}`} />
+            </span>
+            <strong>{formatNumber(coefficientLimits.lambda2, 5)}</strong>
+          </div>
+          <p>
+            <MathText text={text.plots.referenceValues.help} />
+          </p>
+        </div>
+      ) : null}
 
       <Plot
         data={plotData}

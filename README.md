@@ -58,6 +58,20 @@ mhat_g = rho* (Ahat vhat - 1)
 K_A = sqrt(rho*) / Delta * dAhat/dzeta
 ```
 
+For the two-direction linear area-growth law
+`Ahat = (1 + lambda_1 zeta)(1 + lambda_2 zeta)`, the entrainment-coefficient
+reference values are:
+
+```text
+K_A(0) = sqrt(rho*) (lambda_1 + lambda_2) / (1 + rho*)
+K_A(∞) = sqrt(lambda_1 lambda_2)
+```
+
+The far-field expression applies when both directional growth rates are positive.
+If one or both rates are zero, the app reports `K_A(∞) = 0` for the
+current model. The far-field value is an asymptotic reference and may not be
+reached within the plotted downstream range.
+
 For `rho* < 1e-8`, the implementation uses the limiting behavior `vhat ~= 1`, `rhohat ~= 1/Ahat`, and `phat ~= 1/Ahat` to avoid subtractive numerical loss.
 
 ## What The App Computes
@@ -76,6 +90,7 @@ For `rho* < 1e-8`, the implementation uses the limiting behavior `vhat ~= 1`, `r
 - English, Japanese, and Spanish interface controls for public teaching and research use.
 - Mathematical label rendering for hats, Greek symbols, subscripts, and equation-style variable names in the app interface.
 - Saved model-case comparisons: click **Add current case to comparison** to freeze the current curve, then move the sliders to compare the live case against saved model-generated curves.
+- Entrainment-coefficient references: the `K_A` plot shows horizontal lines for the near-field value `K_A(0)` and the far-field asymptote `K_A(∞)` for the current settings.
 - Saved parameter URLs: the current geometry, density ratio, dimensions, half-angles, plot options, overlay selection, saved comparison cases, and 3D cross-section controls are encoded in the query string.
 - CSV export: sampled model states can be downloaded for reproducible figures and follow-up analysis. The CSV includes a `caseLabel` column for the current curve and visible saved comparison cases.
 - Velocity overlays: the app includes overlay infrastructure and one disabled-by-default synthetic example curve. No measured/literature numeric dataset is bundled yet, so overlays must not be interpreted as validation unless a documented public dataset is added later.

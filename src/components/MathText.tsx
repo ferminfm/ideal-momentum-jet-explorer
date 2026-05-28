@@ -83,6 +83,8 @@ const TOKEN_RENDERERS = {
   eta: () => <Greek letter="η" />,
   alpha: () => <Greek letter="α" />,
   gamma: () => <Greek letter="γ" />,
+  lambda_1: () => <Subscript base={<Greek letter="λ" />} subscript="1" />,
+  lambda_2: () => <Subscript base={<Greek letter="λ" />} subscript="2" />,
   sqrt: () => <span className="math-upright">√</span>,
 } satisfies Record<string, () => ReactNode>
 

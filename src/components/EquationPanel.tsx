@@ -44,6 +44,14 @@ export function EquationPanel({ text }: EquationPanelProps) {
           </span>
           <span>{text.equations.coefficient}</span>
         </p>
+        <p>
+          <span className="equation">
+            <MathText text="K_A(∞) = sqrt(lambda_1 lambda_2)" />
+          </span>
+          <span>
+            <MathText text={text.equations.coefficientReferences} />
+          </span>
+        </p>
       </div>
     </section>
   )

@@ -110,3 +110,11 @@ The GitHub Pages app responded with HTTP 200 at `https://ferminfm.github.io/idea
 - Added tests for comparison case creation, immutable snapshots, toggle/remove/clear behavior, URL round-trip, plot traces, and comparison CSV export.
 - Validation: `npm run test`, `npm run build`, `npm run lint`, local `npm run smoke:visual`, live `npm run smoke:visual`, and a targeted live interaction smoke all passed.
 - Deployment: pushed to `origin/main`; GitHub Actions run `26599473219` completed successfully.
+
+## 2026-05-29 Entrainment Coefficient Reference Pass
+
+- Starting commit: `9eec6267647bd3eb12ca269a10d464161d2356f9`.
+- Added current-case `K_A(0)` and `K_A(∞)` reference values computed from directional area-growth rates.
+- Added dashed/dotted horizontal reference traces and a compact readout on the `K_A` plot.
+- Added tests for near-field equality at `zeta=0`, symmetric far-field behavior, AR=2 directional rates, zero/one-direction growth, slider extrema, and reference trace preparation.
+- Validation before commit: `npm run test`, `npm run build`, `npm run lint`, `npm run smoke:visual`, and a targeted local `K_A` interaction smoke passed.

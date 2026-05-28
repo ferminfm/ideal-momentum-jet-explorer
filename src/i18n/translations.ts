@@ -128,6 +128,8 @@ const ENGLISH_TEXT = {
     entrainment:
       'Gas entrainment is reported in nondimensional form relative to the inlet liquid flux.',
     coefficient: 'Generalized entrainment coefficient for arbitrary area-growth histories.',
+    coefficientReferences:
+      'On the K_A plot, dashed and dotted horizontal lines show K_A(0) and the far-field asymptote K_A(∞); for positive two-direction area growth, K_A(∞)=sqrt(lambda_1 lambda_2).',
   },
   plots: {
     eyebrow: 'Interactive plots',
@@ -141,6 +143,14 @@ const ENGLISH_TEXT = {
     xAxisTitle: 'Normalized distance, zeta = z / De',
     hoverZeta: 'zeta',
     hoverValue: 'value',
+    referenceValues: {
+      title: 'Coefficient reference values',
+      nearFieldLimit: 'Near-field K_A(0)',
+      farFieldLimit: 'Far-field K_A(∞)',
+      directionalRates: 'Directional rates',
+      help:
+        'Dashed and dotted lines show the near-field value and far-field asymptote for the current settings.',
+    },
     definitions: {
       area: { label: 'Ahat', yTitle: 'Normalized area, Ahat' },
       velocity: { label: 'vhat', yTitle: 'Bulk velocity, vhat' },
@@ -327,6 +337,8 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       entrainment:
         '気相エントレインメントは、入口液体流束に対する無次元量として表示します。',
       coefficient: '任意の面積成長履歴に対する一般化エントレインメント係数です。',
+      coefficientReferences:
+        'K_A プロットでは、破線と点線の水平線が K_A(0) と遠方漸近値 K_A(∞) を示します。正の二方向面積成長では K_A(∞)=sqrt(lambda_1 lambda_2) です。',
     },
     plots: {
       eyebrow: '対話型プロット',
@@ -340,6 +352,14 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       xAxisTitle: '正規化距離, zeta = z / De',
       hoverZeta: 'zeta',
       hoverValue: '値',
+      referenceValues: {
+        title: '係数の参照値',
+        nearFieldLimit: '近傍 K_A(0)',
+        farFieldLimit: '遠方漸近 K_A(∞)',
+        directionalRates: '方向別成長率',
+        help:
+          '破線と点線は、現在の設定に対する近傍値と遠方漸近値を示します。',
+      },
       definitions: {
         area: { label: 'Ahat', yTitle: '正規化面積, Ahat' },
         velocity: { label: 'vhat', yTitle: 'バルク速度, vhat' },
@@ -525,6 +545,8 @@ export const TRANSLATIONS: Record<Language, UiText> = {
         'El arrastre de gas se informa en forma adimensional respecto al flujo líquido de entrada.',
       coefficient:
         'Coeficiente generalizado de arrastre para historias arbitrarias de crecimiento de área.',
+      coefficientReferences:
+        'En la gráfica de K_A, las líneas horizontales discontinua y punteada muestran K_A(0) y la asíntota lejana K_A(∞); para crecimiento positivo en dos direcciones, K_A(∞)=sqrt(lambda_1 lambda_2).',
     },
     plots: {
       eyebrow: 'Gráficas interactivas',
@@ -538,6 +560,14 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       xAxisTitle: 'Distancia normalizada, zeta = z / De',
       hoverZeta: 'zeta',
       hoverValue: 'valor',
+      referenceValues: {
+        title: 'Valores de referencia del coeficiente',
+        nearFieldLimit: 'Campo cercano K_A(0)',
+        farFieldLimit: 'Asíntota lejana K_A(∞)',
+        directionalRates: 'Tasas direccionales',
+        help:
+          'Las líneas discontinua y punteada muestran el valor de campo cercano y la asíntota lejana para la configuración actual.',
+      },
       definitions: {
         area: { label: 'Ahat', yTitle: 'Área normalizada, Ahat' },
         velocity: { label: 'vhat', yTitle: 'Velocidad media, vhat' },

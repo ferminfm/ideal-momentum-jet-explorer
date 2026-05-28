@@ -38,6 +38,8 @@ const PLAIN_MATH_REPLACEMENTS = {
   eta: 'η',
   alpha: 'α',
   gamma: 'γ',
+  lambda_1: 'λ₁',
+  lambda_2: 'λ₂',
   sqrt: '√',
 } as const
 
