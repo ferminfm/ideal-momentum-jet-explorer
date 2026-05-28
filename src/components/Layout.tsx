@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 
 const GITHUB_URL = 'https://github.com/ferminfm/ideal-momentum-jet-explorer'
 const MODEL_NOTES_URL = `${GITHUB_URL}#scientific-model`
+const RESEARCHMAP_URL = 'https://researchmap.jp/francomedrano'
 const AUTHOR_AFFILIATION =
   'Fermín Franco-Medrano — Ensenada Campus, Autonomous University of Baja California / Institute of Mathematics for Industry, Kyushu University'
 
@@ -33,6 +34,9 @@ export function Layout({ children }: LayoutProps) {
           </a>
           <a className="repo-link secondary" href={MODEL_NOTES_URL} target="_blank" rel="noreferrer">
             Model notes
+          </a>
+          <a className="repo-link secondary" href={RESEARCHMAP_URL} target="_blank" rel="noreferrer">
+            Researchmap profile
           </a>
         </div>
       </header>
