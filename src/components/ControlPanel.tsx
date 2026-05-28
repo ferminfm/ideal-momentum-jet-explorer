@@ -207,9 +207,9 @@ export function ControlPanel({ params, selectedPresetId, onChange }: ControlPane
         <label className="field">
           <span>theta half-angle</span>
           <input
-            type="number"
+            type="range"
             min="0"
-            max="25"
+            max="20"
             step="0.05"
             value={params.thetaDeg}
             onChange={(event) =>
@@ -219,13 +219,14 @@ export function ControlPanel({ params, selectedPresetId, onChange }: ControlPane
               })
             }
           />
+          <output>{formatNumber(params.thetaDeg, 2)} deg</output>
         </label>
         <label className="field">
           <span>phi half-angle</span>
           <input
-            type="number"
+            type="range"
             min="0"
-            max="25"
+            max="20"
             step="0.05"
             value={params.phiDeg}
             onChange={(event) =>
@@ -235,6 +236,7 @@ export function ControlPanel({ params, selectedPresetId, onChange }: ControlPane
               })
             }
           />
+          <output>{formatNumber(params.phiDeg, 2)} deg</output>
         </label>
         <label className="field">
           <span>zeta max = z / De</span>

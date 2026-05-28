@@ -49,7 +49,7 @@ describe('URL state helpers', () => {
       expect(sanitized.params.geometry.minorAxis).toBe(1)
     }
     expect(sanitized.params.densityRatio).toBeCloseTo(0.0012)
-    expect(sanitized.params.thetaDeg).toBe(25)
+    expect(sanitized.params.thetaDeg).toBe(20)
     expect(sanitized.params.phiDeg).toBe(0)
     expect(sanitized.params.zetaMax).toBe(100)
     expect(sanitized.params.samples).toBe(50)

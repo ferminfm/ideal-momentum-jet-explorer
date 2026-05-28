@@ -11,7 +11,7 @@ import {
 export const URL_LIMITS = {
   densityRatio: { min: 1e-4, max: 1 },
   dimension: { min: 0.25, max: 4 },
-  angle: { min: 0, max: 25 },
+  angle: { min: 0, max: 20 },
   zetaMax: { min: 20, max: 100 },
   samples: { min: 50, max: 200 },
 }
