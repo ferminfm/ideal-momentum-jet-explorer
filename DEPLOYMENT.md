@@ -2,12 +2,18 @@
 
 This project is a static Vite app. GitHub Pages can serve the built files directly through GitHub Actions.
 
+## Public URLs
+
+- GitHub repository: https://github.com/ferminfm/ideal-momentum-jet-explorer
+- GitHub Pages app: https://ferminfm.github.io/ideal-momentum-jet-explorer/
+
 ## Local Checks
 
 ```bash
 npm install
 npm run test
 npm run build
+npm run lint
 ```
 
 ## Create The Public GitHub Repository
@@ -34,8 +40,6 @@ git remote add origin https://github.com/ferminfm/ideal-momentum-jet-explorer.gi
 git branch -M main
 git push -u origin main
 ```
-
-Current status as of 2026-05-29: local verification passes, but `gh auth status` reports that the saved `ferminfm` token is invalid. Run `gh auth login` manually in a normal terminal before using `gh repo create`.
 
 ## Enable GitHub Pages
 
@@ -70,3 +74,10 @@ base: '/ideal-momentum-jet-explorer/'
 ```
 
 This is required for project Pages rather than a user root Pages site.
+
+Production preview:
+
+```bash
+npm run build
+npm run preview -- --host 127.0.0.1
+```

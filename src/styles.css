@@ -74,10 +74,21 @@ a:hover {
   max-width: 48rem;
 }
 
+.description-line {
+  color: #40596b;
+  font-size: 0.98rem;
+  margin: 0.7rem 0 0;
+  max-width: 56rem;
+}
+
 .author-line {
   color: #5d6d7a;
   font-size: 0.95rem;
   margin: 0.65rem 0 0;
+}
+
+.author-line span {
+  display: block;
 }
 
 .repo-link,
@@ -92,6 +103,19 @@ a:hover {
   min-height: 2.6rem;
   padding: 0.55rem 0.85rem;
   white-space: nowrap;
+}
+
+.header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  justify-content: flex-end;
+  max-width: 18rem;
+}
+
+.repo-link.secondary {
+  background: #f6fafc;
+  color: #365164;
 }
 
 .repo-link:hover,
@@ -459,6 +483,11 @@ main {
   }
 
   .repo-link {
+    width: 100%;
+  }
+
+  .header-actions {
+    max-width: none;
     width: 100%;
   }
 

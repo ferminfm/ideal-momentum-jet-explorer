@@ -2,25 +2,18 @@
 
 Interactive reduced-order model for circular, rectangular, and elliptical atomizing jets.
 
-This browser app explores the ideal momentum atomizing-jet model used in the Kumamoto JSFM noncircular-jet work. It is a static React/TypeScript application: all calculations run client-side, and the public site requires no Python backend, database, or server-side execution.
+Live app: https://ferminfm.github.io/ideal-momentum-jet-explorer/  
+Source: https://github.com/ferminfm/ideal-momentum-jet-explorer
 
-## What The App Does
+## What This Is
 
-- Evaluates rectangular and elliptical nozzle exits, including square and circular limits.
-- Computes normalized area growth, bulk velocity, composite density, dynamic pressure, gas entrainment, and generalized entrainment coefficient.
-- Provides presets for circular, square, aspect-ratio 2, equal-density, Gutmark-like, and liquid-in-air cases.
-- Displays interactive Plotly graphs with hover readouts and export support through the Plotly modebar.
-- Renders a Three.js control-volume visualization with rectangular frustum or elliptical frustum geometry.
+Ideal Momentum Jet Explorer is a browser-based scientific computing app for exploring a conservative locally homogeneous two-phase jet closure. It evaluates how prescribed nozzle geometry and area growth affect bulk velocity, composite density, dynamic pressure, and entrainment.
 
-## Model Scope
+The app is intended as an educational and exploratory research tool for fluid mechanics, atomization, and reduced-order modeling. It is fully static: all calculations run client-side in TypeScript, and GitHub Pages serves the built files without a backend.
 
-The app visualizes a conservative, lossless top-hat branch. A prescribed area-growth history defines the control volume, and ideal momentum conservation gives the bulk state variables.
+## Scientific Model
 
-It does not predict axis switching, vortex dynamics, breakup physics, turbulence structure, or the spreading half-angles. Those half-angles are inputs. Composite-density predictions require independent phase-fraction or concentration validation. Equal-density comparisons validate only the velocity branch.
-
-This app is for educational and research visualization of a reduced-order model, not validated engineering design software.
-
-## Core Equations
+The model uses a top-hat control volume and a prescribed area-growth history. The user selects a rectangular or elliptical nozzle exit, density ratio, initial dimensions, directional spreading half-angles, and normalized downstream range.
 
 Density ratio:
 
@@ -65,14 +58,36 @@ K_A = sqrt(rho*) / Delta * dAhat/dzeta
 
 For `rho* < 1e-8`, the implementation uses the limiting behavior `vhat ~= 1`, `rhohat ~= 1/Ahat`, and `phat ~= 1/Ahat` to avoid subtractive numerical loss.
 
-## Local Development
+## What The App Computes
+
+- Normalized area growth, `Ahat(zeta)`.
+- Bulk velocity, `vhat(zeta)`.
+- Composite density, `rhohat(zeta)`.
+- Dynamic pressure, `phat(zeta)`.
+- Normalized gas entrainment rate, `mhat_g(zeta)`.
+- Generalized entrainment coefficient, `K_A(zeta)`.
+- Rectangular or elliptical expanding control-volume geometry in 3D.
+
+## What It Does Not Compute
+
+The app does not predict axis switching, vortex dynamics, droplet-size distribution, breakup, losses, turbulence structure, or spreading half-angles. Those half-angles are prescribed inputs.
+
+Velocity predictions can be compared with equal-density jet data. Composite-density validation requires independent phase-fraction or concentration measurements. This app is not validated engineering design software.
+
+## Running Locally
 
 ```bash
 npm install
-npm run dev
+npm run dev -- --host 127.0.0.1
 ```
 
-Quality checks:
+Default local app path:
+
+```text
+http://127.0.0.1:5173/ideal-momentum-jet-explorer/
+```
+
+## Tests And Build
 
 ```bash
 npm run test
@@ -90,36 +105,29 @@ The smoke test uses `playwright-core` with system Chrome and writes desktop/mobi
 
 ## Deployment
 
-GitHub Pages deployment is configured through GitHub Actions in `.github/workflows/deploy.yml`. The Vite base path is set to:
+GitHub Pages deployment is configured through GitHub Actions in `.github/workflows/deploy.yml`. The Vite base path is:
 
 ```text
 /ideal-momentum-jet-explorer/
 ```
 
-After pushing the repository, enable Pages with:
+Production preview after building:
 
-```text
-GitHub -> Settings -> Pages -> Source: GitHub Actions
+```bash
+npm run preview -- --host 127.0.0.1
 ```
 
-GitHub Pages sites are public. Do not add private PDFs, unpublished manuscripts, credentials, tokens, or sensitive research notes to `public/` or committed app assets.
+GitHub Pages sites are public. Keep private PDFs, unpublished manuscripts, credentials, tokens, sensitive notes, and non-public datasets out of `public/` and committed assets.
 
-## Citations
+## Citation / Model Lineage
 
-- Model citation placeholder: Franco, Fukumoto, Velte & Hodžić, JPSJ 2017.
-- Kumamoto JSFM 2026: public visualization companion for the noncircular ideal momentum jet model.
-
-## Screenshots
-
-Screenshot placeholders:
-
-- Main dashboard with controls and Plotly graph.
-- Three.js rectangular control volume.
-- Three.js elliptical control volume.
+- Franco, Fukumoto, Velte & Hodžić, JPSJ 2017: circular ideal momentum jet model.
+- Noncircular extension: rectangular and elliptical area-growth formulation.
+- Kumamoto JSFM 2026: short conference version.
 
 ## Roadmap
 
 - Add saved parameter URLs for reproducible figures.
 - Add CSV export for sampled state variables.
-- Add a small derivation note for the density and entrainment branches.
+- Add a concise derivation note for the density and entrainment branches.
 - Add comparison overlays for measured or literature velocity curves when public data are available.
