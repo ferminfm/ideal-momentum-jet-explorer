@@ -5,20 +5,22 @@ import {
   VELOCITY_OVERLAY_NONE,
   getVelocityOverlay,
 } from '../data/velocityOverlays'
+import type { UiText } from '../i18n/translations'
 import type { JetSeries, JetState } from '../model/jetModel'
 
 interface PlotsProps {
   series: JetSeries
   densityLogScale: boolean
   overlayId: string
+  text: UiText
   onDensityLogScaleChange: (value: boolean) => void
   onOverlayChange: (overlayId: string) => void
 }
 
+type PlotId = keyof UiText['plots']['definitions']
+
 interface PlotDefinition {
-  id: string
-  label: string
-  yTitle: string
+  id: PlotId
   color: string
   logAllowed?: boolean
   getValue: (state: JetState) => number
@@ -27,44 +29,32 @@ interface PlotDefinition {
 const PLOT_DEFINITIONS: PlotDefinition[] = [
   {
     id: 'area',
-    label: 'Ahat',
-    yTitle: 'Normalized area, Ahat',
     color: '#236b8e',
     getValue: (state) => state.normalizedArea,
   },
   {
     id: 'velocity',
-    label: 'vhat',
-    yTitle: 'Bulk velocity, vhat',
     color: '#3b6f48',
     getValue: (state) => state.velocityHat,
   },
   {
     id: 'density',
-    label: 'rhohat',
-    yTitle: 'Composite density, rhohat',
     color: '#6f5fa8',
     logAllowed: true,
     getValue: (state) => state.densityHat,
   },
   {
     id: 'pressure',
-    label: 'phat',
-    yTitle: 'Dynamic pressure, phat',
     color: '#5d7182',
     getValue: (state) => state.pressureHat,
   },
   {
     id: 'entrainment',
-    label: 'mhat_g',
-    yTitle: 'Gas entrainment rate, mhat_g',
     color: '#b35a2a',
     getValue: (state) => state.gasEntrainmentHat,
   },
   {
     id: 'coefficient',
-    label: 'K_A',
-    yTitle: 'Generalized entrainment coefficient, K_A',
     color: '#94424e',
     getValue: (state) => state.entrainmentCoefficient,
   },
@@ -79,14 +69,19 @@ export function Plots({
   series,
   densityLogScale,
   overlayId,
+  text,
   onDensityLogScaleChange,
   onOverlayChange,
 }: PlotsProps) {
-  const [activeId, setActiveId] = useState(PLOT_DEFINITIONS[0].id)
+  const [activeId, setActiveId] = useState<PlotId>(PLOT_DEFINITIONS[0].id)
   const activePlot =
     PLOT_DEFINITIONS.find((definition) => definition.id === activeId) ??
     PLOT_DEFINITIONS[0]
+  const activePlotCopy = text.plots.definitions[activePlot.id]
   const selectedOverlay = getVelocityOverlay(overlayId)
+  const selectedOverlayCopy = selectedOverlay
+    ? text.plots.overlays[selectedOverlay.id as keyof typeof text.plots.overlays]
+    : undefined
 
   const plotData = useMemo(() => {
     const x = series.states.map((state) => state.axialZeta)
@@ -102,17 +97,20 @@ export function Plots({
           color: activePlot.color,
           width: 3,
         },
-        hovertemplate: 'zeta=%{x:.3f}<br>value=%{y:.5g}<extra></extra>',
+        hovertemplate: `${text.plots.hoverZeta}=%{x:.3f}<br>${text.plots.hoverValue}=%{y:.5g}<extra></extra>`,
       },
     ]
 
     if (activePlot.id === 'velocity' && selectedOverlay) {
+      const overlayLabel = selectedOverlayCopy?.label ?? selectedOverlay.label
+      const overlaySource = selectedOverlayCopy?.source ?? selectedOverlay.source
+
       traces.push({
         x: selectedOverlay.points.map((point) => point.zeta),
         y: selectedOverlay.points.map((point) => point.vhat),
         type: 'scatter',
         mode: 'markers',
-        name: selectedOverlay.label,
+        name: overlayLabel,
         marker: {
           color: selectedOverlay.publicData ? '#94424e' : '#b35a2a',
           size: 9,
@@ -120,13 +118,20 @@ export function Plots({
           line: { width: 1.5 },
         },
         hovertemplate:
-          'zeta=%{x:.3f}<br>vhat=%{y:.5g}<br>' +
-          `${selectedOverlay.label}<br>${selectedOverlay.source}<extra></extra>`,
+          `${text.plots.hoverZeta}=%{x:.3f}<br>vhat=%{y:.5g}<br>` +
+          `${overlayLabel}<br>${overlaySource}<extra></extra>`,
       })
     }
 
     return traces
-  }, [activePlot, selectedOverlay, series.states])
+  }, [
+    activePlot,
+    selectedOverlay,
+    selectedOverlayCopy,
+    series.states,
+    text.plots.hoverValue,
+    text.plots.hoverZeta,
+  ])
 
   const yAxisType = activePlot.id === 'density' && densityLogScale ? 'log' : 'linear'
 
@@ -134,8 +139,8 @@ export function Plots({
     <section className="panel plot-panel" aria-labelledby="plots-title">
       <div className="section-heading plot-heading">
         <div>
-          <p className="eyebrow">Interactive plots</p>
-          <h2 id="plots-title">State variables along zeta</h2>
+          <p className="eyebrow">{text.plots.eyebrow}</p>
+          <h2 id="plots-title">{text.plots.title}</h2>
         </div>
         {activePlot.logAllowed ? (
           <label className="toggle-control">
@@ -144,12 +149,12 @@ export function Plots({
               checked={densityLogScale}
               onChange={(event) => onDensityLogScaleChange(event.target.checked)}
             />
-            Log density
+            {text.plots.logDensity}
           </label>
         ) : null}
       </div>
 
-      <div className="plot-tabs" role="tablist" aria-label="Plot variable">
+      <div className="plot-tabs" role="tablist" aria-label={text.plots.plotVariableAria}>
         {PLOT_DEFINITIONS.map((definition) => (
           <button
             key={definition.id}
@@ -157,30 +162,31 @@ export function Plots({
             className={definition.id === activeId ? 'active' : ''}
             onClick={() => setActiveId(definition.id)}
           >
-            {definition.label}
+            {text.plots.definitions[definition.id].label}
           </button>
         ))}
       </div>
 
       <div className="overlay-controls">
         <label className="field">
-          <span>Velocity overlay</span>
+          <span>{text.plots.velocityOverlay}</span>
           <select
             value={overlayId}
             onChange={(event) => onOverlayChange(event.target.value)}
           >
-            <option value={VELOCITY_OVERLAY_NONE}>None</option>
+            <option value={VELOCITY_OVERLAY_NONE}>{text.plots.none}</option>
             {VELOCITY_OVERLAYS.map((overlay) => (
               <option key={overlay.id} value={overlay.id}>
-                {overlay.label}
+                {text.plots.overlays[overlay.id as keyof typeof text.plots.overlays]
+                  ?.label ?? overlay.label}
               </option>
             ))}
           </select>
         </label>
         <p className="helper-text">
           {selectedOverlay
-            ? selectedOverlay.notes
-            : 'No public measured velocity dataset is bundled yet. Overlays are optional comparison aids and may test only reduced model branches.'}
+            ? selectedOverlayCopy?.notes ?? selectedOverlay.notes
+            : text.plots.defaultOverlayNote}
         </p>
       </div>
 
@@ -197,12 +203,12 @@ export function Plots({
               'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif',
           },
           xaxis: {
-            title: 'Normalized distance, zeta = z / De',
+            title: text.plots.xAxisTitle,
             zeroline: false,
             gridcolor: '#dfe7ee',
           },
           yaxis: {
-            title: activePlot.yTitle,
+            title: activePlotCopy.yTitle,
             type: yAxisType,
             zeroline: false,
             gridcolor: '#dfe7ee',

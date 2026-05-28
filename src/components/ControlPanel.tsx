@@ -1,3 +1,4 @@
+import type { UiText } from '../i18n/translations'
 import type { JetParameters } from '../model/jetModel'
 import { getAspectRatio, getEquivalentDiameter, getInitialArea } from '../model/jetModel'
 import { PRESETS, cloneParams } from '../model/presets'
@@ -6,6 +7,7 @@ import { formatNumber, formatScientific } from '../utils/format'
 interface ControlPanelProps {
   params: JetParameters
   selectedPresetId: string
+  text: UiText
   onChange: (params: JetParameters, presetId?: string) => void
 }
 
@@ -47,7 +49,7 @@ function clampDimension(value: number): number {
   return Math.min(4, Math.max(0.25, value))
 }
 
-export function ControlPanel({ params, selectedPresetId, onChange }: ControlPanelProps) {
+export function ControlPanel({ params, selectedPresetId, text, onChange }: ControlPanelProps) {
   const densityLog = Math.log10(params.densityRatio)
   const initialArea = getInitialArea(params.geometry)
   const equivalentDiameter = getEquivalentDiameter(params.geometry)
@@ -67,26 +69,26 @@ export function ControlPanel({ params, selectedPresetId, onChange }: ControlPane
   return (
     <section className="panel control-panel" aria-labelledby="controls-title">
       <div className="section-heading">
-        <p className="eyebrow">Model controls</p>
-        <h2 id="controls-title">Nozzle and area-growth inputs</h2>
+        <p className="eyebrow">{text.controls.eyebrow}</p>
+        <h2 id="controls-title">{text.controls.title}</h2>
       </div>
 
       <div className="control-block">
-        <label className="control-label">Nozzle geometry</label>
-        <div className="segmented-control" role="group" aria-label="Nozzle geometry">
+        <label className="control-label">{text.controls.geometry}</label>
+        <div className="segmented-control" role="group" aria-label={text.controls.geometryAria}>
           <button
             type="button"
             className={params.geometry.geometry === 'rectangular' ? 'active' : ''}
             onClick={() => setParams(updateGeometry(params, 'rectangular'))}
           >
-            Rectangular
+            {text.controls.rectangular}
           </button>
           <button
             type="button"
             className={params.geometry.geometry === 'elliptical' ? 'active' : ''}
             onClick={() => setParams(updateGeometry(params, 'elliptical'))}
           >
-            Elliptical
+            {text.controls.elliptical}
           </button>
         </div>
       </div>
@@ -94,7 +96,7 @@ export function ControlPanel({ params, selectedPresetId, onChange }: ControlPane
       <div className="control-grid">
         <label className="field">
           <span>
-            Density ratio <span className="math">rho* = rho_g / rho_l</span>
+            {text.controls.densityRatio} <span className="math">rho* = rho_g / rho_l</span>
           </span>
           <input
             type="range"
@@ -115,7 +117,7 @@ export function ControlPanel({ params, selectedPresetId, onChange }: ControlPane
         {params.geometry.geometry === 'rectangular' ? (
           <>
             <label className="field">
-              <span>B0 width</span>
+              <span>{text.controls.width}</span>
               <input
                 type="range"
                 min="0.25"
@@ -136,7 +138,7 @@ export function ControlPanel({ params, selectedPresetId, onChange }: ControlPane
               <output>{formatNumber(rectangularWidth, 2)}</output>
             </label>
             <label className="field">
-              <span>H0 height</span>
+              <span>{text.controls.height}</span>
               <input
                 type="range"
                 min="0.25"
@@ -160,7 +162,7 @@ export function ControlPanel({ params, selectedPresetId, onChange }: ControlPane
         ) : (
           <>
             <label className="field">
-              <span>a0 full major axis</span>
+              <span>{text.controls.majorAxis}</span>
               <input
                 type="range"
                 min="0.25"
@@ -181,7 +183,7 @@ export function ControlPanel({ params, selectedPresetId, onChange }: ControlPane
               <output>{formatNumber(ellipticalMajorAxis, 2)}</output>
             </label>
             <label className="field">
-              <span>b0 full minor axis</span>
+              <span>{text.controls.minorAxis}</span>
               <input
                 type="range"
                 min="0.25"
@@ -205,7 +207,7 @@ export function ControlPanel({ params, selectedPresetId, onChange }: ControlPane
         )}
 
         <label className="field">
-          <span>theta half-angle</span>
+          <span>{text.controls.theta}</span>
           <input
             type="range"
             min="0"
@@ -222,7 +224,7 @@ export function ControlPanel({ params, selectedPresetId, onChange }: ControlPane
           <output>{formatNumber(params.thetaDeg, 2)} deg</output>
         </label>
         <label className="field">
-          <span>phi half-angle</span>
+          <span>{text.controls.phi}</span>
           <input
             type="range"
             min="0"
@@ -239,7 +241,7 @@ export function ControlPanel({ params, selectedPresetId, onChange }: ControlPane
           <output>{formatNumber(params.phiDeg, 2)} deg</output>
         </label>
         <label className="field">
-          <span>zeta max = z / De</span>
+          <span>{text.controls.zetaMax}</span>
           <input
             type="range"
             min="20"
@@ -256,7 +258,7 @@ export function ControlPanel({ params, selectedPresetId, onChange }: ControlPane
           <output>{formatNumber(params.zetaMax, 0)}</output>
         </label>
         <label className="field">
-          <span>Sample points</span>
+          <span>{text.controls.samplePoints}</span>
           <input
             type="range"
             min="50"
@@ -274,7 +276,7 @@ export function ControlPanel({ params, selectedPresetId, onChange }: ControlPane
         </label>
       </div>
 
-      <div className="metrics-strip" aria-label="Derived geometry values">
+      <div className="metrics-strip" aria-label={text.controls.derivedGeometryAria}>
         <div>
           <span>A0</span>
           <strong>{formatNumber(initialArea, 4)}</strong>
@@ -290,19 +292,26 @@ export function ControlPanel({ params, selectedPresetId, onChange }: ControlPane
       </div>
 
       <div className="control-block">
-        <label className="control-label">Presets</label>
+        <label className="control-label">{text.controls.presets}</label>
         <div className="preset-grid">
-          {PRESETS.map((preset) => (
-            <button
-              key={preset.id}
-              type="button"
-              className={selectedPresetId === preset.id ? 'active' : ''}
-              title={preset.description}
-              onClick={() => setParams(preset.params, preset.id)}
-            >
-              {preset.name}
-            </button>
-          ))}
+          {PRESETS.map((preset) => {
+            const presetCopy =
+              text.controls.presetsCopy[
+                preset.id as keyof typeof text.controls.presetsCopy
+              ] ?? preset
+
+            return (
+              <button
+                key={preset.id}
+                type="button"
+                className={selectedPresetId === preset.id ? 'active' : ''}
+                title={presetCopy.description}
+                onClick={() => setParams(preset.params, preset.id)}
+              >
+                {presetCopy.name}
+              </button>
+            )
+          })}
         </div>
       </div>
     </section>

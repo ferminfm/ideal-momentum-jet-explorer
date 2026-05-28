@@ -7,6 +7,7 @@ import { InterpretationPanel } from './components/InterpretationPanel'
 import { JetGeometry3D } from './components/JetGeometry3D'
 import { Layout } from './components/Layout'
 import { Plots } from './components/Plots'
+import { TRANSLATIONS, type Language, type UiText } from './i18n/translations'
 import { generateJetSeries, type JetParameters } from './model/jetModel'
 import { cloneParams } from './model/presets'
 import { PRESET_CUSTOM, type ExplorerState } from './types/appState'
@@ -21,29 +22,35 @@ import {
 } from './utils/urlState'
 import './styles.css'
 
-function TerminalStateSummary({ series }: { series: ReturnType<typeof generateJetSeries> }) {
+function TerminalStateSummary({
+  series,
+  text,
+}: {
+  series: ReturnType<typeof generateJetSeries>
+  text: UiText
+}) {
   const terminal = series.states[series.states.length - 1]
 
   return (
-    <section className="summary-bar" aria-label="Terminal state summary">
+    <section className="summary-bar" aria-label={text.summary.ariaLabel}>
       <div>
-        <span>Ahat at zeta max</span>
+        <span>{text.summary.areaAtZetaMax}</span>
         <strong>{formatNumber(terminal.normalizedArea, 3)}</strong>
       </div>
       <div>
-        <span>vhat</span>
+        <span>{text.summary.velocity}</span>
         <strong>{formatNumber(terminal.velocityHat, 4)}</strong>
       </div>
       <div>
-        <span>rhohat</span>
+        <span>{text.summary.density}</span>
         <strong>{formatNumber(terminal.densityHat, 4)}</strong>
       </div>
       <div>
-        <span>mhat_g</span>
+        <span>{text.summary.gasEntrainment}</span>
         <strong>{formatNumber(terminal.gasEntrainmentHat, 4)}</strong>
       </div>
       <div>
-        <span>K_A</span>
+        <span>{text.summary.coefficient}</span>
         <strong>{formatNumber(terminal.entrainmentCoefficient, 4)}</strong>
       </div>
     </section>
@@ -62,6 +69,7 @@ function App() {
   })
   const [shareStatus, setShareStatus] = useState('')
   const { params } = appState
+  const text = TRANSLATIONS[appState.language]
   const series = useMemo(() => generateJetSeries(params), [params])
 
   useEffect(() => {
@@ -74,6 +82,15 @@ function App() {
     window.history.replaceState(null, '', nextUrl)
   }, [appState])
 
+  useEffect(() => {
+    if (typeof document === 'undefined') {
+      return
+    }
+
+    document.documentElement.lang = appState.language
+    document.title = text.layout.title
+  }, [appState.language, text.layout.title])
+
   function updateParams(nextParams: JetParameters, presetId = PRESET_CUSTOM) {
     setAppState((current) => ({
       ...current,
@@ -85,32 +102,43 @@ function App() {
 
   async function copyShareableUrl() {
     await copyTextToClipboard(window.location.href)
-    setShareStatus('Shareable URL copied.')
+    setShareStatus(text.export.copied)
     window.setTimeout(() => setShareStatus(''), 1800)
   }
 
+  function updateLanguage(language: Language) {
+    setAppState((current) => ({ ...current, language }))
+  }
+
   return (
-    <Layout>
+    <Layout
+      language={appState.language}
+      text={text}
+      onLanguageChange={updateLanguage}
+    >
       <div className="app-grid">
         <aside className="left-rail">
           <ControlPanel
             params={params}
             selectedPresetId={appState.selectedPresetId}
+            text={text}
             onChange={updateParams}
           />
           <ExportPanel
             shareStatus={shareStatus}
+            text={text}
             onCopyShareUrl={() => void copyShareableUrl()}
             onDownloadCsv={() => downloadJetCsv(series)}
           />
-          <EquationPanel />
+          <EquationPanel text={text} />
         </aside>
         <section className="main-rail">
-          <TerminalStateSummary series={series} />
+          <TerminalStateSummary series={series} text={text} />
           <Plots
             series={series}
             densityLogScale={appState.densityLogScale}
             overlayId={appState.overlayId}
+            text={text}
             onDensityLogScaleChange={(densityLogScale) =>
               setAppState((current) => ({ ...current, densityLogScale }))
             }
@@ -123,6 +151,7 @@ function App() {
             crossSectionZeta={appState.crossSectionZeta}
             showSelectedCrossSection={appState.showSelectedCrossSection}
             showAxisSwitchingSection={appState.showAxisSwitchingSection}
+            text={text}
             onCrossSectionZetaChange={(crossSectionZeta) =>
               setAppState((current) => ({
                 ...current,
@@ -136,8 +165,8 @@ function App() {
               setAppState((current) => ({ ...current, showAxisSwitchingSection }))
             }
           />
-          <InterpretationPanel />
-          <CitationPanel />
+          <InterpretationPanel text={text} />
+          <CitationPanel text={text} />
         </section>
       </div>
     </Layout>

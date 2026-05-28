@@ -8,6 +8,7 @@ import {
   type JetSeries,
   type JetState,
 } from '../model/jetModel'
+import type { UiText } from '../i18n/translations'
 import { formatDegrees, formatNumber } from '../utils/format'
 
 interface JetGeometry3DProps {
@@ -15,6 +16,7 @@ interface JetGeometry3DProps {
   crossSectionZeta: number
   showSelectedCrossSection: boolean
   showAxisSwitchingSection: boolean
+  text: UiText
   onCrossSectionZetaChange: (zeta: number) => void
   onShowSelectedCrossSectionChange: (value: boolean) => void
   onShowAxisSwitchingSectionChange: (value: boolean) => void
@@ -317,6 +319,7 @@ export function JetGeometry3D({
   crossSectionZeta,
   showSelectedCrossSection,
   showAxisSwitchingSection,
+  text,
   onCrossSectionZetaChange,
   onShowSelectedCrossSectionChange,
   onShowAxisSwitchingSectionChange,
@@ -324,16 +327,20 @@ export function JetGeometry3D({
   const axisSwitchingZeta = computeAxisSwitchingZeta(series.params)
   const selectedState = getJetState(series.params, crossSectionZeta)
   const canJumpToAxisSwitching = axisSwitchingZeta !== null
+  const geometryLabel =
+    series.params.geometry.geometry === 'rectangular'
+      ? text.controls.rectangular
+      : text.controls.elliptical
 
   return (
     <section className="panel geometry-panel" aria-labelledby="geometry-title">
       <div className="section-heading">
-        <p className="eyebrow">3D geometry</p>
-        <h2 id="geometry-title">Expanding control volume</h2>
+        <p className="eyebrow">{text.geometry.eyebrow}</p>
+        <h2 id="geometry-title">{text.geometry.title}</h2>
       </div>
       <div className="geometry-controls">
         <label className="field">
-          <span>Cross-section zeta</span>
+          <span>{text.geometry.crossSection}</span>
           <input
             type="range"
             min="0"
@@ -350,7 +357,7 @@ export function JetGeometry3D({
             checked={showSelectedCrossSection}
             onChange={(event) => onShowSelectedCrossSectionChange(event.target.checked)}
           />
-          Show selected cross-section
+          {text.geometry.showSelected}
         </label>
         <label className="toggle-control">
           <input
@@ -358,7 +365,7 @@ export function JetGeometry3D({
             checked={showAxisSwitchingSection}
             onChange={(event) => onShowAxisSwitchingSectionChange(event.target.checked)}
           />
-          Highlight axis-switching section
+          {text.geometry.highlightSwitching}
         </label>
         <button
           type="button"
@@ -370,27 +377,27 @@ export function JetGeometry3D({
             }
           }}
         >
-          Jump to axis switching
+          {text.geometry.jumpToSwitching}
         </button>
       </div>
       <div className="cross-section-readout">
         <div>
-          <span>Selected dimensions</span>
+          <span>{text.geometry.selectedDimensions}</span>
           <strong>
             {formatNumber(selectedState.primarySpan, 3)} x{' '}
             {formatNumber(selectedState.secondarySpan, 3)}
           </strong>
         </div>
         <div>
-          <span>Ahat at selected zeta</span>
+          <span>{text.geometry.areaAtSelected}</span>
           <strong>{formatNumber(selectedState.normalizedArea, 3)}</strong>
         </div>
         <div>
-          <span>Axis switching</span>
+          <span>{text.geometry.axisSwitching}</span>
           <strong>
             {axisSwitchingZeta === null
-              ? 'none in range'
-              : `zeta ${formatNumber(axisSwitchingZeta, 2)}`}
+              ? text.geometry.noneInRange
+              : `${text.geometry.zetaPrefix} ${formatNumber(axisSwitchingZeta, 2)}`}
           </strong>
         </div>
       </div>
@@ -410,15 +417,15 @@ export function JetGeometry3D({
           />
         </Canvas>
         <div className="viewer-overlay" aria-hidden="true">
-          <span>z-axis</span>
-          <span>A(z) surface</span>
-          <span>Drag to rotate · scroll to zoom · right-drag/shift-drag to pan</span>
+          <span>{text.geometry.zAxis}</span>
+          <span>{text.geometry.surface}</span>
+          <span>{text.geometry.controlsHint}</span>
           <span>
             theta {formatDegrees(series.params.thetaDeg)} / phi{' '}
             {formatDegrees(series.params.phiDeg)}
           </span>
           <span>
-            {series.params.geometry.geometry}, De {formatNumber(series.equivalentDiameter, 3)}
+            {geometryLabel}, De {formatNumber(series.equivalentDiameter, 3)}
           </span>
         </div>
       </div>

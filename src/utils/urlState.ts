@@ -1,4 +1,5 @@
 import { VELOCITY_OVERLAYS } from '../data/velocityOverlays'
+import type { Language } from '../i18n/translations'
 import type { JetParameters } from '../model/jetModel'
 import { PRESETS, cloneParams } from '../model/presets'
 import {
@@ -19,6 +20,7 @@ export const URL_LIMITS = {
 type GeometryName = JetParameters['geometry']['geometry']
 
 export interface DecodedUrlState {
+  language?: Language
   geometry?: GeometryName
   densityRatio?: number
   width?: number
@@ -66,6 +68,14 @@ function boolValue(value: string | null): boolean | undefined {
   return undefined
 }
 
+function languageValue(value: string | null): Language | undefined {
+  if (value === 'en' || value === 'ja' || value === 'es') {
+    return value
+  }
+
+  return undefined
+}
+
 function setNumber(params: URLSearchParams, key: string, value: number): void {
   params.set(key, Number(value.toPrecision(8)).toString())
 }
@@ -74,6 +84,7 @@ export function encodeStateToQuery(state: ExplorerState): URLSearchParams {
   const query = new URLSearchParams()
   const { params } = state
 
+  query.set('lang', state.language)
   query.set('geometry', params.geometry.geometry)
   setNumber(query, 'rhoStar', params.densityRatio)
   setNumber(query, 'theta', params.thetaDeg)
@@ -107,6 +118,7 @@ export function decodeStateFromQuery(search: string): DecodedUrlState {
   const geometry = query.get('geometry')
 
   return {
+    language: languageValue(query.get('lang')),
     geometry: geometry === 'rectangular' || geometry === 'elliptical' ? geometry : undefined,
     densityRatio: finiteNumber(query.get('rhoStar')),
     width: finiteNumber(query.get('B0')),
@@ -198,6 +210,7 @@ export function sanitizeDecodedState(decoded: DecodedUrlState): Partial<Explorer
   }
 
   return {
+    language: decoded.language ?? base.language,
     params,
     selectedPresetId: preset ? preset.id : PRESET_CUSTOM,
     densityLogScale: decoded.densityLogScale ?? base.densityLogScale,

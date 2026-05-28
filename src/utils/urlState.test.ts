@@ -16,6 +16,7 @@ describe('URL state helpers', () => {
       height: 0.75,
     }
     state.params.densityRatio = 0.0025
+    state.language = 'ja'
     state.densityLogScale = true
     state.overlayId = 'synthetic-equal-density-reference'
     state.crossSectionZeta = 12.5
@@ -29,6 +30,7 @@ describe('URL state helpers', () => {
       expect(sanitized.params.geometry.height).toBeCloseTo(0.75)
     }
     expect(sanitized.params.densityRatio).toBeCloseTo(0.0025)
+    expect(sanitized.language).toBe('ja')
     expect(sanitized.densityLogScale).toBe(true)
     expect(sanitized.overlayId).toBe('synthetic-equal-density-reference')
     expect(sanitized.crossSectionZeta).toBeCloseTo(12.5)
@@ -38,7 +40,7 @@ describe('URL state helpers', () => {
     const sanitized = mergeStateWithDefaults(
       sanitizeDecodedState(
         decodeStateFromQuery(
-          '?geometry=elliptical&rhoStar=-2&a0=10&b0=bad&theta=200&phi=-10&zetaMax=400&sampleCount=2&crossSectionZeta=900&overlay=unknown',
+          '?lang=fr&geometry=elliptical&rhoStar=-2&a0=10&b0=bad&theta=200&phi=-10&zetaMax=400&sampleCount=2&crossSectionZeta=900&overlay=unknown',
         ),
       ),
     )
@@ -55,7 +57,16 @@ describe('URL state helpers', () => {
     expect(sanitized.params.samples).toBe(50)
     expect(sanitized.crossSectionZeta).toBe(100)
     expect(sanitized.overlayId).toBe('none')
+    expect(sanitized.language).toBe('en')
     expect(sanitized.selectedPresetId).toBe(PRESET_CUSTOM)
+  })
+
+  it('sanitizes supported language query parameters', () => {
+    const sanitized = mergeStateWithDefaults(
+      sanitizeDecodedState(decodeStateFromQuery('?lang=es')),
+    )
+
+    expect(sanitized.language).toBe('es')
   })
 
   it('uses a valid preset as the parameter seed', () => {

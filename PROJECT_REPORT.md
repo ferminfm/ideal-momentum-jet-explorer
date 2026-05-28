@@ -29,7 +29,7 @@
 
 ## Validation Status
 
-- `npm run test`: passed, 3 test files and 14 tests.
+- `npm run test`: passed, 3 test files and 15 tests after adding URL language-state coverage.
 - `npm run build`: passed with no TypeScript errors. Vite reported the expected large-bundle warning because Plotly and Three.js are bundled client-side.
 - `npm run lint`: passed.
 - `npm run smoke:visual`: passed on desktop and mobile; Plotly line output and Three.js canvas pixel checks both rendered.
@@ -44,6 +44,13 @@
 - Added selected cross-section controls and computed axis-switching highlighting in the 3D viewer.
 - Replaced initial dimension text boxes with slider-first controls.
 - Updated affiliation text in the UI and metadata.
+
+## Language UI Pass Summary
+
+- Added an interface language switcher for English, Japanese, and Spanish.
+- Added translated UI copy for the header, controls, export panel, equations, plots, 3D viewer, interpretation panel, citation panel, and footer.
+- Added the selected language to shareable URLs through the `lang` query parameter.
+- Kept model equations, numerical logic, citation records, and CSV schema unchanged.
 
 ## Public-Facing Polish Summary
 
@@ -63,6 +70,7 @@
 - Three.js control-volume viewer with translucent rectangular or elliptical frustum geometry.
 - GitHub Pages deployment through GitHub Actions.
 - Saved share URLs, CSV export, citation copying, velocity-overlay infrastructure, and 3D cross-section inspection.
+- English, Japanese, and Spanish interface modes with language state encoded in reproducible URLs.
 
 ## Known Limitations
 

@@ -1,42 +1,52 @@
 import type { ReactNode } from 'react'
+import { LANGUAGE_OPTIONS, type Language, type UiText } from '../i18n/translations'
 
 const GITHUB_URL = 'https://github.com/ferminfm/ideal-momentum-jet-explorer'
 const MODEL_NOTES_URL = `${GITHUB_URL}#scientific-model`
 const RESEARCHMAP_URL = 'https://researchmap.jp/francomedrano'
-const AUTHOR_AFFILIATION =
-  'Fermín Franco-Medrano — Ensenada Campus, Autonomous University of Baja California / Institute of Mathematics for Industry, Kyushu University'
-
 interface LayoutProps {
   children: ReactNode
+  language: Language
+  text: UiText
+  onLanguageChange: (language: Language) => void
 }
 
-export function Layout({ children }: LayoutProps) {
+export function Layout({ children, language, text, onLanguageChange }: LayoutProps) {
   return (
     <div className="app-shell">
       <header className="site-header">
         <div>
-          <p className="eyebrow">Browser-based scientific computing app</p>
-          <h1>Ideal Momentum Jet Explorer</h1>
-          <p className="subtitle">
-            Interactive reduced-order model for circular, rectangular, and elliptical atomizing
-            jets
-          </p>
-          <p className="description-line">
-            Explore how prescribed nozzle geometry and area growth affect bulk velocity, composite
-            density, dynamic pressure, and entrainment in a conservative locally homogeneous
-            two-phase jet model.
-          </p>
-          <p className="author-line">{AUTHOR_AFFILIATION}</p>
+          <p className="eyebrow">{text.layout.eyebrow}</p>
+          <h1>{text.layout.title}</h1>
+          <p className="subtitle">{text.layout.subtitle}</p>
+          <p className="description-line">{text.layout.description}</p>
+          <p className="author-line">{text.layout.author}</p>
         </div>
-        <div className="header-actions" aria-label="Project links">
+        <div className="header-actions" aria-label={text.layout.projectLinksLabel}>
+          <div className="language-switcher" aria-label={text.layout.languageLabel}>
+            <span>{text.layout.languageLabel}</span>
+            <div className="language-buttons">
+              {LANGUAGE_OPTIONS.map((option) => (
+                <button
+                  key={option.id}
+                  type="button"
+                  className={language === option.id ? 'active' : ''}
+                  aria-pressed={language === option.id}
+                  onClick={() => onLanguageChange(option.id)}
+                >
+                  {option.shortLabel}
+                </button>
+              ))}
+            </div>
+          </div>
           <a className="repo-link" href={GITHUB_URL} target="_blank" rel="noreferrer">
-            Source code
+            {text.layout.sourceCode}
           </a>
           <a className="repo-link secondary" href={MODEL_NOTES_URL} target="_blank" rel="noreferrer">
-            Model notes
+            {text.layout.modelNotes}
           </a>
           <a className="repo-link secondary" href={RESEARCHMAP_URL} target="_blank" rel="noreferrer">
-            Researchmap profile
+            {text.layout.researchmap}
           </a>
         </div>
       </header>
@@ -44,13 +54,9 @@ export function Layout({ children }: LayoutProps) {
       <main>{children}</main>
 
       <footer className="site-footer">
-        <p>
-          Model lineage: Franco, Fukumoto, Velte & Hodžić, JPSJ 2017 circular ideal momentum jet
-          model; rectangular and elliptical area-growth extension; Kumamoto JSFM 2026 short
-          conference version.
-        </p>
+        <p>{text.layout.footerLineage}</p>
         <a href={GITHUB_URL} target="_blank" rel="noreferrer">
-          Source repository
+          {text.layout.sourceRepository}
         </a>
       </footer>
     </div>

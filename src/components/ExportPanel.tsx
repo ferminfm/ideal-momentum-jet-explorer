@@ -1,11 +1,15 @@
+import type { UiText } from '../i18n/translations'
+
 interface ExportPanelProps {
   shareStatus: string
+  text: UiText
   onCopyShareUrl: () => void
   onDownloadCsv: () => void
 }
 
 export function ExportPanel({
   shareStatus,
+  text,
   onCopyShareUrl,
   onDownloadCsv,
 }: ExportPanelProps) {
@@ -13,23 +17,20 @@ export function ExportPanel({
     <section className="panel export-panel" aria-labelledby="export-title">
       <div className="section-heading">
         <div>
-          <p className="eyebrow">Reproducibility</p>
-          <h2 id="export-title">Share and export</h2>
+          <p className="eyebrow">{text.export.eyebrow}</p>
+          <h2 id="export-title">{text.export.title}</h2>
         </div>
       </div>
 
       <div className="export-actions">
         <button type="button" className="primary-action" onClick={onCopyShareUrl}>
-          Copy shareable URL
+          {text.export.copyUrl}
         </button>
         <button type="button" className="secondary-action" onClick={onDownloadCsv}>
-          Download CSV
+          {text.export.downloadCsv}
         </button>
       </div>
-      <p className="helper-text">
-        URLs encode the model configuration, plot options, overlay choice, and cross-section
-        controls. CSV exports include all sampled state variables for the current settings.
-      </p>
+      <p className="helper-text">{text.export.helper}</p>
       {shareStatus ? <p className="copy-status">{shareStatus}</p> : null}
     </section>
   )

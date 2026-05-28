@@ -111,7 +111,48 @@ a:hover {
   flex-wrap: wrap;
   gap: 0.55rem;
   justify-content: flex-end;
-  max-width: 18rem;
+  max-width: 24rem;
+}
+
+.language-switcher {
+  background: #f6fafc;
+  border: 1px solid #d1dee7;
+  border-radius: 8px;
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.45rem;
+  width: 100%;
+}
+
+.language-switcher > span {
+  color: #536a7b;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.language-buttons {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.language-buttons button {
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  color: #426073;
+  flex: 1;
+  font-size: 0.78rem;
+  font-weight: 800;
+  min-height: 1.9rem;
+  padding: 0.25rem 0.4rem;
+  white-space: nowrap;
+}
+
+.language-buttons button.active {
+  background: #ffffff;
+  box-shadow: 0 1px 5px rgba(29, 42, 53, 0.11);
+  color: #174b66;
 }
 
 .repo-link.secondary {

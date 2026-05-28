@@ -73,3 +73,10 @@
 ## Deployment Status
 
 Pending commit, push, and GitHub Pages workflow verification.
+
+## 2026-05-29 Language Interface Pass
+
+- Added English/Japanese/Spanish interface switching through a typed translation module.
+- Added `lang` to the shareable URL state and tested encode/decode/sanitize behavior.
+- Added translated labels for the main public UI: header, controls, plots, 3D viewer, interpretation, citations, footer, and share/export controls.
+- Validation after the language pass: `npm run test`, `npm run build`, `npm run lint`, and `npm run smoke:visual` passed locally.
