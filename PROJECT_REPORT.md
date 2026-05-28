@@ -25,8 +25,8 @@
 - Remote: `origin` -> `https://github.com/ferminfm/ideal-momentum-jet-explorer.git`
 - GitHub Pages workflow: `.github/workflows/deploy.yml`
 - Vite project base: `/ideal-momentum-jet-explorer/`
-- Latest deployed feature commit: `15c934134903699201940537d9c40df3b74389c2`
-- Latest verified deployment run: GitHub Actions run `26600532972`, completed successfully.
+- Latest deployed feature commit: `642130111e519ddaa9d9032ca02684e551847af8`
+- Latest verified deployment run: GitHub Actions run `26601438813`, completed successfully.
 - Live Pages check: `curl -I https://ferminfm.github.io/ideal-momentum-jet-explorer/` returned HTTP 200.
 
 ## Validation Status
@@ -39,6 +39,7 @@
 - Local `K_A` reference interaction smoke: passed for reference lines, slider update to zero growth, and saved comparison overlay coexistence.
 - Live `K_A` reference interaction smoke: passed for reference lines, slider update to zero growth, and saved comparison overlay coexistence.
 - Local traveling-element interaction smoke: passed for play/pause, zeta advancement, reset, droplet toggle, rectangular-to-elliptical switching, and 3D canvas rendering.
+- Live traveling-element interaction smoke: passed for play/pause, zeta advancement, reset, droplet toggle, rectangular-to-elliptical switching, and 3D canvas rendering.
 - Public wording scan: no matches for stale repository owner tokens or internal positioning phrases in the requested public/source/doc paths.
 
 ## Feature Pass Summary
@@ -94,11 +95,13 @@
 ## Traveling Fluid-Element Animation Summary
 
 - Starting commit for this pass: `630065385193fddd78f644eb55349f5f64f41ad1`.
+- Feature commit for this pass: `642130111e519ddaa9d9032ca02684e551847af8`.
 - Added a cyclic conceptual LHF fluid-element animation to the 3D jet viewer.
 - The moving element uses the current prescribed rectangular or elliptical cross-section and expands as it travels from `zeta=0` to `zeta_max`.
 - Added play/pause, reset, droplet visibility, animation-speed, and element-zeta controls in English, Japanese, and Spanish.
 - Implemented 24 deterministic conserved liquid markers inside the moving element. The marker count and radius remain fixed while their normalized positions redistribute across the expanding local element.
 - The animation is a visualization of the locally homogeneous-flow interpretation, not a droplet dynamics, breakup, collision, turbulence, or axis-switching prediction.
+- Deployment: pushed to `origin/main`; GitHub Actions run `26601438813` completed successfully and the live Pages URL returned HTTP 200.
 
 ## Public-Facing Polish Summary
 

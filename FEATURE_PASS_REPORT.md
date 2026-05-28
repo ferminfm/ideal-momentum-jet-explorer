@@ -129,3 +129,5 @@ The GitHub Pages app responded with HTTP 200 at `https://ferminfm.github.io/idea
 - Implemented 24 deterministic conserved liquid markers inside the element. The markers keep fixed count and size while positions scale with the local element dimensions.
 - Added helper tests for zeta wrapping, zeta advancement, finite element frames, and normalized droplet-coordinate bounds.
 - Validation before commit: `npm run test`, `npm run build`, `npm run lint`, `npm run smoke:visual`, and a targeted local traveling-element interaction smoke passed.
+- Feature commit: `642130111e519ddaa9d9032ca02684e551847af8`.
+- Deployment: pushed to `origin/main`; GitHub Actions run `26601438813` completed successfully. The live Pages app returned HTTP 200 and passed visual plus traveling-element interaction smoke checks.
