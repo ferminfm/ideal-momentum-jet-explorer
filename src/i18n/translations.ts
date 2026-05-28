@@ -8,8 +8,12 @@ export type Language = (typeof LANGUAGE_OPTIONS)[number]['id']
 
 export const DEFAULT_LANGUAGE: Language = 'en'
 
-const AFFILIATION =
+const ENGLISH_AFFILIATION =
   'Fermín Franco-Medrano — Ensenada Campus, Autonomous University of Baja California / Institute of Mathematics for Industry, Kyushu University'
+const JAPANESE_AFFILIATION =
+  'フランコ＝メドラノ・フェルミン｜バハ・カリフォルニア自治大学エンセナダキャンパス / 九州大学マス・フォア・インダストリ研究所'
+const SPANISH_AFFILIATION =
+  'Fermín Franco-Medrano — Campus Ensenada, Universidad Autónoma de Baja California / Instituto de Matemáticas para la Industria, Universidad de Kyushu'
 
 const ENGLISH_TEXT = {
   layout: {
@@ -21,7 +25,7 @@ const ENGLISH_TEXT = {
       'Interactive reduced-order model for circular, rectangular, and elliptical atomizing jets',
     description:
       'Explore how prescribed nozzle geometry and area growth affect bulk velocity, composite density, dynamic pressure, and entrainment in a conservative locally homogeneous two-phase jet model.',
-    author: AFFILIATION,
+    author: ENGLISH_AFFILIATION,
     sourceCode: 'Source code',
     modelNotes: 'Model notes',
     researchmap: 'Researchmap profile',
@@ -200,11 +204,11 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       languageLabel: '表示言語',
       projectLinksLabel: 'プロジェクトリンク',
       eyebrow: 'ブラウザベースの科学計算アプリ',
-      title: 'Ideal Momentum Jet Explorer',
+      title: '理想運動量噴流 エクスプローラー',
       subtitle: '円形・矩形・楕円形の微粒化噴流のための対話型低次元モデル',
       description:
         '指定したノズル形状と面積成長が、保存的な局所均質二相噴流モデルにおけるバルク速度、混合密度、動圧、エントレインメントに与える影響を調べます。',
-      author: AFFILIATION,
+      author: JAPANESE_AFFILIATION,
       sourceCode: 'ソースコード',
       modelNotes: 'モデルノート',
       researchmap: 'researchmapプロフィール',
@@ -373,12 +377,12 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       languageLabel: 'Idioma de la interfaz',
       projectLinksLabel: 'Enlaces del proyecto',
       eyebrow: 'Aplicación científica de cómputo en el navegador',
-      title: 'Ideal Momentum Jet Explorer',
+      title: 'Explorador del Chorro Ideal de Cantidad de Movimiento',
       subtitle:
         'Modelo reducido interactivo para chorros atomizantes circulares, rectangulares y elípticos',
       description:
         'Explore cómo la geometría de la boquilla y el crecimiento de área prescritos afectan la velocidad media, la densidad compuesta, la presión dinámica y el arrastre de gas en un modelo bifásico conservativo localmente homogéneo.',
-      author: AFFILIATION,
+      author: SPANISH_AFFILIATION,
       sourceCode: 'Código fuente',
       modelNotes: 'Notas del modelo',
       researchmap: 'Perfil researchmap',

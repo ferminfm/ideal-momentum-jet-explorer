@@ -92,3 +92,8 @@ Pending commit, push, and GitHub Pages workflow verification.
 
 - Updated the maximum normalized downstream-distance slider from 20-100 to 10-60.
 - Updated URL sanitization and clamping tests to match the new 10-60 range.
+
+## 2026-05-29 Localized Title Pass
+
+- Localized the visible app title and author/affiliation line in Japanese and Spanish.
+- Japanese author display uses `フランコ＝メドラノ・フェルミン`.

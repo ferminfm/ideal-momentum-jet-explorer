@@ -63,6 +63,11 @@
 - Set the maximum normalized downstream-distance control range to 10-60.
 - Updated URL sanitization so old or out-of-range shared links clamp to the same 10-60 range.
 
+## Localization Updates
+
+- Localized the main app title and author/affiliation line for Japanese and Spanish interface modes.
+- Japanese author display uses `フランコ＝メドラノ・フェルミン`.
+
 ## Public-Facing Polish Summary
 
 - Replaced source-code links with `https://github.com/ferminfm/ideal-momentum-jet-explorer`.

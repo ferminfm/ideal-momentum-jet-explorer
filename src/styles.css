@@ -65,7 +65,9 @@ a:hover {
   font-weight: 700;
   line-height: 1.02;
   margin: 0.2rem 0 0.45rem;
-  max-width: 14ch;
+  max-width: 20ch;
+  overflow-wrap: normal;
+  word-break: keep-all;
 }
 
 .subtitle {
