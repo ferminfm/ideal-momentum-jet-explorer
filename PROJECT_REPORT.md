@@ -31,13 +31,14 @@
 
 ## Validation Status
 
-- `npm run test`: passed, 6 test files and 30 tests after adding comparison-case, plot-trace, URL, CSV, language-state, math formatter, and entrainment-coefficient reference coverage.
+- `npm run test`: passed, 7 test files and 35 tests after adding comparison-case, plot-trace, URL, CSV, language-state, math formatter, entrainment-coefficient reference, and traveling-element helper coverage.
 - `npm run build`: passed with no TypeScript errors. Vite reported the expected large-bundle warning because Plotly and Three.js are bundled client-side.
 - `npm run lint`: passed.
 - `npm run smoke:visual`: passed on desktop and mobile; Plotly line output and Three.js canvas pixel checks both rendered.
 - Live interaction smoke: passed for add saved case, change geometry, hide/show saved case, settings tooltip, and remove saved case.
 - Local `K_A` reference interaction smoke: passed for reference lines, slider update to zero growth, and saved comparison overlay coexistence.
 - Live `K_A` reference interaction smoke: passed for reference lines, slider update to zero growth, and saved comparison overlay coexistence.
+- Local traveling-element interaction smoke: passed for play/pause, zeta advancement, reset, droplet toggle, rectangular-to-elliptical switching, and 3D canvas rendering.
 - Public wording scan: no matches for stale repository owner tokens or internal positioning phrases in the requested public/source/doc paths.
 
 ## Feature Pass Summary
@@ -90,6 +91,15 @@
 - Saved comparison-case tooltips now include the near-field and far-field coefficient references for the frozen case.
 - Far-field references use `K_A(∞)=sqrt(lambda_1 lambda_2)` only when both directional growth rates are positive; otherwise the app reports zero for the current model.
 
+## Traveling Fluid-Element Animation Summary
+
+- Starting commit for this pass: `630065385193fddd78f644eb55349f5f64f41ad1`.
+- Added a cyclic conceptual LHF fluid-element animation to the 3D jet viewer.
+- The moving element uses the current prescribed rectangular or elliptical cross-section and expands as it travels from `zeta=0` to `zeta_max`.
+- Added play/pause, reset, droplet visibility, animation-speed, and element-zeta controls in English, Japanese, and Spanish.
+- Implemented 24 deterministic conserved liquid markers inside the moving element. The marker count and radius remain fixed while their normalized positions redistribute across the expanding local element.
+- The animation is a visualization of the locally homogeneous-flow interpretation, not a droplet dynamics, breakup, collision, turbulence, or axis-switching prediction.
+
 ## Public-Facing Polish Summary
 
 - Replaced source-code links with `https://github.com/ferminfm/ideal-momentum-jet-explorer`.
@@ -107,6 +117,7 @@
 - Plotly plots for normalized area, velocity, density, dynamic pressure, gas entrainment, and `K_A`.
 - Saved model-case comparison overlays on all Plotly model variables.
 - Three.js control-volume viewer with translucent rectangular or elliptical frustum geometry.
+- Traveling LHF fluid-element animation with conserved marker droplets in the 3D viewer.
 - GitHub Pages deployment through GitHub Actions.
 - Saved share URLs, CSV export, citation copying, velocity-overlay infrastructure, and 3D cross-section inspection.
 - Compact URL restoration for saved model comparisons.
@@ -116,6 +127,7 @@
 
 - Spreading half-angles are prescribed inputs; the model does not predict them.
 - Axis switching, vortex dynamics, breakup, turbulence, losses, and droplet-size distributions are outside the reduced-order model.
+- The traveling fluid-element markers are conceptual conserved-liquid markers and do not model droplet-size evolution or interactions.
 - Composite density needs independent phase-fraction or concentration validation.
 - No measured/literature velocity overlay dataset is bundled yet; the current overlay option is synthetic and only demonstrates the plotting mechanism.
 - The initial JavaScript bundle is large because Plotly and Three.js are bundled client-side; code-splitting is a reasonable future optimization.

@@ -120,3 +120,12 @@ The GitHub Pages app responded with HTTP 200 at `https://ferminfm.github.io/idea
 - Validation before commit: `npm run test`, `npm run build`, `npm run lint`, `npm run smoke:visual`, and a targeted local `K_A` interaction smoke passed.
 - Feature commit: `15c934134903699201940537d9c40df3b74389c2`.
 - Deployment: pushed to `origin/main`; GitHub Actions run `26600532972` completed successfully. The live Pages app returned HTTP 200 and passed visual plus `K_A` interaction smoke checks.
+
+## 2026-05-29 Traveling Fluid-Element Animation Pass
+
+- Starting commit: `630065385193fddd78f644eb55349f5f64f41ad1`.
+- Added a cyclic moving LHF element to the 3D viewer with play/pause, reset, droplet visibility, animation speed, and element-zeta readout controls.
+- The element cross-section follows the current rectangular or elliptical model geometry and expands downstream with the prescribed area-growth state.
+- Implemented 24 deterministic conserved liquid markers inside the element. The markers keep fixed count and size while positions scale with the local element dimensions.
+- Added helper tests for zeta wrapping, zeta advancement, finite element frames, and normalized droplet-coordinate bounds.
+- Validation before commit: `npm run test`, `npm run build`, `npm run lint`, `npm run smoke:visual`, and a targeted local traveling-element interaction smoke passed.

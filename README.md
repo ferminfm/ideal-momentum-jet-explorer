@@ -96,10 +96,13 @@ For `rho* < 1e-8`, the implementation uses the limiting behavior `vhat ~= 1`, `r
 - Velocity overlays: the app includes overlay infrastructure and one disabled-by-default synthetic example curve. No measured/literature numeric dataset is bundled yet, so overlays must not be interpreted as validation unless a documented public dataset is added later.
 - Citation panel: copy references in plain text, BibTeX, LaTeX snippet, or Word/APA-style format.
 - 3D cross-section tools: inspect a selected downstream cross-section and highlight the computed axis-switching section when it exists.
+- Traveling fluid-element animation: the 3D view can play a conceptual LHF element that expands with the prescribed local cross-section while conserved liquid markers redistribute through the growing control volume.
 
 ## What It Does Not Compute
 
 The app does not predict axis switching, vortex dynamics, droplet-size distribution, breakup, losses, turbulence structure, or spreading half-angles. Those half-angles are prescribed inputs.
+
+The traveling fluid-element animation is a visual aid for the locally homogeneous-flow interpretation. The droplets are conserved liquid markers, not a droplet-size, breakup, collision, or turbulence model.
 
 Velocity predictions can be compared with equal-density jet data. Composite-density validation requires independent phase-fraction or concentration measurements. This app is not validated engineering design software.
 

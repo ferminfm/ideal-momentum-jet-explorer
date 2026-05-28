@@ -735,6 +735,49 @@ main {
   flex: 1 1 16rem;
 }
 
+.element-animation-controls {
+  align-items: center;
+  border: 1px solid #dce7ef;
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem;
+}
+
+.element-speed-field {
+  flex: 1 1 13rem;
+  min-width: 12rem;
+}
+
+.element-zeta-readout {
+  background: #f7fafc;
+  border: 1px solid #dce7ef;
+  border-radius: 8px;
+  min-width: 8.5rem;
+  padding: 0.5rem 0.6rem;
+}
+
+.element-zeta-readout span {
+  color: #607586;
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.element-zeta-readout strong {
+  color: #132334;
+  display: block;
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+  margin-top: 0.12rem;
+}
+
+.element-animation-controls .helper-text {
+  flex: 1 1 100%;
+}
+
 .cross-section-readout {
   display: grid;
   gap: 0.6rem;

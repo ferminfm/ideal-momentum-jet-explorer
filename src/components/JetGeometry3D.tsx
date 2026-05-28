@@ -1,6 +1,6 @@
-import { Canvas } from '@react-three/fiber'
+import { Canvas, useFrame } from '@react-three/fiber'
 import { Line, OrbitControls } from '@react-three/drei'
-import { useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as THREE from 'three'
 import {
   computeAxisSwitchingZeta,
@@ -10,6 +10,13 @@ import {
 } from '../model/jetModel'
 import type { UiText } from '../i18n/translations'
 import { formatDegrees, formatNumber } from '../utils/format'
+import {
+  advanceElementZeta,
+  createNormalizedDropletCoordinates,
+  FLUID_ELEMENT_DROPLET_COUNT,
+  getFluidElementFrame,
+  wrapElementZeta,
+} from '../utils/fluidElementAnimation'
 import { MathText } from './MathText'
 
 interface JetGeometry3DProps {
@@ -189,12 +196,180 @@ function createCrossSectionPoints(state: JetState, scale: number, segments: numb
   })
 }
 
+function MovingFluidElement({
+  series,
+  scale,
+  isAnimating,
+  elementZeta,
+  showDroplets,
+  animationSpeed,
+  resetNonce,
+  onElementZetaChange,
+}: {
+  series: JetSeries
+  scale: number
+  isAnimating: boolean
+  elementZeta: number
+  showDroplets: boolean
+  animationSpeed: number
+  resetNonce: number
+  onElementZetaChange: (zeta: number) => void
+}) {
+  const volumeRef = useRef<THREE.Mesh>(null)
+  const wireframeRef = useRef<THREE.Mesh>(null)
+  const dropletsRef = useRef<THREE.InstancedMesh>(null)
+  const zetaRef = useRef(wrapElementZeta(elementZeta, series.params.zetaMax))
+  const reportAccumulatorRef = useRef(0)
+  const dummy = useMemo(() => new THREE.Object3D(), [])
+  const dropletCoordinates = useMemo(
+    () => createNormalizedDropletCoordinates(series.params.geometry.geometry),
+    [series.params.geometry.geometry],
+  )
+  const dropletRadius = 0.038
+  const isRectangular = series.params.geometry.geometry === 'rectangular'
+
+  const applyElementFrame = useCallback(
+    (zeta: number) => {
+      const frame = getFluidElementFrame(series, zeta, scale)
+
+      if (volumeRef.current) {
+        volumeRef.current.position.set(0, 0, frame.centerZ)
+        if (isRectangular) {
+          volumeRef.current.scale.set(frame.width, frame.height, frame.depth)
+        } else {
+          volumeRef.current.scale.set(frame.halfWidth, frame.depth, frame.halfHeight)
+        }
+      }
+
+      if (wireframeRef.current) {
+        wireframeRef.current.position.set(0, 0, frame.centerZ)
+        if (isRectangular) {
+          wireframeRef.current.scale.set(frame.width, frame.height, frame.depth)
+        } else {
+          wireframeRef.current.scale.set(frame.halfWidth, frame.depth, frame.halfHeight)
+        }
+      }
+
+      if (showDroplets && dropletsRef.current) {
+        dropletCoordinates.forEach((coordinate, index) => {
+          dummy.position.set(
+            coordinate.x * frame.halfWidth,
+            coordinate.y * frame.halfHeight,
+            frame.centerZ + coordinate.z * (frame.depth / 2),
+          )
+          dummy.scale.setScalar(dropletRadius)
+          dummy.updateMatrix()
+          dropletsRef.current?.setMatrixAt(index, dummy.matrix)
+        })
+        dropletsRef.current.instanceMatrix.needsUpdate = true
+      }
+    },
+    [dropletCoordinates, dummy, isRectangular, scale, series, showDroplets],
+  )
+
+  useEffect(() => {
+    const nextZeta = wrapElementZeta(elementZeta, series.params.zetaMax)
+    zetaRef.current = nextZeta
+    applyElementFrame(nextZeta)
+    onElementZetaChange(nextZeta)
+  }, [
+    applyElementFrame,
+    elementZeta,
+    onElementZetaChange,
+    resetNonce,
+    series.params.zetaMax,
+  ])
+
+  useFrame((_, delta) => {
+    if (!isAnimating) {
+      return
+    }
+
+    zetaRef.current = advanceElementZeta(
+      zetaRef.current,
+      series.params.zetaMax,
+      delta,
+      animationSpeed,
+    )
+    applyElementFrame(zetaRef.current)
+    reportAccumulatorRef.current += delta
+
+    if (reportAccumulatorRef.current >= 0.08) {
+      reportAccumulatorRef.current = 0
+      onElementZetaChange(zetaRef.current)
+    }
+  })
+
+  return (
+    <>
+      {isRectangular ? (
+        <>
+          <mesh ref={volumeRef}>
+            <boxGeometry args={[1, 1, 1]} />
+            <meshStandardMaterial
+              color="#63b7cc"
+              opacity={0.42}
+              transparent
+              depthWrite={false}
+              roughness={0.35}
+              metalness={0.05}
+            />
+          </mesh>
+          <mesh ref={wireframeRef}>
+            <boxGeometry args={[1, 1, 1]} />
+            <meshBasicMaterial color="#0f5874" wireframe transparent opacity={0.9} />
+          </mesh>
+        </>
+      ) : (
+        <>
+          <mesh ref={volumeRef} rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[1, 1, 1, 64, 1, false]} />
+            <meshStandardMaterial
+              color="#63b7cc"
+              opacity={0.42}
+              transparent
+              depthWrite={false}
+              roughness={0.35}
+              metalness={0.05}
+            />
+          </mesh>
+          <mesh ref={wireframeRef} rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[1, 1, 1, 64, 1, false]} />
+            <meshBasicMaterial color="#0f5874" wireframe transparent opacity={0.9} />
+          </mesh>
+        </>
+      )}
+      {showDroplets ? (
+        <instancedMesh ref={dropletsRef} args={[undefined, undefined, FLUID_ELEMENT_DROPLET_COUNT]}>
+          <sphereGeometry args={[1, 14, 10]} />
+          <meshStandardMaterial
+            color="#0b5fa5"
+            emissive="#083a61"
+            emissiveIntensity={0.12}
+            roughness={0.38}
+          />
+        </instancedMesh>
+      ) : null}
+    </>
+  )
+}
+
 interface JetMeshProps {
   series: JetSeries
   crossSectionZeta: number
   showSelectedCrossSection: boolean
   showAxisSwitchingSection: boolean
   axisSwitchingZeta: number | null
+  elementAnimation: FluidElementAnimationProps
+}
+
+interface FluidElementAnimationProps {
+  isAnimating: boolean
+  elementZeta: number
+  showDroplets: boolean
+  animationSpeed: number
+  resetNonce: number
+  onElementZetaChange: (zeta: number) => void
 }
 
 function JetMesh({
@@ -203,6 +378,7 @@ function JetMesh({
   showSelectedCrossSection,
   showAxisSwitchingSection,
   axisSwitchingZeta,
+  elementAnimation,
 }: JetMeshProps) {
   const sampledStates = useMemo(() => sampleStates(series.states, 36), [series.states])
   const scale = useMemo(() => getSceneScale(series.states), [series.states])
@@ -260,9 +436,19 @@ function JetMesh({
           size={0.035}
           sizeAttenuation
           transparent
-          opacity={0.72}
+          opacity={elementAnimation.showDroplets ? 0.42 : 0.72}
         />
       </points>
+      <MovingFluidElement
+        series={series}
+        scale={scale}
+        isAnimating={elementAnimation.isAnimating}
+        elementZeta={elementAnimation.elementZeta}
+        showDroplets={elementAnimation.showDroplets}
+        animationSpeed={elementAnimation.animationSpeed}
+        resetNonce={elementAnimation.resetNonce}
+        onElementZetaChange={elementAnimation.onElementZetaChange}
+      />
       {series.params.geometry.geometry === 'rectangular' ? (
         <mesh
           position={[0, 0, -0.09]}
@@ -325,6 +511,11 @@ export function JetGeometry3D({
   onShowSelectedCrossSectionChange,
   onShowAxisSwitchingSectionChange,
 }: JetGeometry3DProps) {
+  const [isElementAnimating, setIsElementAnimating] = useState(false)
+  const [elementZeta, setElementZeta] = useState(0)
+  const [showElementDroplets, setShowElementDroplets] = useState(true)
+  const [animationSpeed, setAnimationSpeed] = useState(1)
+  const [resetNonce, setResetNonce] = useState(0)
   const axisSwitchingZeta = computeAxisSwitchingZeta(series.params)
   const selectedState = getJetState(series.params, crossSectionZeta)
   const canJumpToAxisSwitching = axisSwitchingZeta !== null
@@ -332,6 +523,7 @@ export function JetGeometry3D({
     series.params.geometry.geometry === 'rectangular'
       ? text.controls.rectangular
       : text.controls.elliptical
+  const displayedElementZeta = Math.min(elementZeta, series.params.zetaMax)
 
   return (
     <section className="panel geometry-panel" aria-labelledby="geometry-title">
@@ -383,6 +575,55 @@ export function JetGeometry3D({
           {text.geometry.jumpToSwitching}
         </button>
       </div>
+      <div className="element-animation-controls">
+        <button
+          type="button"
+          className="primary-action"
+          onClick={() => setIsElementAnimating((current) => !current)}
+        >
+          {isElementAnimating ? text.geometry.pauseElement : text.geometry.playElement}
+        </button>
+        <button
+          type="button"
+          className="secondary-action"
+          onClick={() => {
+            setIsElementAnimating(false)
+            setElementZeta(0)
+            setResetNonce((current) => current + 1)
+          }}
+        >
+          {text.geometry.resetElement}
+        </button>
+        <label className="toggle-control">
+          <input
+            type="checkbox"
+            checked={showElementDroplets}
+            onChange={(event) => setShowElementDroplets(event.target.checked)}
+          />
+          {text.geometry.showElementDroplets}
+        </label>
+        <label className="field element-speed-field">
+          <span>{text.geometry.animationSpeed}</span>
+          <input
+            type="range"
+            min="0.25"
+            max="3"
+            step="0.25"
+            value={animationSpeed}
+            onChange={(event) => setAnimationSpeed(Number(event.target.value))}
+          />
+          <output>{formatNumber(animationSpeed, 2)}x</output>
+        </label>
+        <div className="element-zeta-readout">
+          <span>
+            <MathText text={text.geometry.elementZeta} />
+          </span>
+          <strong>{formatNumber(displayedElementZeta, 2)}</strong>
+        </div>
+        <p className="helper-text">
+          <MathText text={text.geometry.animationHelp} />
+        </p>
+      </div>
       <div className="cross-section-readout">
         <div>
           <span>{text.geometry.selectedDimensions}</span>
@@ -424,6 +665,14 @@ export function JetGeometry3D({
             showSelectedCrossSection={showSelectedCrossSection}
             showAxisSwitchingSection={showAxisSwitchingSection}
             axisSwitchingZeta={axisSwitchingZeta}
+            elementAnimation={{
+              isAnimating: isElementAnimating,
+              elementZeta: displayedElementZeta,
+              showDroplets: showElementDroplets,
+              animationSpeed,
+              resetNonce,
+              onElementZetaChange: setElementZeta,
+            }}
           />
         </Canvas>
         <div className="viewer-overlay" aria-hidden="true">

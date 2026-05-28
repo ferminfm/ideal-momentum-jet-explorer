@@ -186,13 +186,21 @@ const ENGLISH_TEXT = {
     zAxis: 'z-axis',
     surface: 'A(z) surface',
     controlsHint: 'Drag to rotate · scroll to zoom · right-drag/shift-drag to pan',
+    playElement: 'Play fluid element',
+    pauseElement: 'Pause fluid element',
+    resetElement: 'Reset element',
+    showElementDroplets: 'Show droplets in element',
+    animationSpeed: 'Animation speed',
+    elementZeta: 'Element zeta',
+    animationHelp:
+      'Conceptual LHF element: conserved liquid markers redistributed inside the expanding control volume.',
   },
   interpretation: {
     eyebrow: 'Model scope',
     title: 'Closure assumptions and validation boundary',
     stateClosureTitle: 'State closure',
     stateClosureBody:
-      'This app implements a conservative, top-hat, locally homogeneous two-phase state closure. The inputs are density ratio and a prescribed rectangular or elliptical area-growth history.',
+      'This app implements a conservative, top-hat, locally homogeneous two-phase state closure. The inputs are density ratio and a prescribed rectangular or elliptical area-growth history. The traveling element in the 3D view is a conceptual LHF visualization, not droplet dynamics.',
     predictedTitle: 'Predicted',
     predictedBody:
       'Normalized area, bulk velocity, composite density, dynamic pressure, gas entrainment, and the generalized entrainment coefficient K_A(z).',
@@ -392,13 +400,21 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       zAxis: 'z軸',
       surface: 'A(z) 面',
       controlsHint: 'ドラッグで回転 · スクロールでズーム · 右ドラッグ/Shiftドラッグでパン',
+      playElement: '流体要素を再生',
+      pauseElement: '流体要素を一時停止',
+      resetElement: '要素をリセット',
+      showElementDroplets: '要素内の液滴を表示',
+      animationSpeed: 'アニメーション速度',
+      elementZeta: '要素 zeta',
+      animationHelp:
+        'LHF の概念図：保存された液体マーカーが拡大する制御体積内に再分布します。',
     },
     interpretation: {
       eyebrow: 'モデルの範囲',
       title: 'クロージャ仮定と検証範囲',
       stateClosureTitle: '状態クロージャ',
       stateClosureBody:
-        'このアプリは、保存的なトップハット型・局所均質二相状態クロージャを実装しています。入力は密度比と、規定された矩形または楕円形の面積成長履歴です。',
+        'このアプリは、保存的なトップハット型・局所均質二相状態クロージャを実装しています。入力は密度比と、規定された矩形または楕円形の面積成長履歴です。3D 表示の移動要素は LHF の概念図であり、液滴力学のシミュレーションではありません。',
       predictedTitle: '予測する量',
       predictedBody:
         '正規化面積、バルク速度、混合密度、動圧、気相エントレインメント、一般化エントレインメント係数 K_A(z)。',
@@ -604,13 +620,21 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       surface: 'superficie A(z)',
       controlsHint:
         'Arrastre para rotar · rueda para zoom · clic derecho/Shift-arrastre para desplazar',
+      playElement: 'Reproducir elemento fluido',
+      pauseElement: 'Pausar elemento fluido',
+      resetElement: 'Reiniciar elemento',
+      showElementDroplets: 'Mostrar gotas en el elemento',
+      animationSpeed: 'Velocidad de animación',
+      elementZeta: 'zeta del elemento',
+      animationHelp:
+        'Elemento LHF conceptual: marcadores líquidos conservados redistribuidos dentro del volumen de control en expansión.',
     },
     interpretation: {
       eyebrow: 'Alcance del modelo',
       title: 'Supuestos de cierre y límite de validación',
       stateClosureTitle: 'Cierre de estado',
       stateClosureBody:
-        'Esta app implementa un cierre de estado bifásico conservativo, top-hat y localmente homogéneo. Las entradas son la relación de densidades y una historia prescrita de crecimiento de área rectangular o elíptica.',
+        'Esta app implementa un cierre de estado bifásico conservativo, top-hat y localmente homogéneo. Las entradas son la relación de densidades y una historia prescrita de crecimiento de área rectangular o elíptica. El elemento móvil en la vista 3D es una visualización conceptual LHF, no una simulación de dinámica de gotas.',
       predictedTitle: 'Predice',
       predictedBody:
         'Área normalizada, velocidad media, densidad compuesta, presión dinámica, arrastre de gas y el coeficiente generalizado de arrastre K_A(z).',
