@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Jet explorer icon">
+  <rect width="64" height="64" rx="8" fill="#eef3f7"/>
+  <path d="M12 32h8" stroke="#1d2a35" stroke-width="4" stroke-linecap="round"/>
+  <path d="M22 23 54 14v36l-32-9Z" fill="#4e89ae" fill-opacity=".42" stroke="#236b8e" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M23 32h30" stroke="#b96332" stroke-width="3" stroke-linecap="round" stroke-dasharray="4 5"/>
+</svg>
