@@ -262,8 +262,8 @@ export function ControlPanel({ params, selectedPresetId, text, onChange }: Contr
           </span>
           <input
             type="range"
-            min="20"
-            max="100"
+            min="10"
+            max="60"
             step="1"
             value={params.zetaMax}
             onChange={(event) =>

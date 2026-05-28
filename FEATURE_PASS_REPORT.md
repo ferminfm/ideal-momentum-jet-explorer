@@ -87,3 +87,8 @@ Pending commit, push, and GitHub Pages workflow verification.
 - Updated Plotly axis and hover labels to use Unicode mathematical plain text.
 - Kept numerical model logic, URL parameters, CSV column names, and citations unchanged.
 - Validation after the math-label pass: `npm run test`, `npm run build`, `npm run lint`, and `npm run smoke:visual` passed locally.
+
+## 2026-05-29 Downstream Range Pass
+
+- Updated the maximum normalized downstream-distance slider from 20-100 to 10-60.
+- Updated URL sanitization and clamping tests to match the new 10-60 range.
