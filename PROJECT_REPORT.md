@@ -4,6 +4,15 @@
 
 `/home/franco/Documents/GitHub/ideal-momentum-jet-explorer`
 
+## Current Publish Target
+
+- GitHub repository URL: `https://github.com/ferminfm/ideal-momentum-jet-explorer`
+- Expected GitHub Pages URL: `https://ferminfm.github.io/ideal-momentum-jet-explorer/`
+- Local dev command: `npm run dev -- --host 127.0.0.1`
+- Test command: `npm run test`
+- Build command: `npm run build`
+- Production preview command: `npm run preview -- --host 127.0.0.1`
+
 ## Commands Run
 
 - `npm create vite@latest . -- --template react-ts`
@@ -13,9 +22,12 @@
 - `npm run test`
 - `npm run build`
 - `npm run lint`
-- `npm run dev -- --host 127.0.0.1`
+- `npm run dev -- --host 127.0.0.1 --port 5173 --strictPort`
 - `curl -I http://127.0.0.1:5173/ideal-momentum-jet-explorer/`
 - `npm run smoke:visual`
+- `gh auth status`
+- `gh repo view ferminfm/ideal-momentum-jet-explorer || true`
+- `git remote -v`
 
 ## Test And Build Results
 
@@ -27,9 +39,36 @@
 
 ## Repository
 
+- Local git repository: present on branch `main`.
+- Latest local commit before this status update: `0fcb278 Initial ideal momentum jet explorer`.
 - GitHub repository: not created automatically. `gh auth status` found account `ferminfm`, but the saved token is invalid.
-- GitHub Pages URL: pending.
-- Deployment status: GitHub Actions workflow added; Pages still needs a public GitHub repository push and Pages source set to GitHub Actions.
+- Origin remote: not configured.
+- GitHub Pages URL: expected at `https://ferminfm.github.io/ideal-momentum-jet-explorer/` after public repo push and Pages activation.
+- Deployment status: GitHub Actions workflow is configured; Pages still needs a public GitHub repository push and Pages source set to GitHub Actions.
+
+Exact authentication blocker:
+
+```text
+github.com
+  X Failed to log in to github.com account ferminfm (default)
+  - Active account: true
+  - The token in default is invalid.
+  - To re-authenticate, run: gh auth login -h github.com
+  - To forget about this account, run: gh auth logout -h github.com -u ferminfm
+```
+
+Manual next step:
+
+```bash
+gh auth login -h github.com
+```
+
+Then:
+
+```bash
+cd /home/franco/Documents/GitHub/ideal-momentum-jet-explorer
+gh repo create ideal-momentum-jet-explorer --public --source=. --remote=origin --push
+```
 
 ## Implemented Features
 

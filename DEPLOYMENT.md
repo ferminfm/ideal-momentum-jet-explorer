@@ -12,6 +12,12 @@ npm run build
 
 ## Create The Public GitHub Repository
 
+Target repository:
+
+```text
+https://github.com/ferminfm/ideal-momentum-jet-explorer
+```
+
 If GitHub CLI is authenticated:
 
 ```bash
@@ -24,12 +30,12 @@ If GitHub CLI is not authenticated, do not enter credentials in this project. Cr
 
 ```bash
 cd /home/franco/Documents/GitHub/ideal-momentum-jet-explorer
-git remote add origin https://github.com/OWNER/ideal-momentum-jet-explorer.git
+git remote add origin https://github.com/ferminfm/ideal-momentum-jet-explorer.git
 git branch -M main
 git push -u origin main
 ```
 
-Replace `OWNER` with the GitHub account or organization that owns the repository.
+Current status as of 2026-05-29: local verification passes, but `gh auth status` reports that the saved `ferminfm` token is invalid. Run `gh auth login` manually in a normal terminal before using `gh repo create`.
 
 ## Enable GitHub Pages
 
@@ -42,7 +48,13 @@ GitHub -> repository -> Settings -> Pages -> Source: GitHub Actions
 The expected Pages URL is:
 
 ```text
-https://OWNER.github.io/ideal-momentum-jet-explorer/
+https://ferminfm.github.io/ideal-momentum-jet-explorer/
+```
+
+Manual Pages path:
+
+```text
+https://github.com/ferminfm/ideal-momentum-jet-explorer/settings/pages
 ```
 
 ## Public-Asset Constraint
