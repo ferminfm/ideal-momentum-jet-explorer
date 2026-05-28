@@ -10,6 +10,7 @@ import {
 } from '../model/jetModel'
 import type { UiText } from '../i18n/translations'
 import { formatDegrees, formatNumber } from '../utils/format'
+import { MathText } from './MathText'
 
 interface JetGeometry3DProps {
   series: JetSeries
@@ -340,7 +341,9 @@ export function JetGeometry3D({
       </div>
       <div className="geometry-controls">
         <label className="field">
-          <span>{text.geometry.crossSection}</span>
+          <span>
+            <MathText text={text.geometry.crossSection} />
+          </span>
           <input
             type="range"
             min="0"
@@ -389,7 +392,9 @@ export function JetGeometry3D({
           </strong>
         </div>
         <div>
-          <span>{text.geometry.areaAtSelected}</span>
+          <span>
+            <MathText text={text.geometry.areaAtSelected} />
+          </span>
           <strong>{formatNumber(selectedState.normalizedArea, 3)}</strong>
         </div>
         <div>
@@ -397,7 +402,12 @@ export function JetGeometry3D({
           <strong>
             {axisSwitchingZeta === null
               ? text.geometry.noneInRange
-              : `${text.geometry.zetaPrefix} ${formatNumber(axisSwitchingZeta, 2)}`}
+              : (
+                  <>
+                    <MathText text={text.geometry.zetaPrefix} />{' '}
+                    {formatNumber(axisSwitchingZeta, 2)}
+                  </>
+                )}
           </strong>
         </div>
       </div>
@@ -421,11 +431,13 @@ export function JetGeometry3D({
           <span>{text.geometry.surface}</span>
           <span>{text.geometry.controlsHint}</span>
           <span>
-            theta {formatDegrees(series.params.thetaDeg)} / phi{' '}
+            <MathText text="theta" /> {formatDegrees(series.params.thetaDeg)} /{' '}
+            <MathText text="phi" />{' '}
             {formatDegrees(series.params.phiDeg)}
           </span>
           <span>
-            {geometryLabel}, De {formatNumber(series.equivalentDiameter, 3)}
+            {geometryLabel}, <MathText text="De" />{' '}
+            {formatNumber(series.equivalentDiameter, 3)}
           </span>
         </div>
       </div>

@@ -3,6 +3,7 @@ import type { JetParameters } from '../model/jetModel'
 import { getAspectRatio, getEquivalentDiameter, getInitialArea } from '../model/jetModel'
 import { PRESETS, cloneParams } from '../model/presets'
 import { formatNumber, formatScientific } from '../utils/format'
+import { MathText } from './MathText'
 
 interface ControlPanelProps {
   params: JetParameters
@@ -96,7 +97,10 @@ export function ControlPanel({ params, selectedPresetId, text, onChange }: Contr
       <div className="control-grid">
         <label className="field">
           <span>
-            {text.controls.densityRatio} <span className="math">rho* = rho_g / rho_l</span>
+            <MathText text={text.controls.densityRatio} />{' '}
+            <span className="math">
+              <MathText text="rho* = rho_g / rho_l" />
+            </span>
           </span>
           <input
             type="range"
@@ -117,7 +121,9 @@ export function ControlPanel({ params, selectedPresetId, text, onChange }: Contr
         {params.geometry.geometry === 'rectangular' ? (
           <>
             <label className="field">
-              <span>{text.controls.width}</span>
+              <span>
+                <MathText text={text.controls.width} />
+              </span>
               <input
                 type="range"
                 min="0.25"
@@ -138,7 +144,9 @@ export function ControlPanel({ params, selectedPresetId, text, onChange }: Contr
               <output>{formatNumber(rectangularWidth, 2)}</output>
             </label>
             <label className="field">
-              <span>{text.controls.height}</span>
+              <span>
+                <MathText text={text.controls.height} />
+              </span>
               <input
                 type="range"
                 min="0.25"
@@ -162,7 +170,9 @@ export function ControlPanel({ params, selectedPresetId, text, onChange }: Contr
         ) : (
           <>
             <label className="field">
-              <span>{text.controls.majorAxis}</span>
+              <span>
+                <MathText text={text.controls.majorAxis} />
+              </span>
               <input
                 type="range"
                 min="0.25"
@@ -183,7 +193,9 @@ export function ControlPanel({ params, selectedPresetId, text, onChange }: Contr
               <output>{formatNumber(ellipticalMajorAxis, 2)}</output>
             </label>
             <label className="field">
-              <span>{text.controls.minorAxis}</span>
+              <span>
+                <MathText text={text.controls.minorAxis} />
+              </span>
               <input
                 type="range"
                 min="0.25"
@@ -207,7 +219,9 @@ export function ControlPanel({ params, selectedPresetId, text, onChange }: Contr
         )}
 
         <label className="field">
-          <span>{text.controls.theta}</span>
+          <span>
+            <MathText text={text.controls.theta} />
+          </span>
           <input
             type="range"
             min="0"
@@ -224,7 +238,9 @@ export function ControlPanel({ params, selectedPresetId, text, onChange }: Contr
           <output>{formatNumber(params.thetaDeg, 2)} deg</output>
         </label>
         <label className="field">
-          <span>{text.controls.phi}</span>
+          <span>
+            <MathText text={text.controls.phi} />
+          </span>
           <input
             type="range"
             min="0"
@@ -241,7 +257,9 @@ export function ControlPanel({ params, selectedPresetId, text, onChange }: Contr
           <output>{formatNumber(params.phiDeg, 2)} deg</output>
         </label>
         <label className="field">
-          <span>{text.controls.zetaMax}</span>
+          <span>
+            <MathText text={text.controls.zetaMax} />
+          </span>
           <input
             type="range"
             min="20"
@@ -278,15 +296,21 @@ export function ControlPanel({ params, selectedPresetId, text, onChange }: Contr
 
       <div className="metrics-strip" aria-label={text.controls.derivedGeometryAria}>
         <div>
-          <span>A0</span>
+          <span>
+            <MathText text="A0" />
+          </span>
           <strong>{formatNumber(initialArea, 4)}</strong>
         </div>
         <div>
-          <span>De</span>
+          <span>
+            <MathText text="De" />
+          </span>
           <strong>{formatNumber(equivalentDiameter, 4)}</strong>
         </div>
         <div>
-          <span>AR</span>
+          <span>
+            <MathText text="AR" />
+          </span>
           <strong>{formatNumber(aspectRatio, 3)}</strong>
         </div>
       </div>

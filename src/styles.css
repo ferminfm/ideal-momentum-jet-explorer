@@ -313,9 +313,64 @@ main {
 .math {
   color: #657887;
   display: block;
-  font-family: ui-monospace, "Cascadia Mono", "Segoe UI Mono", monospace;
   font-size: 0.75rem;
   font-weight: 600;
+}
+
+.math-inline {
+  display: inline-block;
+  font-family: "STIX Two Math", "Cambria Math", "Noto Serif Math", "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 600;
+  line-height: 1;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+.math-inline sub,
+.math-inline sup {
+  font-size: 0.68em;
+  line-height: 0;
+}
+
+.math-upright {
+  font-style: normal;
+}
+
+.math-greek {
+  font-family: "STIX Two Math", "Cambria Math", "Noto Serif Math", "Times New Roman", serif;
+}
+
+.math-overhat,
+.math-overdot {
+  display: inline-block;
+  position: relative;
+}
+
+.math-overhat {
+  padding-top: 0.1em;
+}
+
+.math-overhat::before {
+  content: "ˆ";
+  font-size: 0.82em;
+  font-style: normal;
+  left: 50%;
+  line-height: 1;
+  position: absolute;
+  top: -0.46em;
+  transform: translateX(-50%);
+}
+
+.math-overdot::before {
+  content: ".";
+  font-size: 0.85em;
+  font-style: normal;
+  left: 50%;
+  line-height: 1;
+  position: absolute;
+  top: -0.52em;
+  transform: translateX(-50%);
 }
 
 .metrics-strip,
@@ -451,7 +506,7 @@ main {
 .equation {
   color: #0f2e42;
   display: block;
-  font-family: ui-monospace, "Cascadia Mono", "Segoe UI Mono", monospace;
+  font-family: "STIX Two Math", "Cambria Math", "Noto Serif Math", "Times New Roman", serif;
   font-size: 0.83rem;
   font-weight: 750;
   line-height: 1.45;

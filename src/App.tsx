@@ -6,6 +6,7 @@ import { ExportPanel } from './components/ExportPanel'
 import { InterpretationPanel } from './components/InterpretationPanel'
 import { JetGeometry3D } from './components/JetGeometry3D'
 import { Layout } from './components/Layout'
+import { MathText } from './components/MathText'
 import { Plots } from './components/Plots'
 import { TRANSLATIONS, type Language, type UiText } from './i18n/translations'
 import { generateJetSeries, type JetParameters } from './model/jetModel'
@@ -34,23 +35,33 @@ function TerminalStateSummary({
   return (
     <section className="summary-bar" aria-label={text.summary.ariaLabel}>
       <div>
-        <span>{text.summary.areaAtZetaMax}</span>
+        <span>
+          <MathText text={text.summary.areaAtZetaMax} />
+        </span>
         <strong>{formatNumber(terminal.normalizedArea, 3)}</strong>
       </div>
       <div>
-        <span>{text.summary.velocity}</span>
+        <span>
+          <MathText text={text.summary.velocity} />
+        </span>
         <strong>{formatNumber(terminal.velocityHat, 4)}</strong>
       </div>
       <div>
-        <span>{text.summary.density}</span>
+        <span>
+          <MathText text={text.summary.density} />
+        </span>
         <strong>{formatNumber(terminal.densityHat, 4)}</strong>
       </div>
       <div>
-        <span>{text.summary.gasEntrainment}</span>
+        <span>
+          <MathText text={text.summary.gasEntrainment} />
+        </span>
         <strong>{formatNumber(terminal.gasEntrainmentHat, 4)}</strong>
       </div>
       <div>
-        <span>{text.summary.coefficient}</span>
+        <span>
+          <MathText text={text.summary.coefficient} />
+        </span>
         <strong>{formatNumber(terminal.entrainmentCoefficient, 4)}</strong>
       </div>
     </section>

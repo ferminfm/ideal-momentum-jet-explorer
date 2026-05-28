@@ -80,3 +80,10 @@ Pending commit, push, and GitHub Pages workflow verification.
 - Added `lang` to the shareable URL state and tested encode/decode/sanitize behavior.
 - Added translated labels for the main public UI: header, controls, plots, 3D viewer, interpretation, citations, footer, and share/export controls.
 - Validation after the language pass: `npm run test`, `npm run build`, `npm run lint`, and `npm run smoke:visual` passed locally.
+
+## 2026-05-29 Mathematical Label Pass
+
+- Added in-app mathematical rendering for visible variables such as `rho*`, `Ahat`, `vhat`, `rhohat`, `mhat_g`, `K_A`, `theta`, `phi`, `zeta`, and `De`.
+- Updated Plotly axis and hover labels to use Unicode mathematical plain text.
+- Kept numerical model logic, URL parameters, CSV column names, and citations unchanged.
+- Validation after the math-label pass: `npm run test`, `npm run build`, `npm run lint`, and `npm run smoke:visual` passed locally.

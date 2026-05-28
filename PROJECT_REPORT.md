@@ -29,7 +29,7 @@
 
 ## Validation Status
 
-- `npm run test`: passed, 3 test files and 15 tests after adding URL language-state coverage.
+- `npm run test`: passed, 4 test files and 17 tests after adding URL language-state and math formatter coverage.
 - `npm run build`: passed with no TypeScript errors. Vite reported the expected large-bundle warning because Plotly and Three.js are bundled client-side.
 - `npm run lint`: passed.
 - `npm run smoke:visual`: passed on desktop and mobile; Plotly line output and Three.js canvas pixel checks both rendered.
@@ -51,6 +51,12 @@
 - Added translated UI copy for the header, controls, export panel, equations, plots, 3D viewer, interpretation panel, citation panel, and footer.
 - Added the selected language to shareable URLs through the `lang` query parameter.
 - Kept model equations, numerical logic, citation records, and CSV schema unchanged.
+
+## Mathematical Label Pass Summary
+
+- Replaced code-style variable labels in the public UI with mathematical rendering for hats, Greek symbols, subscripts, and equation labels.
+- Added a lightweight local math-label component and plain-text formatter for Plotly axis and hover labels.
+- Kept the app dependency set unchanged; no CDN or server-side math rendering is required.
 
 ## Public-Facing Polish Summary
 

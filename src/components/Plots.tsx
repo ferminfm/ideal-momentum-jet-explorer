@@ -7,6 +7,8 @@ import {
 } from '../data/velocityOverlays'
 import type { UiText } from '../i18n/translations'
 import type { JetSeries, JetState } from '../model/jetModel'
+import { toMathPlainText } from '../utils/mathPlainText'
+import { MathText } from './MathText'
 
 interface PlotsProps {
   series: JetSeries
@@ -97,7 +99,7 @@ export function Plots({
           color: activePlot.color,
           width: 3,
         },
-        hovertemplate: `${text.plots.hoverZeta}=%{x:.3f}<br>${text.plots.hoverValue}=%{y:.5g}<extra></extra>`,
+        hovertemplate: `${toMathPlainText(text.plots.hoverZeta)}=%{x:.3f}<br>${text.plots.hoverValue}=%{y:.5g}<extra></extra>`,
       },
     ]
 
@@ -118,7 +120,7 @@ export function Plots({
           line: { width: 1.5 },
         },
         hovertemplate:
-          `${text.plots.hoverZeta}=%{x:.3f}<br>vhat=%{y:.5g}<br>` +
+          `${toMathPlainText(text.plots.hoverZeta)}=%{x:.3f}<br>${toMathPlainText('vhat')}=%{y:.5g}<br>` +
           `${overlayLabel}<br>${overlaySource}<extra></extra>`,
       })
     }
@@ -140,7 +142,9 @@ export function Plots({
       <div className="section-heading plot-heading">
         <div>
           <p className="eyebrow">{text.plots.eyebrow}</p>
-          <h2 id="plots-title">{text.plots.title}</h2>
+          <h2 id="plots-title">
+            <MathText text={text.plots.title} />
+          </h2>
         </div>
         {activePlot.logAllowed ? (
           <label className="toggle-control">
@@ -162,7 +166,7 @@ export function Plots({
             className={definition.id === activeId ? 'active' : ''}
             onClick={() => setActiveId(definition.id)}
           >
-            {text.plots.definitions[definition.id].label}
+            <MathText text={text.plots.definitions[definition.id].label} />
           </button>
         ))}
       </div>
@@ -203,12 +207,12 @@ export function Plots({
               'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif',
           },
           xaxis: {
-            title: text.plots.xAxisTitle,
+            title: toMathPlainText(text.plots.xAxisTitle),
             zeroline: false,
             gridcolor: '#dfe7ee',
           },
           yaxis: {
-            title: activePlotCopy.yTitle,
+            title: toMathPlainText(activePlotCopy.yTitle),
             type: yAxisType,
             zeroline: false,
             gridcolor: '#dfe7ee',
