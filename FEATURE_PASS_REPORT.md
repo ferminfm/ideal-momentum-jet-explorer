@@ -72,7 +72,8 @@
 
 ## Deployment Status
 
-Pending commit, push, and GitHub Pages workflow verification.
+Latest completed deployment: `6eab8af61fbd17bdb4b538f0f1e8601c7346abe2` through GitHub Actions run `26599473219`.
+The GitHub Pages app responded with HTTP 200 at `https://ferminfm.github.io/ideal-momentum-jet-explorer/`.
 
 ## 2026-05-29 Language Interface Pass
 
@@ -101,8 +102,11 @@ Pending commit, push, and GitHub Pages workflow verification.
 ## 2026-05-29 Saved Model-Case Comparison Pass
 
 - Starting commit: `8bfb8a0682b4ea323481d9bfc4a4307ddb4bb314`.
+- Feature commit: `6eab8af61fbd17bdb4b538f0f1e8601c7346abe2`.
 - Added frozen saved model-case snapshots with fixed parameters and regenerated sampled curves.
 - Added comparison controls for add, show/hide, show all, hide all, clear all, remove, color swatches, and settings tooltips.
 - Added model comparison traces to all Plotly variables while keeping measured velocity overlays separate.
 - Added compact URL serialization for saved model cases and CSV export with `caseLabel` for current plus visible saved cases.
 - Added tests for comparison case creation, immutable snapshots, toggle/remove/clear behavior, URL round-trip, plot traces, and comparison CSV export.
+- Validation: `npm run test`, `npm run build`, `npm run lint`, local `npm run smoke:visual`, live `npm run smoke:visual`, and a targeted live interaction smoke all passed.
+- Deployment: pushed to `origin/main`; GitHub Actions run `26599473219` completed successfully.

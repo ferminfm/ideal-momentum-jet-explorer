@@ -25,7 +25,9 @@
 - Remote: `origin` -> `https://github.com/ferminfm/ideal-momentum-jet-explorer.git`
 - GitHub Pages workflow: `.github/workflows/deploy.yml`
 - Vite project base: `/ideal-momentum-jet-explorer/`
-- Latest commit hash: recorded after the feature pass commit and push.
+- Latest deployed feature commit: `6eab8af61fbd17bdb4b538f0f1e8601c7346abe2`
+- Latest verified deployment run: GitHub Actions run `26599473219`, completed successfully.
+- Live Pages check: `curl -I https://ferminfm.github.io/ideal-momentum-jet-explorer/` returned HTTP 200.
 
 ## Validation Status
 
@@ -33,6 +35,7 @@
 - `npm run build`: passed with no TypeScript errors. Vite reported the expected large-bundle warning because Plotly and Three.js are bundled client-side.
 - `npm run lint`: passed.
 - `npm run smoke:visual`: passed on desktop and mobile; Plotly line output and Three.js canvas pixel checks both rendered.
+- Live interaction smoke: passed for add saved case, change geometry, hide/show saved case, settings tooltip, and remove saved case.
 - Public wording scan: no matches for stale repository owner tokens or internal positioning phrases in the requested public/source/doc paths.
 
 ## Feature Pass Summary
