@@ -165,3 +165,17 @@ The GitHub Pages app responded with HTTP 200 at `https://ferminfm.github.io/idea
 - Deployment: pushed to `origin/main`; GitHub Actions run `26618729298` completed successfully; `curl -I https://ferminfm.github.io/ideal-momentum-jet-explorer/` returned HTTP 200; live `SMOKE_URL=https://ferminfm.github.io/ideal-momentum-jet-explorer/ npm run smoke:visual` passed.
 - Known warning: Vite/browser smoke still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
 - Remaining TODO: consider updating the GitHub Actions workflow actions when Node.js 20 action-runtime deprecation becomes urgent.
+
+## 2026-05-29 Jet Enclosure Visibility Toggle Pass
+
+- Start time: `2026-05-29T14:12:56+09:00`.
+- Starting commit: `116e86c`.
+- Feature commit: `4e44ce6`.
+- Branch: `main`.
+- Files changed: `README.md`, `src/components/JetGeometry3D.tsx`, `src/components/JetGeometry3D.test.tsx`, and `src/i18n/translations.ts`.
+- Added a local 3D-view checkbox labeled `Show jet enclosure` / `噴流外形を表示` / `Mostrar envolvente del chorro`.
+- The toggle hides the outer translucent jet surface, its wireframe, and the global background droplet points. The animated traveling LHF element, its conserved marker droplets, selected cross-section, axis-switching section, axes, and nozzle remain independently visible.
+- Validation: `npm run test` passed with 11 test files and 39 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed after starting the required Vite dev server; targeted Playwright interaction smoke passed for play animation, enclosure toggle, axes toggle, nozzle toggle, and canvas rendering with zero console errors.
+- Deployment: feature commit pushed to `origin/main`; GitHub Actions run `26619350360` completed successfully; `curl -I https://ferminfm.github.io/ideal-momentum-jet-explorer/` returned HTTP 200; live `SMOKE_URL=https://ferminfm.github.io/ideal-momentum-jet-explorer/ npm run smoke:visual` passed.
+- Known warnings: GitHub Actions reported the upstream Node.js 20 action-runtime deprecation for current action versions; local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
+- Remaining TODO: consider updating the GitHub Actions workflow actions/runtime settings before the Node.js 20 action-runtime removal window.
