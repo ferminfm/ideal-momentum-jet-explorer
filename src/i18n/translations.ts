@@ -47,6 +47,7 @@ const ENGLISH_TEXT = {
   },
   sections: {
     modelParameters: 'Model parameters',
+    quickStart: 'Quick start examples',
     savedCases: 'Saved model cases',
     dataOverlays: 'Data overlays',
     calibration: 'Calibration',
@@ -61,6 +62,42 @@ const ENGLISH_TEXT = {
     regimeApplicability: 'Regime / applicability',
     expandSection: 'Expand section',
     collapseSection: 'Collapse section',
+  },
+  loading: {
+    plots: 'Loading plots...',
+    viewer3d: 'Loading 3D viewer...',
+    dataOverlays: 'Loading data overlay tools...',
+    calibration: 'Loading calibration tools...',
+    exportTools: 'Loading export tools...',
+    tipPenetration: 'Loading tip penetration tools...',
+  },
+  quickStart: {
+    eyebrow: 'Onboarding',
+    title: 'Quick start examples',
+    apply: 'Apply example',
+    note: 'Examples are illustrative starting points, not validated design cases.',
+    examples: {
+      'circular-baseline': {
+        title: 'Circular baseline',
+        description: 'Symmetric circular-limit case for reading the core normalized curves.',
+      },
+      'rectangular-axis-switching': {
+        title: 'Rectangular axis switching',
+        description: 'Aspect-ratio-two rectangular case with faster growth on the short side.',
+      },
+      'elliptical-axis-switching': {
+        title: 'Elliptical axis switching',
+        description: 'Full-axis elliptical case for comparing anisotropic area growth.',
+      },
+      'dimensional-water-air': {
+        title: 'Dimensional water-air spray',
+        description: 'Water/air preset with a 1 mm by 0.5 mm rectangular nozzle at 30 m/s.',
+      },
+      'equal-density-lab': {
+        title: 'Equal-density lab jet',
+        description: 'Single-phase branch useful for velocity-only comparison exercises.',
+      },
+    },
   },
   controls: {
     eyebrow: 'Model controls',
@@ -687,6 +724,7 @@ export const TRANSLATIONS: Record<Language, UiText> = {
     },
     sections: {
       modelParameters: 'モデルパラメータ',
+      quickStart: 'クイックスタート例',
       savedCases: '保存したモデルケース',
       dataOverlays: 'データオーバーレイ',
       calibration: 'キャリブレーション',
@@ -701,6 +739,42 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       regimeApplicability: 'レジーム・適用範囲',
       expandSection: '展開',
       collapseSection: '折りたたみ',
+    },
+    loading: {
+      plots: 'グラフを読み込み中...',
+      viewer3d: '3D 表示を読み込み中...',
+      dataOverlays: 'データ重ね合わせツールを読み込み中...',
+      calibration: 'キャリブレーションツールを読み込み中...',
+      exportTools: 'エクスポートツールを読み込み中...',
+      tipPenetration: '先端到達距離ツールを読み込み中...',
+    },
+    quickStart: {
+      eyebrow: '導入',
+      title: 'クイックスタート例',
+      apply: '例を適用',
+      note: 'これらの例は説明用の出発点であり，検証済みの設計ケースではありません。',
+      examples: {
+        'circular-baseline': {
+          title: '円形基準ケース',
+          description: '基本的な無次元曲線を読むための対称な円形極限ケース。',
+        },
+        'rectangular-axis-switching': {
+          title: '矩形の軸切り替わり',
+          description: '短辺側が速く成長するアスペクト比 2 の矩形ケース。',
+        },
+        'elliptical-axis-switching': {
+          title: '楕円の軸切り替わり',
+          description: '異方的な面積成長を比較するための全軸楕円ケース。',
+        },
+        'dimensional-water-air': {
+          title: '次元付き水-空気噴霧',
+          description: '30 m/s，1 mm x 0.5 mm 矩形ノズルの水/空気プリセット。',
+        },
+        'equal-density-lab': {
+          title: '等密度実験室噴流',
+          description: '速度のみの比較演習に使いやすい単相分岐。',
+        },
+      },
     },
     controls: {
       eyebrow: 'モデル入力',
@@ -1324,6 +1398,7 @@ export const TRANSLATIONS: Record<Language, UiText> = {
     },
     sections: {
       modelParameters: 'Parámetros del modelo',
+      quickStart: 'Ejemplos rápidos',
       savedCases: 'Casos de modelo guardados',
       dataOverlays: 'Superposiciones de datos',
       calibration: 'Calibración',
@@ -1338,6 +1413,42 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       regimeApplicability: 'Régimen / aplicabilidad',
       expandSection: 'Expandir',
       collapseSection: 'Contraer',
+    },
+    loading: {
+      plots: 'Cargando gráficas...',
+      viewer3d: 'Cargando vista 3D...',
+      dataOverlays: 'Cargando herramientas de datos superpuestos...',
+      calibration: 'Cargando herramientas de calibración...',
+      exportTools: 'Cargando herramientas de exportación...',
+      tipPenetration: 'Cargando herramientas de penetración...',
+    },
+    quickStart: {
+      eyebrow: 'Inicio',
+      title: 'Ejemplos rápidos',
+      apply: 'Aplicar ejemplo',
+      note: 'Los ejemplos son puntos de partida ilustrativos, no casos de diseño validados.',
+      examples: {
+        'circular-baseline': {
+          title: 'Base circular',
+          description: 'Caso simétrico de límite circular para leer las curvas normalizadas.',
+        },
+        'rectangular-axis-switching': {
+          title: 'Cambio de ejes rectangular',
+          description: 'Caso rectangular de relación de aspecto 2 con crecimiento más rápido en el lado corto.',
+        },
+        'elliptical-axis-switching': {
+          title: 'Cambio de ejes elíptico',
+          description: 'Caso elíptico de ejes completos para comparar crecimiento anisotrópico.',
+        },
+        'dimensional-water-air': {
+          title: 'Spray agua-aire dimensional',
+          description: 'Preajuste agua/aire con boquilla rectangular de 1 mm x 0.5 mm a 30 m/s.',
+        },
+        'equal-density-lab': {
+          title: 'Jet de laboratorio de igual densidad',
+          description: 'Rama monofásica útil para ejercicios de comparación de velocidad.',
+        },
+      },
     },
     controls: {
       eyebrow: 'Controles del modelo',

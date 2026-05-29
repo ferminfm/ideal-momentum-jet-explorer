@@ -279,3 +279,18 @@
 - Validation before commit: `npm run test` passed with 28 test files and 117 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server; targeted browser check passed for report preview and disclaimer rendering.
 - Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
 - Next recommended unit: Unit 10 performance/tutorial/showcase polish.
+
+## Performance Showcase Polish Branch
+
+- Branch: `feature/performance-showcase-polish`.
+- Starting commit: `4e2a4cb`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Added dependency-free asset reporting with `scripts/report-build-assets.mjs` and `npm run analyze:assets`.
+- Added lazy loading and Suspense fallbacks for Plotly plots, Three.js 3D viewer, data overlays, calibration, tip penetration, CFD/config export, and report tools.
+- Added optional unmounting for collapsed heavy sections so closed tooling does not mount until opened.
+- Added Vite manual chunks for React, Plotly, and Three.js.
+- Added quick-start examples for circular, rectangular, elliptical, dimensional water-air, and equal-density scenarios.
+- Added public README showcase polish, project `AGENTS.md`, and `PERFORMANCE_REPORT.md`.
+- Validation before commit: `npm run test` passed with 30 test files and 119 tests; `npm run build` passed with the expected large Plotly/Three chunk warning; `npm run lint` passed; `npm run analyze:assets` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server; targeted browser check passed for applying a quick-start example.
+- Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
+- Next recommended action: merge reviewed feature branches into main in order or open PRs.

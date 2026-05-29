@@ -367,3 +367,19 @@ The GitHub Pages app responded with HTTP 200 at `https://ferminfm.github.io/idea
 - Validation before commit: `npm run test` passed with 28 test files and 117 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server; targeted browser check passed for report preview and disclaimer rendering.
 - Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
 - Next recommended unit: Unit 10 performance/tutorial/showcase polish.
+
+## 2026-05-29 Performance Showcase Polish Branch
+
+- Start time: `2026-05-29T22:32:46+09:00`.
+- Starting commit: `4e2a4cb`.
+- Branch: `feature/performance-showcase-polish`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Baseline build had a single main JavaScript asset of about 6.24 MB raw / 1.84 MB gzip.
+- Added `npm run analyze:assets` for raw/gzip JS/CSS asset reporting after builds.
+- Added React lazy loading, Suspense loading placeholders, and closed-section unmounting for heavy tools.
+- Added Vite manual chunking for React, Plotly, and Three.js; post-change main app entry is about 407 kB raw / 118 kB gzip, with Plotly and Three isolated in separate chunks.
+- Added quick-start examples for common exploratory cases and public README showcase polish.
+- Added `AGENTS.md` with project commands, scientific wording cautions, and Unit 6 deferral guidance.
+- Validation before commit: `npm run test` passed with 30 test files and 119 tests; `npm run build` passed with the expected large Plotly/Three chunk warning; `npm run lint` passed; `npm run analyze:assets` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server; targeted browser check passed for applying a quick-start example.
+- Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
+- Next recommended action: merge reviewed feature branches into main in order or open PRs.
