@@ -26,10 +26,11 @@ export function buildModelCurveTraces({
   currentLabel,
 }: BuildModelTraceOptions): Array<Record<string, unknown>> {
   const zetaLabel = toMathPlainText(hoverZeta)
+  const currentValues = stabilizeNearConstantSeries(series.states.map(getValue))
   const traces: Array<Record<string, unknown>> = [
     {
       x: series.states.map((state) => state.axialZeta),
-      y: series.states.map(getValue),
+      y: currentValues,
       type: 'scatter',
       mode: 'lines',
       name: currentLabel,
@@ -48,7 +49,7 @@ export function buildModelCurveTraces({
 
     traces.push({
       x: comparisonCase.series.states.map((state) => state.axialZeta),
-      y: comparisonCase.series.states.map(getValue),
+      y: stabilizeNearConstantSeries(comparisonCase.series.states.map(getValue)),
       type: 'scatter',
       mode: 'lines',
       name: comparisonCase.label,
@@ -193,6 +194,29 @@ export function buildCalibrationPreviewTrace(
       )}=%{y:.5g}<extra>${escapeHoverText(label)}</extra>`,
     },
   ]
+}
+
+export function stabilizeNearConstantSeries(
+  values: number[],
+  tolerance = 1e-10,
+): number[] {
+  const finiteValues = values.filter(Number.isFinite)
+  if (finiteValues.length < 2) {
+    return values
+  }
+
+  const min = Math.min(...finiteValues)
+  const max = Math.max(...finiteValues)
+  const mean =
+    finiteValues.reduce((sum, value) => sum + value, 0) / finiteValues.length
+  const spread = max - min
+  const scale = Math.max(Math.abs(mean), 1)
+
+  if (spread <= tolerance * scale) {
+    return values.map((value) => (Number.isFinite(value) ? mean : value))
+  }
+
+  return values
 }
 
 function formatHoverNumber(value: number): string {

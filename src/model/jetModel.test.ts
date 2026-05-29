@@ -148,6 +148,32 @@ describe('ideal momentum jet model', () => {
     expectClose(limits.farField, expectedLambda)
   })
 
+  it('keeps K_A constant for the equal-density square symmetric branch', () => {
+    const params: JetParameters = {
+      ...baseRectangular,
+      densityRatio: 1,
+      thetaDeg: 8,
+      phiDeg: 8,
+      zetaMax: 50,
+      samples: 120,
+      geometry: {
+        geometry: 'rectangular',
+        width: 1,
+        height: 1,
+      },
+    }
+    const series = generateJetSeries(params)
+    const values = series.states.map((state) => state.entrainmentCoefficient)
+    const expectedLambda =
+      2 * getEquivalentDiameter(params.geometry) * Math.tan((8 * Math.PI) / 180)
+    const spread = Math.max(...values) - Math.min(...values)
+
+    for (const value of values) {
+      expectClose(value, expectedLambda, 1e-12)
+    }
+    expect(spread).toBeLessThanOrEqual(1e-12)
+  })
+
   it('computes AR=2 far-field references from directional growth rates', () => {
     const cases: JetParameters[] = [
       {

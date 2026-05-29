@@ -11,6 +11,7 @@ describe('Layout', () => {
       </Layout>,
     )
 
+    expect(screen.getByText('Ideal Momentum Jet Explorer v0.2.0')).toBeTruthy()
     expect(screen.getByText(/fermin\.franco \*at\* uabc\.edu\.mx/)).toBeTruthy()
     expect(
       screen.queryByRole('link', { name: /fermin\.franco \*at\* uabc\.edu\.mx/ }),

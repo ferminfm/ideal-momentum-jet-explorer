@@ -141,6 +141,8 @@ export function Plots({
   ])
 
   const yAxisType = activePlot.id === 'density' && densityLogScale ? 'log' : 'linear'
+  const yAxisRange =
+    activePlot.id === 'coefficient' ? getNearConstantYAxisRange(plotData) : undefined
 
   return (
     <section className="panel plot-panel" aria-labelledby="plots-title">
@@ -238,6 +240,7 @@ export function Plots({
           yaxis: {
             title: toMathPlainText(activePlotCopy.yTitle),
             type: yAxisType,
+            range: yAxisRange,
             zeroline: false,
             gridcolor: '#dfe7ee',
           },
@@ -269,4 +272,33 @@ export function Plots({
       />
     </section>
   )
+}
+
+function getNearConstantYAxisRange(
+  plotData: Array<Record<string, unknown>>,
+): [number, number] | undefined {
+  const values = plotData.flatMap((trace) =>
+    Array.isArray(trace.y)
+      ? trace.y.filter(
+          (value): value is number => typeof value === 'number' && Number.isFinite(value),
+        )
+      : [],
+  )
+
+  if (values.length < 2) {
+    return undefined
+  }
+
+  const min = Math.min(...values)
+  const max = Math.max(...values)
+  const mean = values.reduce((sum, value) => sum + value, 0) / values.length
+  const spread = max - min
+  const scale = Math.max(Math.abs(mean), 1)
+
+  if (spread > 1e-10 * scale) {
+    return undefined
+  }
+
+  const padding = Math.max(Math.abs(mean) * 0.05, 0.05)
+  return [mean - padding, mean + padding]
 }

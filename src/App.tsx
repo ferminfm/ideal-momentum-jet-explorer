@@ -365,7 +365,6 @@ function App() {
           >
             <ControlPanel
               params={params}
-              selectedPresetId={appState.selectedPresetId}
               inputMode={appState.inputMode}
               dimensionalSettings={appState.dimensionalSettings}
               text={text}

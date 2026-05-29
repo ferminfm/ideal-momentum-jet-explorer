@@ -1,4 +1,5 @@
 import { CITATIONS } from '../data/citations'
+import { APP_METADATA } from '../data/appMetadata'
 import type { DataOverlay } from '../data/dataOverlayTypes'
 import type { ComparisonCase } from './comparisonCases'
 import type { DimensionalMappingResult } from './dimensionalMapping'
@@ -75,12 +76,6 @@ export const DEFAULT_CFD_EXPORT_OPTIONS: CfdExportOptions = {
   stateSampleStride: 5,
 }
 
-const APP_INFO = {
-  name: 'Ideal Momentum Jet Explorer',
-  liveUrl: 'https://ferminfm.github.io/ideal-momentum-jet-explorer/',
-  repositoryUrl: 'https://github.com/ferminfm/ideal-momentum-jet-explorer',
-}
-
 export function buildCfdExportPayload(args: {
   params: JetParameters
   series: JetSeries
@@ -112,7 +107,10 @@ export function buildCfdExportPayload(args: {
     schemaVersion: '1.0.0',
     generatedAt: new Date().toISOString(),
     app: {
-      ...APP_INFO,
+      name: APP_METADATA.name,
+      version: APP_METADATA.version,
+      liveUrl: APP_METADATA.liveUrl,
+      repositoryUrl: APP_METADATA.repositoryUrl,
       shareUrl: args.shareUrl,
     },
     model: {

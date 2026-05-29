@@ -250,7 +250,9 @@ const ENGLISH_TEXT = {
     includeTipPenetration: 'Include tip penetration',
     includeDataOverlays: 'Include data overlays',
     includeComparisonCases: 'Include comparison cases',
-    stateSampleStride: 'State sample stride',
+    stateSampleStride: 'Export every Nth sampled state',
+    stateSampleStrideHelp:
+      'Controls how many sampled model points are included. For example, 5 exports every fifth point plus the final point.',
     warning: 'Setup aid only; not a solver-ready CFD case. Verify all solver settings independently.',
     dataOverlayPrivacyWarning:
       'Data overlays may include user-imported local data. Include them only when the exported file is safe to share.',
@@ -273,7 +275,9 @@ const ENGLISH_TEXT = {
     includeCfdExportSummary: 'Include CFD/config summary',
     includeCitations: 'Include citations',
     includeDisclaimer: 'Include research-use disclaimer',
-    stateSampleStride: 'State sample stride',
+    stateSampleStride: 'Export every Nth sampled state',
+    stateSampleStrideHelp:
+      'Controls how many sampled model points are included in the report. For example, 5 exports every fifth point plus the final point.',
     privacyWarning:
       'User-imported overlays and sampled tables may contain local/private data or make reports large. Include them only when intended.',
   },
@@ -932,7 +936,9 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       includeTipPenetration: '先端到達距離を含める',
       includeDataOverlays: 'データ重ね合わせを含める',
       includeComparisonCases: '比較ケースを含める',
-      stateSampleStride: '状態サンプル間隔',
+      stateSampleStride: 'N 点ごとに状態をエクスポート',
+      stateSampleStrideHelp:
+        '含めるサンプル点の間隔を指定します。例えば 5 の場合は 5 点ごとと最後の点を出力します。',
       warning:
         '設定補助であり，CFD の完全なケースではありません。すべてのソルバー設定を独立に確認してください。',
       dataOverlayPrivacyWarning:
@@ -956,7 +962,9 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       includeCfdExportSummary: 'CFD/設定概要を含める',
       includeCitations: '引用を含める',
       includeDisclaimer: '研究利用の免責事項を含める',
-      stateSampleStride: '状態サンプル間隔',
+      stateSampleStride: 'N 点ごとに状態をエクスポート',
+      stateSampleStrideHelp:
+        'レポートに含めるサンプル点の間隔を指定します。例えば 5 の場合は 5 点ごとと最後の点を出力します。',
       privacyWarning:
         'ユーザーが読み込んだデータやサンプル表にはローカル/非公開データが含まれたり，レポートが大きくなる可能性があります。意図した場合のみ含めてください。',
     },
@@ -1612,7 +1620,9 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       includeTipPenetration: 'Incluir penetración de la punta',
       includeDataOverlays: 'Incluir datos superpuestos',
       includeComparisonCases: 'Incluir casos de comparación',
-      stateSampleStride: 'Intervalo de muestreo de estados',
+      stateSampleStride: 'Exportar cada N estados muestreados',
+      stateSampleStrideHelp:
+        'Controla cuántos puntos muestreados del modelo se incluyen. Por ejemplo, 5 exporta cada quinto punto y el punto final.',
       warning:
         'Es una ayuda de configuración, no un caso CFD listo para resolver. Verifique todos los ajustes del solver independientemente.',
       dataOverlayPrivacyWarning:
@@ -1636,7 +1646,9 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       includeCfdExportSummary: 'Incluir resumen CFD/configuración',
       includeCitations: 'Incluir citas',
       includeDisclaimer: 'Incluir descargo de uso en investigación',
-      stateSampleStride: 'Intervalo de muestreo de estados',
+      stateSampleStride: 'Exportar cada N estados muestreados',
+      stateSampleStrideHelp:
+        'Controla cuántos puntos muestreados del modelo se incluyen en el reporte. Por ejemplo, 5 exporta cada quinto punto y el punto final.',
       privacyWarning:
         'Los datos importados por el usuario y las tablas muestreadas pueden contener información local/privada o generar reportes grandes. Inclúyalos solo cuando sea intencional.',
     },

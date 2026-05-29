@@ -13,6 +13,7 @@ export function ReportPreview({ payload }: ReportPreviewProps) {
         <h1>{payload.title}</h1>
         <p>Generated: {payload.generatedAt}</p>
         <p>Author: {payload.author}</p>
+        {payload.app.version ? <p>Version: v{payload.app.version}</p> : null}
         <p>App URL: {payload.app.liveUrl}</p>
         <p>Repository: {payload.app.repositoryUrl}</p>
         {payload.app.shareUrl ? <p>Share URL: {payload.app.shareUrl}</p> : null}

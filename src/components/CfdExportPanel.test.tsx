@@ -21,6 +21,8 @@ describe('CfdExportPanel', () => {
 
     expect(screen.getByText('CFD / configuration export')).toBeTruthy()
     expect(screen.getByText('Export format')).toBeTruthy()
+    expect(screen.getByText('Export every Nth sampled state')).toBeTruthy()
+    expect(screen.getByText(/every fifth point plus the final point/i)).toBeTruthy()
     expect(screen.getByText('Download configuration')).toBeTruthy()
     expect(screen.getByText(/not a solver-ready CFD case/i)).toBeTruthy()
   })

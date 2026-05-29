@@ -7,6 +7,7 @@ export function serializeReportMarkdown(payload: ReportPayload): string {
     '',
     `Generated: ${payload.generatedAt}`,
     `Author: ${payload.author}`,
+    payload.app.version ? `Version: v${payload.app.version}` : undefined,
     `App URL: ${payload.app.liveUrl}`,
     `Repository: ${payload.app.repositoryUrl}`,
     payload.app.shareUrl ? `Share URL: ${payload.app.shareUrl}` : undefined,
@@ -215,6 +216,7 @@ export function serializeReportHtml(payload: ReportPayload): string {
     <h1>${escapeHtml(payload.title)}</h1>
     <p class="meta">Generated: ${escapeHtml(payload.generatedAt)}</p>
     <p class="meta">Author: ${escapeHtml(payload.author)}</p>
+    ${payload.app.version ? `<p class="meta">Version: v${escapeHtml(payload.app.version)}</p>` : ''}
     <p class="meta">App URL: ${escapeHtml(payload.app.liveUrl)}</p>
     <p class="meta">Repository: ${escapeHtml(payload.app.repositoryUrl)}</p>
     ${

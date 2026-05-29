@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react'
+import { APP_METADATA } from '../data/appMetadata'
 import { LANGUAGE_OPTIONS, type Language, type UiText } from '../i18n/translations'
 
-const GITHUB_URL = 'https://github.com/ferminfm/ideal-momentum-jet-explorer'
+const GITHUB_URL = APP_METADATA.repositoryUrl
 const MODEL_NOTES_URL = `${GITHUB_URL}#scientific-model`
 const RESEARCHMAP_URL = 'https://researchmap.jp/francomedrano'
 interface LayoutProps {
@@ -18,6 +19,9 @@ export function Layout({ children, language, text, onLanguageChange }: LayoutPro
         <div>
           <p className="eyebrow">{text.layout.eyebrow}</p>
           <h1>{text.layout.title}</h1>
+          <p className="version-line">
+            {APP_METADATA.name} v{APP_METADATA.version}
+          </p>
           <p className="subtitle">{text.layout.subtitle}</p>
           <p className="description-line">{text.layout.description}</p>
           <p className="author-line">{text.layout.author}</p>

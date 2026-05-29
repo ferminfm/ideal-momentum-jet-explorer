@@ -117,6 +117,7 @@ export function CfdExportPanel({
               updateOption('stateSampleStride', Number(event.target.value))
             }
           />
+          <small>{text.cfdExport.stateSampleStrideHelp}</small>
         </label>
       </div>
 

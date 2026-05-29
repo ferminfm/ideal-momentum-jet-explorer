@@ -12,6 +12,7 @@ import {
   buildCalibrationPreviewTrace,
   buildEntrainmentReferenceTraces,
   buildModelCurveTraces,
+  stabilizeNearConstantSeries,
 } from './plotTraces'
 
 const params: JetParameters = {
@@ -159,5 +160,17 @@ describe('plot trace helpers', () => {
 
     expect(buildCalibrationPreviewTrace(result, 'velocity', 'Fit')).toHaveLength(1)
     expect(buildCalibrationPreviewTrace(result, 'density', 'Fit')).toHaveLength(0)
+  })
+
+  it('flattens near-constant numeric jitter for plotted model curves', () => {
+    const stabilized = stabilizeNearConstantSeries([1, 1 + 1e-12, 1 - 1e-12])
+
+    expect(new Set(stabilized).size).toBe(1)
+  })
+
+  it('leaves genuinely varying plotted values unchanged', () => {
+    const values = [1, 1.1, 1.2]
+
+    expect(stabilizeNearConstantSeries(values)).toEqual(values)
   })
 })

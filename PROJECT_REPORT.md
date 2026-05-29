@@ -356,3 +356,35 @@ repository URL below.
 - Integration checks: user-imported overlays remain session-local and are not
   encoded in URLs; citations remain visible; the 3D section remains before
   plots; no local absolute paths were found in public docs/source scans.
+
+## Post-v0.2.0 UI And Scientific Polish
+
+- Branch: `fix/post-v0.2.0-ui-scientific-polish`.
+- Starting commit: `13fc104`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded
+  in the final report.
+- Added shared app metadata and displayed `Ideal Momentum Jet Explorer v0.2.0`
+  in the header.
+- Fixed CFD/config export and report-generator checkbox option layout to avoid
+  label overlap.
+- Renamed the user-facing state-stride control to "Export every Nth sampled
+  state" and added explanatory helper text.
+- Added model and plot-helper tests for the equal-density symmetric `K_A`
+  branch and flattened near-constant plotted model traces to avoid roundoff
+  spikes.
+- Removed the visible normalized preset grid from the control rail while
+  preserving internal presets, URL compatibility, and quick-start examples.
+- Added `docs/public-data-discovery.md` and `docs/analytics-options.md`; no
+  unverified public datasets or tracking scripts were added.
+- Unit 6 remains deferred; no lossy-model code was added.
+- Validation:
+  - `npm run test` passed with 31 files and 127 tests.
+  - `npm run build` passed with the expected large Plotly chunk warning.
+  - `npm run lint` passed.
+  - `npm run analyze:assets` passed; largest chunks were Plotly
+    `4535.12 kB` raw / `1345.08 kB` gzip and Three `904.27 kB` raw /
+    `240.25 kB` gzip.
+  - `npm run smoke:visual` passed on desktop and mobile after starting the Vite
+    dev server. A first smoke attempt failed before the server was running.
+- Known warning: local Vite/browser logging still reports the existing
+  `THREE.Clock` deprecation warning from the 3D dependency stack.

@@ -7,8 +7,11 @@
 
 Interactive reduced-order model for circular, rectangular, and elliptical atomizing jets.
 
-Live app: https://ferminfm.github.io/ideal-momentum-jet-explorer/  
+Live app: https://ferminfm.github.io/ideal-momentum-jet-explorer/
+
 Source: https://github.com/ferminfm/ideal-momentum-jet-explorer
+
+Current release: v0.2.0
 
 Author: Fermín Franco-Medrano — Ensenada Campus, Autonomous University of Baja California / Institute of Mathematics for Industry, Kyushu University
 
@@ -153,6 +156,10 @@ of the model; composite-density validation requires phase-fraction,
 mixture-fraction, density, or concentration data. This unit does not fit model
 parameters.
 
+Public dataset discovery is tracked in
+[`docs/public-data-discovery.md`](docs/public-data-discovery.md). Use CSV import
+for local, private, or unpublished comparisons.
+
 Example normalized CSV format:
 
 ```csv
@@ -229,6 +236,8 @@ geometry, dimensional operating point and material presets when dimensional mode
 is active, nondimensional groups, sampled normalized and dimensional states,
 regime/applicability assessment, quasi-steady tip-penetration results, saved
 model comparison cases, and data overlays when explicitly selected.
+The "Export every Nth sampled state" option controls how many sampled model
+points are written, for example every fifth point plus the final point.
 
 These exports are setup aids only. They do not generate a solver-ready CFD case,
 mesh, solver dictionaries, Fluent journal, validated boundary conditions,
@@ -248,9 +257,14 @@ cases, data overlays, quasi-steady tip penetration, CFD/configuration export
 summary, citations, and the research-use disclaimer. User-imported overlays and
 large sampled tables are excluded by default and should be included only when the
 report is intended to contain that local/private data.
+The "Export every Nth sampled state" option has the same meaning in reports.
 
 No report data are uploaded. The report is a reproducibility and discussion aid,
 not a validated design certificate or solver-ready CFD report.
+
+Analytics are not enabled by default. Current public-interest checks should use
+GitHub repository traffic first; future analytics options are documented in
+[`docs/analytics-options.md`](docs/analytics-options.md).
 
 ## Interactive Features
 

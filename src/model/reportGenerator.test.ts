@@ -36,6 +36,7 @@ describe('report payload builder', () => {
 
     expect(payload.schemaVersion).toBe('1.0.0')
     expect(payload.app.name).toBe('Ideal Momentum Jet Explorer')
+    expect(payload.app.version).toBe('0.2.0')
     expect(payload.modelSummary).toBeTruthy()
     expect(payload.geometrySummary).toBeTruthy()
     expect(payload.currentStateSummary).toBeTruthy()
