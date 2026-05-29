@@ -265,3 +265,17 @@
 - Validation before commit: `npm run test` passed with 25 test files and 109 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server.
 - Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
 - Next recommended unit: Unit 9 report generator.
+
+## Browser-Side Report Generator Branch
+
+- Branch: `feature/report-generator`.
+- Starting commit: `78e15cf`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Added a typed report payload builder for compact research/engineering summaries of the current app state.
+- Added Markdown and self-contained HTML report serialization with escaped user-provided strings.
+- Added a report panel in the reproducibility section with title/author fields, optional section checkboxes, sampled-state stride, in-app preview, browser print/save-as-PDF, Markdown download, and HTML download.
+- Optional sections include dimensional summary, regime assessment, sampled state table, saved model cases, data overlays by explicit opt-in, quasi-steady tip penetration, CFD/config summary, citations, and research-use disclaimer.
+- The report generator is browser-side only and does not upload data or add server-side/heavy PDF-generation dependencies.
+- Validation before commit: `npm run test` passed with 28 test files and 117 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server; targeted browser check passed for report preview and disclaimer rendering.
+- Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
+- Next recommended unit: Unit 10 performance/tutorial/showcase polish.

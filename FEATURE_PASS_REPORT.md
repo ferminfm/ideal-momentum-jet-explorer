@@ -352,3 +352,18 @@ The GitHub Pages app responded with HTTP 200 at `https://ferminfm.github.io/idea
 - Validation before commit: `npm run test` passed with 25 test files and 109 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server.
 - Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
 - Next recommended unit: Unit 9 report generator.
+
+## 2026-05-29 Browser-Side Report Generator Branch
+
+- Start time: `2026-05-29T22:20:03+09:00`.
+- Starting commit: `78e15cf`.
+- Branch: `feature/report-generator`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Added `src/model/reportGenerator.ts` with typed report options and payload construction.
+- Added `src/utils/reportSerializers.ts` for Markdown and self-contained HTML serialization plus browser downloads.
+- Added `src/components/ReportPanel.tsx` and `src/components/ReportPreview.tsx` for configurable browser-side report preview, print/save-as-PDF, Markdown download, and HTML download.
+- Optional report sections cover dimensional summary, regime assessment, sampled state table, saved comparison cases, data overlays by explicit opt-in, tip penetration, CFD/config summary, citations, and disclaimer.
+- User-provided report strings are escaped in HTML output, and imported overlay data are excluded by default.
+- Validation before commit: `npm run test` passed with 28 test files and 117 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server; targeted browser check passed for report preview and disclaimer rendering.
+- Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
+- Next recommended unit: Unit 10 performance/tutorial/showcase polish.
