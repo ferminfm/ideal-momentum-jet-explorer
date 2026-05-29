@@ -1,8 +1,9 @@
 # Project Report
 
-## Local Path
+## Local Repository
 
-`/home/franco/Documents/GitHub/ideal-momentum-jet-explorer`
+Use the project root on the local workstation or clone from the public
+repository URL below.
 
 ## Public URLs
 
@@ -19,13 +20,13 @@
 - Visual smoke test: `npm run smoke:visual`
 - Production preview: `npm run preview -- --host 127.0.0.1`
 
-## Current Deployment Status
+## Current Deployment Status Before Unit 11 Release PR
 
 - Branch: `main`
 - Remote: `origin` -> `https://github.com/ferminfm/ideal-momentum-jet-explorer.git`
 - GitHub Pages workflow: `.github/workflows/deploy.yml`
 - Vite project base: `/ideal-momentum-jet-explorer/`
-- Latest deployed feature commit: `32b8e74`
+- Latest deployed main before Unit 11 integration branch: `0adad3c`.
 - Latest verified deployment run: GitHub Actions run `26618729298`, completed successfully.
 - Live Pages check: `curl -I https://ferminfm.github.io/ideal-momentum-jet-explorer/` returned HTTP 200.
 
@@ -227,3 +228,131 @@
 - Validation on merged main: `npm run test` passed with 18 test files and 81 tests; `npm run build` passed with the expected large-bundle warning; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile.
 - Scope check: Unit 5 calibration code was not merged; Unit 6 lossy model remains deferred.
 - Deployment status: pending push to `origin/main` and GitHub Pages workflow.
+
+## Calibration Mode Branch
+
+- Branch: `feature/calibration-mode`.
+- Starting commit: `7a645ce`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Added a browser-side calibration model for fitting prescribed spreading half-angles to selected built-in or user-imported overlays.
+- Implemented symmetric-angle, two-angle, theta-only, and phi-only calibration modes.
+- Optimizer strategy: bounded coarse-grid search followed by coordinate refinement of the active angle parameters.
+- Supported targets: normalized `Ahat`, `vhat`, `rhohat`, `phat`, `mhat_g`, and `K_A`.
+- Added a calibration panel with fit results, fitted-curve preview, apply fitted parameters, and add fitted curve to saved model cases.
+- Calibration remains explicitly scoped as exploratory parameter fitting, not physical validation.
+- Validation before commit: `npm run test` passed with 20 test files and 91 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server.
+
+## Tip Penetration Module Branch
+
+- Branch: `feature/tip-penetration-module`.
+- Starting commit: `74e04f7`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Added a quasi-steady kinematic tip-penetration estimate based on `d zeta / d tau = vhat(zeta)`.
+- Added dimensional display and CSV fields when dimensional engineering scales are available.
+- Added a compact panel below the main plots with penetration summary values, Plotly curve, and penetration CSV export.
+- The module is explicitly scoped as a research/visualization estimate, not a full transient spray model or validation claim.
+- Validation before commit: `npm run test` passed with 22 test files and 98 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server; targeted browser check passed for normalized and dimensional penetration-panel output.
+
+## CFD Configuration Export Branch
+
+- Branch: `feature/cfd-config-export`.
+- Starting commit: `4cf0f47`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Added a typed CFD/configuration export payload for solver-agnostic reduced-order setup summaries.
+- Added browser-side downloads for JSON, YAML-like text, Markdown summaries, and OpenFOAM-oriented setup notes.
+- The OpenFOAM output is intentionally notes-only: it does not generate a solver-ready case, mesh, dictionaries, boundary conditions, multiphase setup, or numerical schemes.
+- Export options can include sampled normalized states, dimensional states when dimensional mode is active, regime assessment, quasi-steady tip penetration, data overlays by explicit opt-in, and saved model comparison cases.
+- Added a compact multilingual export panel in the reproducibility section.
+- Validation before commit: `npm run test` passed with 25 test files and 109 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server.
+- Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
+- Next recommended unit: Unit 9 report generator.
+
+## Browser-Side Report Generator Branch
+
+- Branch: `feature/report-generator`.
+- Starting commit: `78e15cf`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Added a typed report payload builder for compact research/engineering summaries of the current app state.
+- Added Markdown and self-contained HTML report serialization with escaped user-provided strings.
+- Added a report panel in the reproducibility section with title/author fields, optional section checkboxes, sampled-state stride, in-app preview, browser print/save-as-PDF, Markdown download, and HTML download.
+- Optional sections include dimensional summary, regime assessment, sampled state table, saved model cases, data overlays by explicit opt-in, quasi-steady tip penetration, CFD/config summary, citations, and research-use disclaimer.
+- The report generator is browser-side only and does not upload data or add server-side/heavy PDF-generation dependencies.
+- Validation before commit: `npm run test` passed with 28 test files and 117 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server; targeted browser check passed for report preview and disclaimer rendering.
+- Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
+- Next recommended unit: Unit 10 performance/tutorial/showcase polish.
+
+## Performance Showcase Polish Branch
+
+- Branch: `feature/performance-showcase-polish`.
+- Starting commit: `4e2a4cb`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Added dependency-free asset reporting with `scripts/report-build-assets.mjs` and `npm run analyze:assets`.
+- Added lazy loading and Suspense fallbacks for Plotly plots, Three.js 3D viewer, data overlays, calibration, tip penetration, CFD/config export, and report tools.
+- Added optional unmounting for collapsed heavy sections so closed tooling does not mount until opened.
+- Added Vite manual chunks for React, Plotly, and Three.js.
+- Added quick-start examples for circular, rectangular, elliptical, dimensional water-air, and equal-density scenarios.
+- Added public README showcase polish, project `AGENTS.md`, and `PERFORMANCE_REPORT.md`.
+- Validation before commit: `npm run test` passed with 30 test files and 119 tests; `npm run build` passed with the expected large Plotly/Three chunk warning; `npm run lint` passed; `npm run analyze:assets` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server; targeted browser check passed for applying a quick-start example.
+- Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
+- Next recommended action: merge reviewed feature branches into main in order or open PRs.
+
+## Unit 11 Integration Release Branch
+
+- Branch: `integration/industry-features-release`.
+- Starting main commit: `0adad3c`.
+- Units 1-4 were already present on `main` before this integration branch.
+- Merged feature branches:
+  - `origin/feature/calibration-mode` at `74e04f7`.
+  - `origin/feature/tip-penetration-module` at `4cf0f47`.
+  - `origin/feature/cfd-config-export` at `78e15cf`.
+  - `origin/feature/report-generator` at `4e2a4cb`.
+  - `origin/feature/performance-showcase-polish` at `189fb30`.
+- Unit 6 lossy model branch was not found and was not merged; the roadmap keeps
+  Unit 6 deferred until the governing equations, assumptions, and validation
+  strategy are formally documented.
+- Conflicts encountered: `FEATURE_PASS_REPORT.md` and `PROJECT_REPORT.md`
+  during the Unit 5 merge. The resolution kept both the Units 1-4 main-merge
+  notes and the Unit 5 calibration notes. Later merges were automatic.
+- Version metadata updated to `0.2.0` in `package.json` and `package-lock.json`.
+- Added `CHANGELOG.md` with the industry feature integration summary.
+- Public-safety scan: no committed PDF files were found. Local absolute paths
+  were removed from public documentation. Remaining `private`, `token`, and
+  related hits are package metadata/dependency names, safety instructions, or
+  tests for HTML escaping and URL privacy.
+- Validation:
+  - `npm run test` passed with 30 files and 119 tests.
+  - `npm run build` passed with the expected large Plotly chunk warning.
+  - `npm run lint` passed.
+  - `npm run analyze:assets` passed; largest chunks were Plotly
+    `4535.12 kB` raw / `1345.08 kB` gzip and Three `904.27 kB` raw /
+    `240.25 kB` gzip.
+  - `npm run smoke:visual` passed on desktop and mobile after starting the Vite
+    dev server.
+  - `npm audit --omit=dev` reported 0 vulnerabilities.
+- Known warning: local Vite/browser logging still reports the existing
+  `THREE.Clock` deprecation warning from the 3D dependency stack.
+- Deployment status: integration branch prepared for PR; `main` is not changed
+  by this pass until the PR is reviewed and merged.
+
+## Pre-Merge Calibration Cleanup
+
+- Branch: `integration/industry-features-release`.
+- Starting commit: `3e78f21`.
+- Fixed calibration target synchronization so the selected target follows the
+  active overlay variable when overlays first appear or when the selected
+  overlay changes.
+- Added a translated mismatch warning when the user intentionally fits a target
+  variable different from the overlay variable.
+- Localized calibration failure display in the UI; raw model-layer messages are
+  available only under a technical-details disclosure.
+- Unit 6 remains deferred; no lossy-model code was added.
+- Validation:
+  - `npm run test` passed with 30 files and 123 tests.
+  - `npm run build` passed with the expected large Plotly chunk warning.
+  - `npm run lint` passed.
+  - `npm run analyze:assets` passed.
+  - `npm run smoke:visual` passed on desktop and mobile after starting the Vite
+    dev server.
+- Integration checks: user-imported overlays remain session-local and are not
+  encoded in URLs; citations remain visible; the 3D section remains before
+  plots; no local absolute paths were found in public docs/source scans.

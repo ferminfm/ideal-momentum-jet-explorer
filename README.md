@@ -1,5 +1,10 @@
 # Ideal Momentum Jet Explorer
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![React](https://img.shields.io/badge/React-19-blue.svg)](package.json)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6-blue.svg)](package.json)
+[![Vite](https://img.shields.io/badge/Vite-8-purple.svg)](package.json)
+
 Interactive reduced-order model for circular, rectangular, and elliptical atomizing jets.
 
 Live app: https://ferminfm.github.io/ideal-momentum-jet-explorer/  
@@ -12,6 +17,20 @@ Author: Fermín Franco-Medrano — Ensenada Campus, Autonomous University of Baj
 Ideal Momentum Jet Explorer is a browser-based scientific computing app for exploring a conservative locally homogeneous two-phase jet closure. It evaluates how prescribed nozzle geometry and area growth affect bulk velocity, composite density, dynamic pressure, and entrainment.
 
 The app is intended as an educational and exploratory research tool for fluid mechanics, atomization, and reduced-order modeling. It is fully static: all calculations run client-side in TypeScript, and GitHub Pages serves the built files without a backend.
+
+## Public Showcase
+
+The app combines a normalized research model with engineering-oriented workflows:
+
+- Model and physics: normalized conservative state laws, entrainment coefficient references, and saved model-case comparisons.
+- Engineering mode: dimensional fluid/nozzle inputs, nondimensional groups, and heuristic applicability screening.
+- Visualization: Plotly state-variable curves, 3D jet geometry, camera/capture controls, and a traveling LHF element animation.
+- Reproducibility: shareable URLs, CSV export, CFD/configuration export, and browser-side report generation.
+- Data workflows: local CSV overlays and exploratory fitting of prescribed spreading half-angles.
+
+Quick-start examples in the app provide one-click starting cases for circular,
+rectangular, elliptical, dimensional water-air, and equal-density scenarios. They
+are illustrative starting points, not validated design cases.
 
 ## Scientific Model
 
@@ -146,6 +165,93 @@ zeta,vhat
 Use normalized variables unless you have applied the dimensional conversion
 consistently outside the app.
 
+## Calibration / Fitting Of Prescribed Spreading Angles
+
+The calibration panel fits prescribed spreading half-angles to selected built-in
+or user-imported overlay data. It supports symmetric-angle fitting
+`theta=phi`, two-angle fitting, `theta`-only fitting, and `phi`-only fitting.
+Supported targets are normalized `Ahat`, `vhat`, `rhohat`, `phat`, `mhat_g`,
+and `K_A`.
+
+The optimizer is a browser-side bounded least-squares search: a coarse grid
+finds a stable starting point, followed by coordinate refinement of the active
+angle parameters. The result can be previewed on the relevant plot, applied to
+the current controls, or added as a saved model case for comparison.
+
+By default, the fit target follows the selected overlay variable; overriding it
+is allowed, but the app warns when the variables differ.
+
+Calibration here means fitting prescribed area-growth/spreading parameters. It
+does not fit breakup, losses, droplet-size distribution, vortex dynamics, or
+composite-density validation. A good numerical fit is not automatic physical
+validation.
+
+Example workflow:
+
+1. Import a CSV overlay with columns such as `zeta,vhat`.
+2. Select the overlay in the calibration panel.
+3. Fit `theta` and/or `phi` within bounded angle ranges.
+4. Apply the fitted parameters or add the fitted curve to saved model cases.
+
+## Quasi-Steady Tip Penetration Estimate
+
+The tip-penetration panel adds an exploratory kinematic estimate based on the
+steady bulk velocity field:
+
+```text
+d zeta / d tau = vhat(zeta),    tau = v0 t / De.
+```
+
+Equivalently, the app computes:
+
+```text
+tau(zeta) = integral_0^zeta dxi / vhat(xi)
+```
+
+and inverts this sampled relation to plot `zeta_tip(tau)`. In dimensional mode,
+the same result is converted to `Z` in millimeters and `t` in milliseconds using
+the engineering scales `De` and `v0`.
+
+This module is a quasi-steady penetration estimate for a conceptual tip/front.
+It is not a full transient spray simulation and does not model startup, vortex
+formation, breakup, compressibility waves, droplet drag, wall impingement, or
+full spray-tip physics.
+
+## CFD / Configuration Export
+
+The CFD/configuration export panel downloads solver-agnostic setup summaries for
+downstream CFD preparation, scripting, reports, or surrogate-model workflows.
+Available formats include JSON, YAML-like text, Markdown, and
+OpenFOAM-oriented notes.
+
+Exports can include the current reduced-order model parameters, normalized
+geometry, dimensional operating point and material presets when dimensional mode
+is active, nondimensional groups, sampled normalized and dimensional states,
+regime/applicability assessment, quasi-steady tip-penetration results, saved
+model comparison cases, and data overlays when explicitly selected.
+
+These exports are setup aids only. They do not generate a solver-ready CFD case,
+mesh, solver dictionaries, Fluent journal, validated boundary conditions,
+multiphase model, turbulence model, or numerical schemes. Users must choose and
+verify all solver settings independently.
+
+## Report Generator
+
+The report generator creates a compact browser-side technical note from the
+current app state. The report can be previewed in the app, printed or saved as
+PDF through the browser print dialog, downloaded as Markdown, or downloaded as a
+self-contained HTML file.
+
+Optional sections include dimensional engineering summary, heuristic
+regime/applicability screening, sampled reduced-order state tables, saved model
+cases, data overlays, quasi-steady tip penetration, CFD/configuration export
+summary, citations, and the research-use disclaimer. User-imported overlays and
+large sampled tables are excluded by default and should be included only when the
+report is intended to contain that local/private data.
+
+No report data are uploaded. The report is a reproducibility and discussion aid,
+not a validated design certificate or solver-ready CFD report.
+
 ## Interactive Features
 
 - English, Japanese, and Spanish interface controls for public teaching and research use.
@@ -153,7 +259,11 @@ consistently outside the app.
 - Compact symbols glossary for normalized distance, equivalent diameter, density ratio, state variables, nozzle dimensions, and prescribed spreading angles.
 - Dimensional engineering mode with fluid presets, physical nozzle dimensions, velocity/pressure-drop operating point, and nondimensional spray/nozzle groups.
 - Regime/applicability checker with conservative heuristic warnings for Reynolds, Weber, Ohnesorge, Mach estimate, density ratio, aspect ratio, and spreading angles.
+- Quasi-steady tip-penetration plot and CSV export based on the steady `vhat(zeta)` field.
+- CFD/configuration export for JSON, YAML-like text, Markdown summaries, and OpenFOAM-oriented setup notes that are explicitly not solver-ready CFD cases.
+- Browser-side report generator with in-app preview, browser print/save-as-PDF, Markdown download, and HTML download.
 - Data-overlay manager for built-in comparison aids and user-imported CSV curves. Imported CSV overlays stay local in the browser and are not encoded in shareable URLs.
+- Calibration aid for fitting prescribed spreading half-angles to selected overlay data, with fitted-curve preview and optional saved comparison case.
 - 3D-first layout with a desktop sticky parameter sidebar and collapsible sections to reduce scrolling while inspecting the jet geometry.
 - Saved model-case comparisons: click **Add current case to comparison** to freeze the current curve, then move the sliders to compare the live case against saved model-generated curves.
 - Entrainment-coefficient references: the `K_A` plot shows horizontal lines for the near-field value `K_A(0)` and the far-field asymptote `K_A(∞)` for the current settings.
@@ -210,6 +320,12 @@ npm run smoke:visual
 
 The smoke test uses `playwright-core` with system Chrome and writes desktop/mobile screenshots to `/tmp/ideal-momentum-jet-*.png`.
 
+Build asset summary after a production build:
+
+```bash
+npm run analyze:assets
+```
+
 ## Deployment
 
 GitHub Pages deployment is configured through GitHub Actions in `.github/workflows/deploy.yml`. The Vite base path is:
@@ -236,8 +352,8 @@ GitHub Pages sites are public. Keep private PDFs, unpublished manuscripts, crede
 
 - Add documented public data-overlay datasets when permissible numerical data are available.
 - Add dimensional plot-unit toggles for area, velocity, density, pressure, and gas entrainment.
-- Add calibration/fitting tools for prescribed spreading half-angles after data-import workflows are reviewed.
 - Add profile-resolved or phase-fraction validation datasets when public data are available.
 - Defer lossy model extensions until the governing equations, assumptions, and validation strategy are formally documented.
-- Add optional bundle splitting for Plotly and Three.js to reduce initial JavaScript payload.
+- Continue deeper performance work, including possible replacement of the full Plotly bundle if all current plot features remain supported.
+- Add more tutorial examples and optional validation-notebook links.
 - Add a concise derivation note for the density and entrainment branches.

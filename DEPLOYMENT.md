@@ -28,7 +28,7 @@ https://github.com/ferminfm/ideal-momentum-jet-explorer
 If GitHub CLI is authenticated:
 
 ```bash
-cd /home/franco/Documents/GitHub/ideal-momentum-jet-explorer
+cd <local-repo-path>
 gh auth status
 gh repo create ideal-momentum-jet-explorer --public --source=. --remote=origin --push
 ```
@@ -36,7 +36,7 @@ gh repo create ideal-momentum-jet-explorer --public --source=. --remote=origin -
 If GitHub CLI is not authenticated, do not enter credentials in this project. Create the public repository manually on GitHub, then run:
 
 ```bash
-cd /home/franco/Documents/GitHub/ideal-momentum-jet-explorer
+cd <local-repo-path>
 git remote add origin https://github.com/ferminfm/ideal-momentum-jet-explorer.git
 git branch -M main
 git push -u origin main

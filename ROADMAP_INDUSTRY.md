@@ -52,7 +52,9 @@ requires independent validation.
 - Expected files/components: fitting utilities, objective-function tests, calibration UI.
 - Dependencies: public/user data import and robust dimensional state outputs.
 - Risk level: high. Optimization results need uncertainty and validation caveats.
-- Status: next recommended unit after review of the data-overlay foundation.
+- Status: implemented on `feature/calibration-mode`.
+- Notes: fits prescribed half-angles only. It is an exploratory parameter-fitting
+  aid, not automatic physical validation.
 
 ## 6. Lossy Model Extensions — deferred
 
@@ -75,6 +77,9 @@ requires independent validation.
 - Dependencies: dimensional scales and current velocity field. It can be
   implemented independently of the deferred lossy model.
 - Risk level: high. Adds a new physical model branch.
+- Status: implemented on `feature/tip-penetration-module`.
+- Notes: implemented as a kinematic estimate from the steady bulk velocity field,
+  not as a full transient spray-tip model.
 
 ## 8. CFD / Configuration Export
 
@@ -83,6 +88,11 @@ requires independent validation.
 - Expected files/components: export utilities and schema tests.
 - Dependencies: dimensional UI and validated parameter naming.
 - Risk level: medium. Must avoid implying solver-ready CFD completeness.
+- Status: implemented on `feature/cfd-config-export`.
+- Notes: exports JSON, YAML-like text, Markdown summaries, and
+  OpenFOAM-oriented notes. The OpenFOAM output is intentionally a setup note, not
+  a complete case, mesh, solver dictionary, boundary-condition set, or validated
+  CFD workflow.
 
 ## 9. Report Generator
 
@@ -91,6 +101,10 @@ requires independent validation.
 - Expected files/components: browser-side report builder, print CSS, citation helpers.
 - Dependencies: dimensional UI, plot export, and regime checks.
 - Risk level: medium. Wording must remain conservative.
+- Status: implemented on `feature/report-generator`.
+- Notes: implemented as browser-side HTML/Markdown generation with in-app
+  preview and browser print/save-as-PDF. It does not add server-side or heavy PDF
+  generation dependencies.
 
 ## 10. Performance / Tutorial / Showcase Polish
 
@@ -98,3 +112,32 @@ requires independent validation.
 - Expected files/components: route-level code splitting, examples, documentation.
 - Dependencies: stable feature set and performance measurements.
 - Risk level: low to medium. Main risk is UI clutter.
+- Status: implemented on `feature/performance-showcase-polish`.
+- Notes: added dependency-free asset reporting, lazy-loaded heavy panels, manual
+  Plotly/Three/React chunking, quick-start examples, and public README polish.
+
+## 11. Final Integration / Release Hardening
+
+- Goal: integrate the reviewed industry feature branches, stabilize the public
+  release branch, update release documentation, run full validation, and prepare
+  deployment through the existing GitHub Pages workflow.
+- Expected files/components: integration branch, changelog/release notes,
+  project report, version metadata, full test/build/lint/smoke validation.
+- Dependencies: implemented Units 1-5 and 7-10. Unit 6 remains deferred and is
+  not part of this release.
+- Risk level: medium. Main risk is branch-integration drift rather than new
+  scientific behavior.
+- Status: implemented on `integration/industry-features-release`.
+- Notes: this unit does not add physics or change the reduced-order equations.
+
+## Future Follow-Ups
+
+- Add documented public validation datasets when numerical data are permissible.
+- Add dimensional plot-unit toggles for the main state variables.
+- Consider replacing the full Plotly bundle with a smaller bundle only after
+  confirming all current plot, hover, error-bar, export, and responsive features
+  remain supported.
+- Add optional PWA/offline mode after the static app behavior is stable.
+- Add validation notebook links and deeper tutorial examples.
+- Keep Unit 6 lossy model deferred until the scientific formulation is written
+  and reviewed.

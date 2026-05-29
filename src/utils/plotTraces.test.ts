@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import type { CalibrationResult } from '../model/calibration'
 import { createComparisonCase } from '../model/comparisonCases'
 import {
   computeEntrainmentCoefficientLimits,
@@ -8,6 +9,7 @@ import {
 import type { DataOverlay } from '../data/dataOverlayTypes'
 import {
   buildDataOverlayTraces,
+  buildCalibrationPreviewTrace,
   buildEntrainmentReferenceTraces,
   buildModelCurveTraces,
 } from './plotTraces'
@@ -134,5 +136,28 @@ describe('plot trace helpers', () => {
     ]
 
     expect(buildDataOverlayTraces(overlays, 'velocity')).toHaveLength(0)
+  })
+
+  it('adds calibration preview trace only on the fitted target variable', () => {
+    const series = generateJetSeries(params)
+    const result: CalibrationResult = {
+      success: true,
+      targetVariable: 'velocity',
+      parameterMode: 'two-angles',
+      fittedThetaDeg: 8,
+      fittedPhiDeg: 8,
+      initialThetaDeg: 4,
+      initialPhiDeg: 4,
+      rmse: 0,
+      mae: 0,
+      sse: 0,
+      pointCount: 4,
+      iterations: 20,
+      message: 'ok',
+      fittedSeries: series,
+    }
+
+    expect(buildCalibrationPreviewTrace(result, 'velocity', 'Fit')).toHaveLength(1)
+    expect(buildCalibrationPreviewTrace(result, 'density', 'Fit')).toHaveLength(0)
   })
 })
