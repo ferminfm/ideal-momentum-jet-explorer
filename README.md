@@ -97,11 +97,17 @@ normalized geometry before evaluating the same reduced-order model.
 
 The engineering summary reports equivalent diameter, initial area, density
 ratio, injection velocity or pressure-drop scaling, liquid mass flow, liquid
-momentum flux, dynamic-pressure scale, Reynolds number, Weber number,
-Ohnesorge number, and an approximate gas Mach number. Material properties are
-representative exploratory values and must be verified before engineering use.
-Dimensional mode still uses prescribed spreading half-angles; it does not infer
-spray spreading or validate design performance.
+momentum flux, dynamic-pressure scale, liquid Reynolds number, liquid and gas
+Weber numbers, Ohnesorge number, and an approximate gas Mach number. Material
+properties are representative exploratory values and must be verified before
+engineering use. Dimensional mode still uses prescribed spreading half-angles;
+it does not infer spray spreading or validate design performance.
+
+The regime/applicability checker adds heuristic screening based on `Re_l`,
+`We_l`, `We_g`, `Oh_l`, approximate gas Mach number, density ratio, aspect
+ratio, and prescribed spreading angles. It is intended to warn when the
+reduced-order closure is likely outside its assumptions. It is not a validated
+breakup-regime map and is not engineering certification.
 
 ## Interactive Features
 
@@ -109,6 +115,7 @@ spray spreading or validate design performance.
 - KaTeX equation rendering for standard LaTeX notation such as `\widehat A`, `\widehat v`, and `\widehat\rho`.
 - Compact symbols glossary for normalized distance, equivalent diameter, density ratio, state variables, nozzle dimensions, and prescribed spreading angles.
 - Dimensional engineering mode with fluid presets, physical nozzle dimensions, velocity/pressure-drop operating point, and nondimensional spray/nozzle groups.
+- Regime/applicability checker with conservative heuristic warnings for Reynolds, Weber, Ohnesorge, Mach estimate, density ratio, aspect ratio, and spreading angles.
 - 3D-first layout with a desktop sticky parameter sidebar and collapsible sections to reduce scrolling while inspecting the jet geometry.
 - Saved model-case comparisons: click **Add current case to comparison** to freeze the current curve, then move the sliders to compare the live case against saved model-generated curves.
 - Entrainment-coefficient references: the `K_A` plot shows horizontal lines for the near-field value `K_A(0)` and the far-field asymptote `K_A(∞)` for the current settings.

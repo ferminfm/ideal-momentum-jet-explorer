@@ -34,6 +34,7 @@ export interface EngineeringScales {
 export interface DimensionlessGroups {
   reynoldsLiquid: number
   weberLiquid: number | null
+  weberGas: number | null
   ohnesorgeLiquid: number | null
   gasMachEstimate: number | null
 }
@@ -130,6 +131,11 @@ export function computeDimensionlessGroups(
       ? null
       : (point.liquid.density * injectionVelocity ** 2 * point.equivalentDiameter) /
         point.liquid.surfaceTension
+  const weberGas =
+    point.liquid.surfaceTension === undefined
+      ? null
+      : (point.gas.density * injectionVelocity ** 2 * point.equivalentDiameter) /
+        point.liquid.surfaceTension
   const ohnesorgeLiquid =
     point.liquid.surfaceTension === undefined
       ? null
@@ -141,6 +147,7 @@ export function computeDimensionlessGroups(
   return {
     reynoldsLiquid,
     weberLiquid,
+    weberGas,
     ohnesorgeLiquid,
     gasMachEstimate,
   }

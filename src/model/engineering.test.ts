@@ -98,14 +98,20 @@ describe('dimensional engineering model foundation', () => {
     )
   })
 
-  it('computes liquid Reynolds, Weber, Ohnesorge, and gas Mach estimates', () => {
+  it('computes liquid Reynolds, liquid/gas Weber, Ohnesorge, and gas Mach estimates', () => {
     const groups = computeDimensionlessGroups(velocityPoint)
 
     expect(groups.reynoldsLiquid).toBeGreaterThan(0)
     expect(groups.weberLiquid ?? Number.NaN).toBeGreaterThan(0)
+    expect(groups.weberGas ?? Number.NaN).toBeGreaterThan(0)
     expect(groups.ohnesorgeLiquid ?? Number.NaN).toBeGreaterThan(0)
     expect(groups.gasMachEstimate ?? Number.NaN).toBeGreaterThan(0)
     expectClose(groups.gasMachEstimate ?? Number.NaN, 10 / 343)
+    expectClose(
+      groups.weberGas ?? Number.NaN,
+      (AIR_ROOM_CONDITIONS.density * 10 ** 2 * 0.001) /
+        (WATER_ROOM_TEMPERATURE.surfaceTension as number),
+    )
   })
 
   it('dimensionalizes the normalized nozzle-exit state', () => {

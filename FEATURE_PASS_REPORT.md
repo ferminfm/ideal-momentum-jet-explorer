@@ -247,3 +247,19 @@ The GitHub Pages app responded with HTTP 200 at `https://ferminfm.github.io/idea
 - Validation: `npm run test` passed with 15 test files and 56 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; `npm run smoke:visual` passed against the local Vite server.
 - Deferred: dimensional plot-unit toggles are documented for a later Unit 2b/Unit 3-adjacent pass.
 - Next recommended unit: regime/applicability checker using the dimensional operating point and nondimensional groups.
+
+## 2026-05-29 Regime Applicability Checker Branch
+
+- Start time: `2026-05-29T20:33:16+09:00`.
+- Starting commit: `b45b0f6`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Branch: `feature/regime-applicability-checker`.
+- New files: `src/model/regimeChecker.ts`, `src/model/regimeChecker.test.ts`, `src/components/RegimeApplicabilityPanel.tsx`, and `src/components/RegimeApplicabilityPanel.test.tsx`.
+- Modified files: `README.md`, `ROADMAP_INDUSTRY.md`, `src/App.tsx`, `src/components/EngineeringSummaryPanel.tsx`, `src/i18n/translations.ts`, `src/model/engineering.ts`, `src/model/engineering.test.ts`, `src/styles.css`, `src/utils/csvExport.ts`, and `src/utils/csvExport.test.ts`.
+- Added gas Weber number `We_g = rho_g v0^2 D_e / sigma` to the engineering dimensionless groups.
+- Added a heuristic regime/applicability checker that screens `Re_l`, `We_l`, `We_g`, `Oh_l`, gas Mach estimate, density ratio, geometry aspect ratio, prescribed spreading angles, and dimensional-mode availability.
+- Added a compact multilingual UI panel with an overall status badge, nondimensional group readout, recommended use, and concise applicability messages.
+- The checker is explicitly presented as heuristic guidance only, not a validated atomization-regime classifier or engineering certification.
+- Validation before commit: `npm run test` passed with 17 test files and 67 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed after starting the required Vite dev server.
+- Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
+- Next recommended unit: Unit 4 data overlay/import foundation.

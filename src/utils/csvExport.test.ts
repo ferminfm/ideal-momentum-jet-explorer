@@ -79,7 +79,7 @@ describe('CSV export', () => {
     const reynoldsIndex = header.split(',').indexOf('Reynolds')
 
     expect(header).toContain('inputMode,z_m,area_m2,velocity_m_s')
-    expect(header).toContain('Reynolds,Weber,Ohnesorge,gasMachEstimate')
+    expect(header).toContain('Reynolds,Weber,WeberGas,Ohnesorge,gasMachEstimate')
     expect(firstRow[header.split(',').indexOf('inputMode')]).toBe('dimensional')
     expect(Number(firstRow[zIndex])).toBeCloseTo(0)
     expect(Number(firstRow[velocityIndex])).toBeCloseTo(10)

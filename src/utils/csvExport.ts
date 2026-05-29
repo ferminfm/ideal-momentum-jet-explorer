@@ -43,6 +43,7 @@ const DIMENSIONAL_CSV_COLUMNS = [
   'gasDensity_kg_m3',
   'Reynolds',
   'Weber',
+  'WeberGas',
   'Ohnesorge',
   'gasMachEstimate',
 ]
@@ -155,6 +156,7 @@ function buildRows(
         scales?.gasDensity,
         groups?.reynoldsLiquid,
         groups?.weberLiquid,
+        groups?.weberGas,
         groups?.ohnesorgeLiquid,
         groups?.gasMachEstimate,
       )

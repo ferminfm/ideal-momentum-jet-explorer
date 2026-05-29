@@ -10,6 +10,7 @@ import { InterpretationPanel } from './components/InterpretationPanel'
 import { JetGeometry3D } from './components/JetGeometry3D'
 import { Layout } from './components/Layout'
 import { Plots } from './components/Plots'
+import { RegimeApplicabilityPanel } from './components/RegimeApplicabilityPanel'
 import { SymbolsGlossary } from './components/SymbolsGlossary'
 import { TRANSLATIONS, type Language } from './i18n/translations'
 import {
@@ -21,8 +22,9 @@ import {
   setComparisonCaseVisibility,
 } from './model/comparisonCases'
 import { buildDimensionalMapping } from './model/dimensionalMapping'
-import { generateJetSeries, type JetParameters } from './model/jetModel'
+import { generateJetSeries, getAspectRatio, type JetParameters } from './model/jetModel'
 import { cloneParams } from './model/presets'
+import { assessModelApplicability } from './model/regimeChecker'
 import {
   PRESET_CUSTOM,
   type DimensionalSettings,
@@ -64,6 +66,18 @@ function App() {
   const series = useMemo(
     () => dimensionalMapping?.normalizedSeries ?? generateJetSeries(effectiveParams),
     [dimensionalMapping, effectiveParams],
+  )
+  const applicabilityAssessment = useMemo(
+    () =>
+      assessModelApplicability({
+        densityRatio: effectiveParams.densityRatio,
+        dimensionlessGroups: dimensionalMapping?.groups,
+        geometryAspectRatio: getAspectRatio(effectiveParams.geometry),
+        thetaDeg: effectiveParams.thetaDeg,
+        phiDeg: effectiveParams.phiDeg,
+        inputMode: appState.inputMode,
+      }),
+    [appState.inputMode, dimensionalMapping?.groups, effectiveParams],
   )
 
   useEffect(() => {
@@ -185,6 +199,20 @@ function App() {
               />
             </CollapsibleSection>
           ) : null}
+          <CollapsibleSection
+            key={`regime-${appState.inputMode}`}
+            title={text.sections.regimeApplicability}
+            expandLabel={text.sections.expandSection}
+            collapseLabel={text.sections.collapseSection}
+            defaultOpen={appState.inputMode === 'dimensional'}
+          >
+            <RegimeApplicabilityPanel
+              assessment={applicabilityAssessment}
+              densityRatio={effectiveParams.densityRatio}
+              groups={dimensionalMapping?.groups}
+              text={text}
+            />
+          </CollapsibleSection>
           <CollapsibleSection
             title={text.sections.savedCases}
             expandLabel={text.sections.expandSection}

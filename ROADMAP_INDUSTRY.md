@@ -27,11 +27,13 @@ requires independent validation.
 
 ## 3. Regime And Applicability Checker
 
-- Goal: report basic regime flags from `Re`, `We`, `Oh`, Mach estimate, density
-  ratio, and user-selected assumptions.
-- Expected files/components: `src/model/regimeChecks.ts`, interpretation/status panel.
+- Goal: report basic regime flags from `Re_l`, `We_l`, `We_g`, `Oh_l`, Mach
+  estimate, density ratio, aspect ratio, and prescribed spreading angles.
+- Expected files/components: `src/model/regimeChecker.ts`,
+  `RegimeApplicabilityPanel`, interpretation/status panel.
 - Dependencies: dimensional operating point and nondimensional groups.
 - Risk level: medium. Must avoid overclaiming validation.
+- Status: implemented on `feature/regime-applicability-checker`.
 
 ## 4. Public Validation Overlays And CSV Data Import
 

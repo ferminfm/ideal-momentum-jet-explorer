@@ -172,3 +172,15 @@
 - Saved URL state now includes dimensional-mode settings; CSV export adds SI-unit current-curve columns in dimensional mode.
 - Validation before commit: `npm run test`, `npm run build`, `npm run lint`, and local `npm run smoke:visual` passed.
 - Deferred: dimensional plot-unit toggles and regime/applicability checks.
+
+## Regime Applicability Checker Branch
+
+- Branch: `feature/regime-applicability-checker`.
+- Starting commit: `b45b0f6`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Added gas Weber number to dimensional engineering groups.
+- Added a heuristic regime/applicability checker for `Re_l`, `We_l`, `We_g`, `Oh_l`, gas Mach estimate, density ratio, aspect ratio, spreading angles, and dimensional-mode availability.
+- Added a compact app panel that reports overall applicability, nondimensional groups, recommended use, and concise warnings.
+- The checker is explicitly scoped as heuristic screening, not a validated breakup-regime map or engineering certification.
+- Validation before commit: `npm run test`, `npm run build`, `npm run lint`, and local `npm run smoke:visual` passed.
+- Next recommended unit: Unit 4 data overlay/import foundation.

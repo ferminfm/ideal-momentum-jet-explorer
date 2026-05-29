@@ -82,6 +82,11 @@ export function EngineeringSummaryPanel({
           symbol={<MathText text="We_l" />}
         />
         <SummaryItem
+          label={text.engineering.weberGasNumber}
+          value={formatNullable(groups.weberGas, text)}
+          symbol={<MathText text="We_g" />}
+        />
+        <SummaryItem
           label={text.engineering.ohnesorgeNumber}
           value={formatNullable(groups.ohnesorgeLiquid, text)}
           symbol={<MathText text="Oh_l" />}
