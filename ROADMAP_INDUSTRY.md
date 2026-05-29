@@ -77,6 +77,9 @@ requires independent validation.
 - Dependencies: dimensional scales and current velocity field. It can be
   implemented independently of the deferred lossy model.
 - Risk level: high. Adds a new physical model branch.
+- Status: implemented on `feature/tip-penetration-module`.
+- Notes: implemented as a kinematic estimate from the steady bulk velocity field,
+  not as a full transient spray-tip model.
 
 ## 8. CFD / Configuration Export
 

@@ -171,6 +171,30 @@ Example workflow:
 3. Fit `theta` and/or `phi` within bounded angle ranges.
 4. Apply the fitted parameters or add the fitted curve to saved model cases.
 
+## Quasi-Steady Tip Penetration Estimate
+
+The tip-penetration panel adds an exploratory kinematic estimate based on the
+steady bulk velocity field:
+
+```text
+d zeta / d tau = vhat(zeta),    tau = v0 t / De.
+```
+
+Equivalently, the app computes:
+
+```text
+tau(zeta) = integral_0^zeta dxi / vhat(xi)
+```
+
+and inverts this sampled relation to plot `zeta_tip(tau)`. In dimensional mode,
+the same result is converted to `Z` in millimeters and `t` in milliseconds using
+the engineering scales `De` and `v0`.
+
+This module is a quasi-steady penetration estimate for a conceptual tip/front.
+It is not a full transient spray simulation and does not model startup, vortex
+formation, breakup, compressibility waves, droplet drag, wall impingement, or
+full spray-tip physics.
+
 ## Interactive Features
 
 - English, Japanese, and Spanish interface controls for public teaching and research use.
@@ -178,6 +202,7 @@ Example workflow:
 - Compact symbols glossary for normalized distance, equivalent diameter, density ratio, state variables, nozzle dimensions, and prescribed spreading angles.
 - Dimensional engineering mode with fluid presets, physical nozzle dimensions, velocity/pressure-drop operating point, and nondimensional spray/nozzle groups.
 - Regime/applicability checker with conservative heuristic warnings for Reynolds, Weber, Ohnesorge, Mach estimate, density ratio, aspect ratio, and spreading angles.
+- Quasi-steady tip-penetration plot and CSV export based on the steady `vhat(zeta)` field.
 - Data-overlay manager for built-in comparison aids and user-imported CSV curves. Imported CSV overlays stay local in the browser and are not encoded in shareable URLs.
 - Calibration aid for fitting prescribed spreading half-angles to selected overlay data, with fitted-curve preview and optional saved comparison case.
 - 3D-first layout with a desktop sticky parameter sidebar and collapsible sections to reduce scrolling while inspecting the jet geometry.
