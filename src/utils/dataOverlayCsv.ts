@@ -121,7 +121,7 @@ export function buildOverlayFromCsvSelection({
 
   return {
     id: `imported-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
-    label: sanitizeText(label, 80) || 'Imported CSV overlay',
+    label: sanitizeText(label, 80) || 'Imported data overlay',
     variable,
     sourceKind,
     source: sanitizeText(source, 160) || 'User-imported CSV',

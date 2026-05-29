@@ -282,3 +282,19 @@ The GitHub Pages app responded with HTTP 200 at `https://ferminfm.github.io/idea
 - Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
 - Limitations: no measured public validation dataset is bundled, overlay export is not implemented, imported overlays are not URL-persistent by design, and calibration/fitting is deferred.
 - Next recommended unit: Unit 5 calibration/fitting of prescribed spreading angles.
+
+## 2026-05-29 Post Unit 4 Steering Cleanup
+
+- Start time: `2026-05-29T21:07:50+09:00`.
+- Starting commit: `c118447`.
+- Branch: `feature/data-overlay-foundation`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Marked Unit 6 lossy model extensions as deferred until governing equations, assumptions, and validation strategy are scientifically documented.
+- Updated Unit 7 tip penetration dependencies so it can proceed from dimensional scales and the current velocity field without depending on the deferred lossy model.
+- Clarified that `surfaceTension` is the liquid-gas surface/interfacial tension used for `We_l`, `We_g`, and `Oh_l`.
+- Clarified engineering summary labels for initial liquid mass flow rate and initial liquid momentum flux at the nozzle.
+- Adjusted regime-checker spreading-angle thresholds so `theta` or `phi >= 20 deg` triggers a warning and `theta` or `phi > 15 deg` triggers a caution.
+- Confirmed and tested that user-imported overlay data are not serialized into shareable URLs; built-in overlays round-trip only as IDs and visibility.
+- Polished imported overlay default labels to use neutral data-overlay wording.
+- Validation before commit: `npm run test` passed with 18 test files and 81 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server.
+- Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.

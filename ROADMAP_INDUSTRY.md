@@ -54,18 +54,26 @@ requires independent validation.
 - Risk level: high. Optimization results need uncertainty and validation caveats.
 - Status: next recommended unit after review of the data-overlay foundation.
 
-## 6. Lossy Model Extensions
+## 6. Lossy Model Extensions — deferred
 
 - Goal: introduce optional pressure/momentum-loss factors or empirical corrections.
 - Expected files/components: model extension module, toggles, tests, documentation.
 - Dependencies: calibration and validation datasets.
 - Risk level: high. Changes model assumptions and must remain opt-in.
+- Status: deferred.
+- Reason: the lossy extension is not yet formalized in a paper or conference
+  presentation.
+- Requirement before implementation: do not add lossy model features to the
+  public app until the governing equations, assumptions, and validation strategy
+  are written clearly. Future implementation should happen only after the lossy
+  model is scientifically documented.
 
 ## 7. Quasi-Steady Tip Penetration
 
 - Goal: estimate transient penetration from quasi-steady dimensional outputs.
 - Expected files/components: time/penetration model utilities, plots, CSV export.
-- Dependencies: dimensional scales, regime checks, and validation references.
+- Dependencies: dimensional scales and current velocity field. It can be
+  implemented independently of the deferred lossy model.
 - Risk level: high. Adds a new physical model branch.
 
 ## 8. CFD / Configuration Export

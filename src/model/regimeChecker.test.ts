@@ -92,6 +92,69 @@ describe('regime applicability checker', () => {
     expect(assessment.messages.some((message) => message.id === 'extreme-aspect-ratio')).toBe(true)
   })
 
+  it('adds a warning at the reachable maximum spreading angle', () => {
+    const assessment = assessModelApplicability({
+      densityRatio: 0.0012,
+      dimensionlessGroups: favorableGroups,
+      geometryAspectRatio: 1,
+      thetaDeg: 20,
+      phiDeg: 8,
+      inputMode: 'dimensional',
+    })
+
+    expect(assessment.overall).toBe('warning')
+    expect(
+      assessment.messages.some((message) => message.id === 'very-large-spreading-angle'),
+    ).toBe(true)
+  })
+
+  it('adds a caution for large but sub-maximum spreading angles', () => {
+    const assessment = assessModelApplicability({
+      densityRatio: 0.0012,
+      dimensionlessGroups: favorableGroups,
+      geometryAspectRatio: 1,
+      thetaDeg: 16,
+      phiDeg: 8,
+      inputMode: 'dimensional',
+    })
+
+    expect(assessment.overall).toBe('caution')
+    expect(
+      assessment.messages.some((message) => message.id === 'large-spreading-angle'),
+    ).toBe(true)
+  })
+
+  it('does not add an angle warning for moderate spreading angles', () => {
+    const assessment = assessModelApplicability({
+      densityRatio: 0.0012,
+      dimensionlessGroups: favorableGroups,
+      geometryAspectRatio: 1,
+      thetaDeg: 10,
+      phiDeg: 8,
+      inputMode: 'dimensional',
+    })
+
+    expect(
+      assessment.messages.some((message) =>
+        ['large-spreading-angle', 'very-large-spreading-angle'].includes(message.id),
+      ),
+    ).toBe(false)
+  })
+
+  it('keeps the near-zero area-growth caution', () => {
+    const assessment = assessModelApplicability({
+      densityRatio: 0.0012,
+      dimensionlessGroups: favorableGroups,
+      geometryAspectRatio: 1,
+      thetaDeg: 0,
+      phiDeg: 0.05,
+      inputMode: 'dimensional',
+    })
+
+    expect(assessment.overall).toBe('caution')
+    expect(assessment.messages.some((message) => message.id === 'near-zero-growth')).toBe(true)
+  })
+
   it('aggregates severity with outside dominating warning and caution', () => {
     const assessment = assess({
       reynoldsLiquid: 1000,

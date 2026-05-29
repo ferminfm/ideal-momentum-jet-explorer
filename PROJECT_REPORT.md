@@ -200,3 +200,17 @@
 - Validation before commit: `npm run test` passed with 18 test files and 76 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile.
 - Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
 - Next recommended unit: Unit 5 calibration/fitting of prescribed spreading angles.
+
+## Post Unit 4 Steering Cleanup
+
+- Branch: `feature/data-overlay-foundation`.
+- Starting commit: `c118447`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Marked Unit 6 lossy model extensions as deferred until the governing equations, assumptions, and validation strategy are formally documented.
+- Corrected Unit 7 roadmap dependencies so quasi-steady tip penetration can proceed independently from the deferred lossy model.
+- Clarified liquid-gas surface/interfacial tension terminology for engineering presets and dimensionless groups.
+- Clarified engineering summary labels for initial liquid mass flow rate and initial liquid momentum flux at the nozzle.
+- Adjusted regime-checker angle thresholds so maximum UI half-angles can trigger the intended warning.
+- Confirmed user-imported overlay data remain session-local and are not encoded in shareable URLs; built-in overlays are encoded only by ID and visibility.
+- Validation before commit: `npm run test` passed with 18 test files and 81 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile.
+- Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.

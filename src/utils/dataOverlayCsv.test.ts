@@ -42,6 +42,21 @@ describe('data overlay CSV utilities', () => {
     ])
   })
 
+  it('uses neutral imported-overlay defaults for blank optional text', () => {
+    const table = parseCsvText('zeta,rhohat\n0,1\n5,0.92')
+    const overlay = buildOverlayFromCsvSelection({
+      table,
+      xColumn: 'zeta',
+      yColumn: 'rhohat',
+      variable: 'density',
+      label: '',
+      source: '',
+    })
+
+    expect(overlay.label).toBe('Imported data overlay')
+    expect(overlay.notes).toBe('User-imported data; local to this browser session.')
+  })
+
   it('rejects CSV tables with insufficient numeric columns', () => {
     const table = parseCsvText('zeta,label\n0,a\n5,b')
 

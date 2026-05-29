@@ -104,6 +104,8 @@ describe('URL state helpers', () => {
     const query = encodeStateToQuery(state)
     expect(query.toString()).toContain('dataOverlays=synthetic-equal-density-reference%3A0')
     expect(query.toString()).not.toContain('imported-private-data')
+    expect(query.toString()).not.toContain('Private+lab+data')
+    expect(query.toString()).not.toContain('Session-local+data')
 
     const sanitized = mergeStateWithDefaults(
       sanitizeDecodedState(decodeStateFromQuery(query.toString())),

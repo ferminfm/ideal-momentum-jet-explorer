@@ -76,7 +76,7 @@ const ENGLISH_TEXT = {
     fluidProperties: 'Representative properties',
     density: 'density',
     dynamicViscosity: 'dynamic viscosity',
-    surfaceTension: 'surface tension',
+    surfaceTension: 'liquid-gas surface tension',
     soundSpeed: 'sound speed',
     physicalDimensions: 'Physical nozzle dimensions',
     physicalDimensionsHelp:
@@ -89,7 +89,7 @@ const ENGLISH_TEXT = {
     pressureDrop: 'Pressure drop',
     dischargeCoefficient: 'Discharge coefficient',
     representativePropertiesWarning:
-      'Representative material properties; verify values before engineering use.',
+      'Representative material properties; surface-tension entries are liquid-gas interfacial tensions. Verify values before engineering use.',
     densityRatio: 'Density ratio',
     width: 'B0 width',
     height: 'H0 height',
@@ -156,8 +156,8 @@ const ENGLISH_TEXT = {
     injectionVelocity: 'Injection velocity',
     pressureDrop: 'Pressure drop',
     dischargeCoefficient: 'Discharge coefficient',
-    massFlowRate: 'Liquid mass flow',
-    momentumFlux: 'Liquid momentum flux',
+    massFlowRate: 'Initial liquid mass flow rate',
+    momentumFlux: 'Initial liquid momentum flux',
     dynamicPressureScale: 'Dynamic-pressure scale',
     reynoldsNumber: 'Liquid Reynolds number',
     weberNumber: 'Liquid Weber number',
@@ -166,7 +166,7 @@ const ENGLISH_TEXT = {
     gasMachEstimate: 'Approx. gas Mach number',
     unavailable: 'n/a',
     representativePropertiesWarning:
-      'Representative material properties; verify values before engineering use.',
+      'Representative material properties; surface-tension entries are liquid-gas interfacial tensions. Verify values before engineering use.',
   },
   regime: {
     eyebrow: 'Applicability screening',
@@ -226,6 +226,7 @@ const ENGLISH_TEXT = {
     yErrorColumn: 'Y-error column',
     targetVariable: 'Target variable',
     label: 'Label',
+    defaultImportedLabel: 'Imported data overlay',
     sourceNotes: 'Source / notes',
     notes: 'Notes',
     showAll: 'Show all',
@@ -601,7 +602,7 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       fluidProperties: '代表物性',
       density: '密度',
       dynamicViscosity: '粘度',
-      surfaceTension: '表面張力',
+      surfaceTension: '液体-気体界面張力',
       soundSpeed: '音速',
       physicalDimensions: '物理ノズル寸法',
       physicalDimensionsHelp:
@@ -614,7 +615,7 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       pressureDrop: '圧力差',
       dischargeCoefficient: '流量係数',
       representativePropertiesWarning:
-        '代表的な物性値です。工学利用の前に値を確認してください。',
+        '代表的な物性値です。表面張力は液体-気体界面張力として扱います。工学利用の前に値を確認してください。',
       densityRatio: '密度比',
       width: 'B0 幅',
       height: 'H0 高さ',
@@ -681,8 +682,8 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       injectionVelocity: '噴射速度',
       pressureDrop: '圧力差',
       dischargeCoefficient: '流量係数',
-      massFlowRate: '液体質量流量',
-      momentumFlux: '液体運動量流束',
+      massFlowRate: 'ノズル出口液体質量流量',
+      momentumFlux: '初期液体運動量流束',
       dynamicPressureScale: '動圧スケール',
       reynoldsNumber: '液体 Reynolds 数',
       weberNumber: '液体 Weber 数',
@@ -691,7 +692,7 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       gasMachEstimate: '気体 Mach 数の概算',
       unavailable: '該当なし',
       representativePropertiesWarning:
-        '代表的な物性値です。工学利用の前に値を確認してください。',
+        '代表的な物性値です。表面張力は液体-気体界面張力として扱います。工学利用の前に値を確認してください。',
     },
     regime: {
       eyebrow: '適用性の目安',
@@ -752,6 +753,7 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       yErrorColumn: 'Y誤差列',
       targetVariable: '対象変数',
       label: 'ラベル',
+      defaultImportedLabel: 'インポートしたデータオーバーレイ',
       sourceNotes: '出典・メモ',
       notes: 'メモ',
       showAll: 'すべて表示',
@@ -1122,7 +1124,7 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       fluidProperties: 'Propiedades representativas',
       density: 'densidad',
       dynamicViscosity: 'viscosidad dinámica',
-      surfaceTension: 'tensión superficial',
+      surfaceTension: 'tensión interfacial líquido-gas',
       soundSpeed: 'velocidad del sonido',
       physicalDimensions: 'Dimensiones físicas de la boquilla',
       physicalDimensionsHelp:
@@ -1135,7 +1137,7 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       pressureDrop: 'Caída de presión',
       dischargeCoefficient: 'Coeficiente de descarga',
       representativePropertiesWarning:
-        'Propiedades representativas; verifique los valores antes de uso ingenieril.',
+        'Propiedades representativas; los valores de tensión superficial son tensiones interfaciales líquido-gas. Verifique los valores antes de uso ingenieril.',
       densityRatio: 'Relación de densidades',
       width: 'Ancho B0',
       height: 'Altura H0',
@@ -1205,8 +1207,8 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       injectionVelocity: 'Velocidad de inyección',
       pressureDrop: 'Caída de presión',
       dischargeCoefficient: 'Coeficiente de descarga',
-      massFlowRate: 'Flujo másico líquido',
-      momentumFlux: 'Flujo de cantidad de movimiento líquido',
+      massFlowRate: 'Flujo másico líquido inicial',
+      momentumFlux: 'Flujo inicial de cantidad de movimiento líquido',
       dynamicPressureScale: 'Escala de presión dinámica',
       reynoldsNumber: 'Número de Reynolds líquido',
       weberNumber: 'Número de Weber líquido',
@@ -1215,7 +1217,7 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       gasMachEstimate: 'Mach aproximado del gas',
       unavailable: 'n/d',
       representativePropertiesWarning:
-        'Propiedades representativas; verifique los valores antes de uso ingenieril.',
+        'Propiedades representativas; los valores de tensión superficial son tensiones interfaciales líquido-gas. Verifique los valores antes de uso ingenieril.',
     },
     regime: {
       eyebrow: 'Evaluación de aplicabilidad',
@@ -1275,6 +1277,7 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       yErrorColumn: 'Columna de error Y',
       targetVariable: 'Variable objetivo',
       label: 'Etiqueta',
+      defaultImportedLabel: 'Superposición de datos importados',
       sourceNotes: 'Fuente / notas',
       notes: 'Notas',
       showAll: 'Mostrar todas',

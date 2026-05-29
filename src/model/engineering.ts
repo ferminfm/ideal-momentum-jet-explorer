@@ -5,7 +5,7 @@ export interface FluidProperties {
   label: string
   density: number // kg/m^3
   dynamicViscosity: number // Pa s
-  surfaceTension?: number // N/m
+  surfaceTension?: number // N/m, liquid-gas surface/interfacial tension sigma
   soundSpeed?: number // m/s
 }
 
@@ -217,7 +217,7 @@ function validateFluidProperties(fluid: FluidProperties, label: string): void {
   assertPositiveFinite(fluid.dynamicViscosity, `${label} dynamic viscosity`)
 
   if (fluid.surfaceTension !== undefined) {
-    assertPositiveFinite(fluid.surfaceTension, `${label} surface tension`)
+    assertPositiveFinite(fluid.surfaceTension, `${label} liquid-gas surface tension`)
   }
 
   if (fluid.soundSpeed !== undefined) {

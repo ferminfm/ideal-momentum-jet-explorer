@@ -1,6 +1,7 @@
 import type { FluidProperties } from '../model/engineering'
 
-// Representative values for exploratory calculations; verify properties for engineering use.
+// Representative values for exploratory calculations; surfaceTension is the
+// liquid-gas surface/interfacial tension sigma. Verify properties for engineering use.
 export const LIQUID_PRESETS: FluidProperties[] = [
   {
     id: 'water-room-temperature',

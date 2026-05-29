@@ -141,7 +141,8 @@ function assessLiquidWeber(
       id: 'surface-tension-dominated',
       level: 'outside',
       title: 'Surface-tension-dominated liquid Weber number',
-      message: 'Surface tension dominates; atomizing-jet interpretation is likely invalid.',
+      message:
+        'Liquid-gas surface tension dominates; atomizing-jet interpretation is likely invalid.',
       quantity: 'We_l',
       value,
       threshold: 'We_l < 1',
@@ -328,16 +329,27 @@ function assessSpreadingAngles(
     return
   }
 
-  if (theta > 20 || phi > 20) {
+  if (theta >= 20 || phi >= 20) {
     messages.push({
-      id: 'large-spreading-angle',
+      id: 'very-large-spreading-angle',
       level: 'warning',
-      title: 'Large prescribed spreading angle',
+      title: 'Very large prescribed spreading angle',
       message:
-        'Large prescribed spreading angle; small-angle and top-hat assumptions may be questionable.',
+        'Very large prescribed spreading angle; small-angle and top-hat assumptions may be questionable.',
       quantity: 'max(theta, phi)',
       value: Math.max(theta, phi),
-      threshold: '> 20 deg',
+      threshold: 'theta or phi >= 20 deg',
+    })
+  } else if (theta > 15 || phi > 15) {
+    messages.push({
+      id: 'large-spreading-angle',
+      level: 'caution',
+      title: 'Large prescribed spreading angle',
+      message:
+        'Large prescribed spreading angle; prescribed area growth may be sensitive to losses and profile effects.',
+      quantity: 'max(theta, phi)',
+      value: Math.max(theta, phi),
+      threshold: 'theta or phi > 15 deg',
     })
   } else if (theta < 0.1 && phi < 0.1) {
     messages.push({

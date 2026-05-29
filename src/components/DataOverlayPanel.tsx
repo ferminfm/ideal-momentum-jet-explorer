@@ -63,7 +63,7 @@ export function DataOverlayPanel({
   const [xErrorColumn, setXErrorColumn] = useState('')
   const [yErrorColumn, setYErrorColumn] = useState('')
   const [variable, setVariable] = useState<OverlayVariable>('velocity')
-  const [label, setLabel] = useState('Imported velocity overlay')
+  const [label, setLabel] = useState(text.dataOverlays.defaultImportedLabel)
   const [source, setSource] = useState('User-imported CSV')
   const [notes, setNotes] = useState('')
 

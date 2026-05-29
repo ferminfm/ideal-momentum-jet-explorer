@@ -96,18 +96,24 @@ presets, and the app converts the physical nozzle to equivalent-diameter
 normalized geometry before evaluating the same reduced-order model.
 
 The engineering summary reports equivalent diameter, initial area, density
-ratio, injection velocity or pressure-drop scaling, liquid mass flow, liquid
-momentum flux, dynamic-pressure scale, liquid Reynolds number, liquid and gas
-Weber numbers, Ohnesorge number, and an approximate gas Mach number. Material
-properties are representative exploratory values and must be verified before
-engineering use. Dimensional mode still uses prescribed spreading half-angles;
-it does not infer spray spreading or validate design performance.
+ratio, injection velocity or pressure-drop scaling, initial liquid mass flow
+rate, initial liquid momentum flux, dynamic-pressure scale, liquid Reynolds
+number, liquid and gas Weber numbers, Ohnesorge number, and an approximate gas
+Mach number. Surface-tension values are representative liquid-gas interfacial
+tensions. Material properties are representative exploratory values and must be
+verified before engineering use. Dimensional mode still uses prescribed
+spreading half-angles; it does not infer spray spreading or validate design
+performance.
 
 The regime/applicability checker adds heuristic screening based on `Re_l`,
 `We_l`, `We_g`, `Oh_l`, approximate gas Mach number, density ratio, aspect
 ratio, and prescribed spreading angles. It is intended to warn when the
 reduced-order closure is likely outside its assumptions. It is not a validated
 breakup-regime map and is not engineering certification.
+
+Initial liquid mass flow rate and initial liquid momentum flux refer to the
+nozzle-exit liquid stream. They should not be confused with downstream entrained
+gas mass rate.
 
 ## Data Overlays And CSV Import
 
@@ -232,5 +238,6 @@ GitHub Pages sites are public. Keep private PDFs, unpublished manuscripts, crede
 - Add dimensional plot-unit toggles for area, velocity, density, pressure, and gas entrainment.
 - Add calibration/fitting tools for prescribed spreading half-angles after data-import workflows are reviewed.
 - Add profile-resolved or phase-fraction validation datasets when public data are available.
+- Defer lossy model extensions until the governing equations, assumptions, and validation strategy are formally documented.
 - Add optional bundle splitting for Plotly and Three.js to reduce initial JavaScript payload.
 - Add a concise derivation note for the density and entrainment branches.
