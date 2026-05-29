@@ -1,5 +1,10 @@
 # Ideal Momentum Jet Explorer
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![React](https://img.shields.io/badge/React-19-blue.svg)](package.json)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6-blue.svg)](package.json)
+[![Vite](https://img.shields.io/badge/Vite-8-purple.svg)](package.json)
+
 Interactive reduced-order model for circular, rectangular, and elliptical atomizing jets.
 
 Live app: https://ferminfm.github.io/ideal-momentum-jet-explorer/  
@@ -12,6 +17,20 @@ Author: Fermín Franco-Medrano — Ensenada Campus, Autonomous University of Baj
 Ideal Momentum Jet Explorer is a browser-based scientific computing app for exploring a conservative locally homogeneous two-phase jet closure. It evaluates how prescribed nozzle geometry and area growth affect bulk velocity, composite density, dynamic pressure, and entrainment.
 
 The app is intended as an educational and exploratory research tool for fluid mechanics, atomization, and reduced-order modeling. It is fully static: all calculations run client-side in TypeScript, and GitHub Pages serves the built files without a backend.
+
+## Public Showcase
+
+The app combines a normalized research model with engineering-oriented workflows:
+
+- Model and physics: normalized conservative state laws, entrainment coefficient references, and saved model-case comparisons.
+- Engineering mode: dimensional fluid/nozzle inputs, nondimensional groups, and heuristic applicability screening.
+- Visualization: Plotly state-variable curves, 3D jet geometry, camera/capture controls, and a traveling LHF element animation.
+- Reproducibility: shareable URLs, CSV export, CFD/configuration export, and browser-side report generation.
+- Data workflows: local CSV overlays and exploratory fitting of prescribed spreading half-angles.
+
+Quick-start examples in the app provide one-click starting cases for circular,
+rectangular, elliptical, dimensional water-air, and equal-density scenarios. They
+are illustrative starting points, not validated design cases.
 
 ## Scientific Model
 
@@ -298,6 +317,12 @@ npm run smoke:visual
 
 The smoke test uses `playwright-core` with system Chrome and writes desktop/mobile screenshots to `/tmp/ideal-momentum-jet-*.png`.
 
+Build asset summary after a production build:
+
+```bash
+npm run analyze:assets
+```
+
 ## Deployment
 
 GitHub Pages deployment is configured through GitHub Actions in `.github/workflows/deploy.yml`. The Vite base path is:
@@ -324,8 +349,8 @@ GitHub Pages sites are public. Keep private PDFs, unpublished manuscripts, crede
 
 - Add documented public data-overlay datasets when permissible numerical data are available.
 - Add dimensional plot-unit toggles for area, velocity, density, pressure, and gas entrainment.
-- Add calibration/fitting tools for prescribed spreading half-angles after data-import workflows are reviewed.
 - Add profile-resolved or phase-fraction validation datasets when public data are available.
 - Defer lossy model extensions until the governing equations, assumptions, and validation strategy are formally documented.
-- Add optional bundle splitting for Plotly and Three.js to reduce initial JavaScript payload.
+- Continue deeper performance work, including possible replacement of the full Plotly bundle if all current plot features remain supported.
+- Add more tutorial examples and optional validation-notebook links.
 - Add a concise derivation note for the density and entrainment branches.

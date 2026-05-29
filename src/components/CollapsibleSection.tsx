@@ -6,6 +6,7 @@ interface CollapsibleSectionProps {
   defaultOpen?: boolean
   expandLabel: string
   id?: string
+  mountWhenOpenOnly?: boolean
   subtitle?: string
   title: string
 }
@@ -16,6 +17,7 @@ export function CollapsibleSection({
   defaultOpen = true,
   expandLabel,
   id,
+  mountWhenOpenOnly = false,
   subtitle,
   title,
 }: CollapsibleSectionProps) {
@@ -45,7 +47,7 @@ export function CollapsibleSection({
         </span>
       </button>
       <div id={contentId} className="collapsible-section__content" hidden={!isOpen}>
-        {children}
+        {isOpen || !mountWhenOpenOnly ? children : null}
       </div>
     </section>
   )

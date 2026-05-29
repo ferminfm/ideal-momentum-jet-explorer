@@ -112,4 +112,18 @@ requires independent validation.
 - Expected files/components: route-level code splitting, examples, documentation.
 - Dependencies: stable feature set and performance measurements.
 - Risk level: low to medium. Main risk is UI clutter.
-- Status: next recommended unit.
+- Status: implemented on `feature/performance-showcase-polish`.
+- Notes: added dependency-free asset reporting, lazy-loaded heavy panels, manual
+  Plotly/Three/React chunking, quick-start examples, and public README polish.
+
+## Future Follow-Ups
+
+- Add documented public validation datasets when numerical data are permissible.
+- Add dimensional plot-unit toggles for the main state variables.
+- Consider replacing the full Plotly bundle with a smaller bundle only after
+  confirming all current plot, hover, error-bar, export, and responsive features
+  remain supported.
+- Add optional PWA/offline mode after the static app behavior is stable.
+- Add validation notebook links and deeper tutorial examples.
+- Keep Unit 6 lossy model deferred until the scientific formulation is written
+  and reviewed.

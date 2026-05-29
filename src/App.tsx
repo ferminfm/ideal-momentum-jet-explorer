@@ -1,22 +1,17 @@
-import { useEffect, useMemo, useState } from 'react'
-import { CalibrationPanel } from './components/CalibrationPanel'
-import { CfdExportPanel } from './components/CfdExportPanel'
+import { Suspense, lazy, useEffect, useMemo, useState } from 'react'
 import { CitationPanel } from './components/CitationPanel'
 import { CollapsibleSection } from './components/CollapsibleSection'
 import { ComparisonAddPanel, ComparisonPanel } from './components/ComparisonPanel'
 import { ControlPanel } from './components/ControlPanel'
-import { DataOverlayPanel } from './components/DataOverlayPanel'
 import { EquationPanel } from './components/EquationPanel'
 import { EngineeringSummaryPanel } from './components/EngineeringSummaryPanel'
 import { ExportPanel } from './components/ExportPanel'
 import { InterpretationPanel } from './components/InterpretationPanel'
-import { JetGeometry3D } from './components/JetGeometry3D'
+import { LazyPanelFallback } from './components/LazyPanelFallback'
 import { Layout } from './components/Layout'
-import { Plots } from './components/Plots'
+import { QuickStartPanel, type QuickStartExampleId } from './components/QuickStartPanel'
 import { RegimeApplicabilityPanel } from './components/RegimeApplicabilityPanel'
-import { ReportPanel } from './components/ReportPanel'
 import { SymbolsGlossary } from './components/SymbolsGlossary'
-import { TipPenetrationPanel } from './components/TipPenetrationPanel'
 import { TRANSLATIONS, type Language } from './i18n/translations'
 import { cloneDataOverlay } from './data/dataOverlays'
 import type { DataOverlay } from './data/dataOverlayTypes'
@@ -32,10 +27,11 @@ import {
 import { DEFAULT_CFD_EXPORT_OPTIONS, buildCfdExportPayload } from './model/cfdExport'
 import { buildDimensionalMapping } from './model/dimensionalMapping'
 import { generateJetSeries, getAspectRatio, type JetParameters } from './model/jetModel'
-import { cloneParams } from './model/presets'
+import { PRESETS, cloneParams } from './model/presets'
 import { assessModelApplicability } from './model/regimeChecker'
 import { computeTipPenetration, dimensionalizeTipPenetration } from './model/tipPenetration'
 import {
+  DEFAULT_DIMENSIONAL_SETTINGS,
   PRESET_CUSTOM,
   type DimensionalSettings,
   type ExplorerState,
@@ -50,6 +46,42 @@ import {
   sanitizeDecodedState,
 } from './utils/urlState'
 import './styles.css'
+
+const LazyCalibrationPanel = lazy(() =>
+  import('./components/CalibrationPanel').then((module) => ({
+    default: module.CalibrationPanel,
+  })),
+)
+const LazyCfdExportPanel = lazy(() =>
+  import('./components/CfdExportPanel').then((module) => ({
+    default: module.CfdExportPanel,
+  })),
+)
+const LazyDataOverlayPanel = lazy(() =>
+  import('./components/DataOverlayPanel').then((module) => ({
+    default: module.DataOverlayPanel,
+  })),
+)
+const LazyJetGeometry3D = lazy(() =>
+  import('./components/JetGeometry3D').then((module) => ({
+    default: module.JetGeometry3D,
+  })),
+)
+const LazyPlots = lazy(() =>
+  import('./components/Plots').then((module) => ({
+    default: module.Plots,
+  })),
+)
+const LazyReportPanel = lazy(() =>
+  import('./components/ReportPanel').then((module) => ({
+    default: module.ReportPanel,
+  })),
+)
+const LazyTipPenetrationPanel = lazy(() =>
+  import('./components/TipPenetrationPanel').then((module) => ({
+    default: module.TipPenetrationPanel,
+  })),
+)
 
 function App() {
   const [appState, setAppState] = useState<ExplorerState>(() => {
@@ -239,6 +271,47 @@ function App() {
     })
   }
 
+  function applyQuickStartExample(exampleId: QuickStartExampleId) {
+    const presetIdByExample: Partial<Record<QuickStartExampleId, string>> = {
+      'circular-baseline': 'circular-limit',
+      'rectangular-axis-switching': 'rectangular-ar2',
+      'elliptical-axis-switching': 'elliptical-ar2',
+      'equal-density-lab': 'equal-density',
+    }
+    const presetId = presetIdByExample[exampleId]
+    const preset = presetId
+      ? PRESETS.find((candidate) => candidate.id === presetId)
+      : undefined
+    const nextParams =
+      exampleId === 'dimensional-water-air'
+        ? cloneParams(
+            PRESETS.find((candidate) => candidate.id === 'liquid-in-air')?.params ?? params,
+          )
+        : cloneParams(preset?.params ?? params)
+
+    setCalibrationPreview(null)
+    setAppState((current) => ({
+      ...current,
+      inputMode: exampleId === 'dimensional-water-air' ? 'dimensional' : 'normalized',
+      dimensionalSettings:
+        exampleId === 'dimensional-water-air'
+          ? {
+              ...DEFAULT_DIMENSIONAL_SETTINGS,
+              rectangularWidthMm: 1,
+              rectangularHeightMm: 0.5,
+              velocityMode: 'velocity',
+              injectionVelocity: 30,
+              pressureDropKPa: 100,
+              dischargeCoefficient: 1,
+            }
+          : current.dimensionalSettings,
+      params: nextParams,
+      selectedPresetId:
+        exampleId === 'dimensional-water-air' ? PRESET_CUSTOM : (presetId ?? PRESET_CUSTOM),
+      crossSectionZeta: Math.min(current.crossSectionZeta, nextParams.zetaMax),
+    }))
+  }
+
   function applyFittedCalibrationParams(result: CalibrationResult) {
     updateParams({
       ...appState.params,
@@ -301,6 +374,15 @@ function App() {
               onChange={updateParams}
             />
           </CollapsibleSection>
+          <CollapsibleSection
+            title={text.sections.quickStart}
+            expandLabel={text.sections.expandSection}
+            collapseLabel={text.sections.collapseSection}
+            defaultOpen={false}
+            mountWhenOpenOnly
+          >
+            <QuickStartPanel text={text} onApplyExample={applyQuickStartExample} />
+          </CollapsibleSection>
           {appState.inputMode === 'dimensional' && dimensionalMapping ? (
             <CollapsibleSection
               title={text.engineering.title}
@@ -347,84 +429,91 @@ function App() {
             expandLabel={text.sections.expandSection}
             collapseLabel={text.sections.collapseSection}
             defaultOpen={false}
+            mountWhenOpenOnly
           >
-            <DataOverlayPanel
-              overlays={appState.dataOverlays}
-              text={text}
-              onAddOverlay={addDataOverlay}
-              onToggleOverlay={(id, visible) =>
-                setAppState((current) => ({
-                  ...current,
-                  dataOverlays: current.dataOverlays.map((overlay) =>
-                    overlay.id === id ? { ...overlay, visible } : overlay,
-                  ),
-                }))
-              }
-              onRemoveOverlay={(id) =>
-                setAppState((current) => ({
-                  ...current,
-                  dataOverlays: current.dataOverlays.filter((overlay) => overlay.id !== id),
-                }))
-              }
-              onShowAll={() =>
-                setAppState((current) => ({
-                  ...current,
-                  dataOverlays: current.dataOverlays.map((overlay) => ({
-                    ...overlay,
-                    visible: true,
-                  })),
-                }))
-              }
-              onHideAll={() =>
-                setAppState((current) => ({
-                  ...current,
-                  dataOverlays: current.dataOverlays.map((overlay) => ({
-                    ...overlay,
-                    visible: false,
-                  })),
-                }))
-              }
-              onClearUser={() =>
-                setAppState((current) => ({
-                  ...current,
-                  dataOverlays: current.dataOverlays.filter(
-                    (overlay) => overlay.sourceKind !== 'user-import',
-                  ),
-                }))
-              }
-              onClearAll={() =>
-                setAppState((current) => ({
-                  ...current,
-                  dataOverlays: [],
-                  overlayId: 'none',
-                }))
-              }
-            />
+            <Suspense fallback={<LazyPanelFallback label={text.loading.dataOverlays} />}>
+              <LazyDataOverlayPanel
+                overlays={appState.dataOverlays}
+                text={text}
+                onAddOverlay={addDataOverlay}
+                onToggleOverlay={(id, visible) =>
+                  setAppState((current) => ({
+                    ...current,
+                    dataOverlays: current.dataOverlays.map((overlay) =>
+                      overlay.id === id ? { ...overlay, visible } : overlay,
+                    ),
+                  }))
+                }
+                onRemoveOverlay={(id) =>
+                  setAppState((current) => ({
+                    ...current,
+                    dataOverlays: current.dataOverlays.filter((overlay) => overlay.id !== id),
+                  }))
+                }
+                onShowAll={() =>
+                  setAppState((current) => ({
+                    ...current,
+                    dataOverlays: current.dataOverlays.map((overlay) => ({
+                      ...overlay,
+                      visible: true,
+                    })),
+                  }))
+                }
+                onHideAll={() =>
+                  setAppState((current) => ({
+                    ...current,
+                    dataOverlays: current.dataOverlays.map((overlay) => ({
+                      ...overlay,
+                      visible: false,
+                    })),
+                  }))
+                }
+                onClearUser={() =>
+                  setAppState((current) => ({
+                    ...current,
+                    dataOverlays: current.dataOverlays.filter(
+                      (overlay) => overlay.sourceKind !== 'user-import',
+                    ),
+                  }))
+                }
+                onClearAll={() =>
+                  setAppState((current) => ({
+                    ...current,
+                    dataOverlays: [],
+                    overlayId: 'none',
+                  }))
+                }
+              />
+            </Suspense>
           </CollapsibleSection>
           <CollapsibleSection
             title={text.sections.calibration}
             expandLabel={text.sections.expandSection}
             collapseLabel={text.sections.collapseSection}
             defaultOpen={false}
+            mountWhenOpenOnly
           >
-            <CalibrationPanel
-              overlays={appState.dataOverlays}
-              baseParams={effectiveParams}
-              text={text}
-              onPreviewChange={(result) =>
-                setCalibrationPreview(
-                  result ? { signature: effectiveParamsSignature, result } : null,
-                )
-              }
-              onApplyFittedParams={applyFittedCalibrationParams}
-              onAddFittedComparison={addFittedCalibrationComparison}
-            />
+            <Suspense fallback={<LazyPanelFallback label={text.loading.calibration} />}>
+              <LazyCalibrationPanel
+                overlays={appState.dataOverlays}
+                baseParams={effectiveParams}
+                text={text}
+                onPreviewChange={(result) =>
+                  setCalibrationPreview(
+                    result ? { signature: effectiveParamsSignature, result } : null,
+                  )
+                }
+                onApplyFittedParams={applyFittedCalibrationParams}
+                onAddFittedComparison={addFittedCalibrationComparison}
+              />
+            </Suspense>
           </CollapsibleSection>
           <CollapsibleSection
             title={text.sections.reproducibility}
             expandLabel={text.sections.expandSection}
             collapseLabel={text.sections.collapseSection}
             defaultOpen={false}
+            mountWhenOpenOnly
           >
             <ExportPanel
               shareStatus={shareStatus}
@@ -439,29 +528,31 @@ function App() {
                 })
               }
             />
-            <CfdExportPanel
-              params={effectiveParams}
-              series={series}
-              dimensionalMapping={dimensionalMapping}
-              regimeAssessment={applicabilityAssessment}
-              tipPenetration={tipPenetration}
-              dataOverlays={appState.dataOverlays}
-              comparisonCases={appState.comparisonCases}
-              shareUrl={shareUrl}
-              text={text}
-            />
-            <ReportPanel
-              params={effectiveParams}
-              series={series}
-              dimensionalMapping={dimensionalMapping}
-              regimeAssessment={applicabilityAssessment}
-              tipPenetration={tipPenetration}
-              cfdExportPayload={cfdReportPayload}
-              dataOverlays={appState.dataOverlays}
-              comparisonCases={appState.comparisonCases}
-              shareUrl={shareUrl}
-              text={text}
-            />
+            <Suspense fallback={<LazyPanelFallback label={text.loading.exportTools} />}>
+              <LazyCfdExportPanel
+                params={effectiveParams}
+                series={series}
+                dimensionalMapping={dimensionalMapping}
+                regimeAssessment={applicabilityAssessment}
+                tipPenetration={tipPenetration}
+                dataOverlays={appState.dataOverlays}
+                comparisonCases={appState.comparisonCases}
+                shareUrl={shareUrl}
+                text={text}
+              />
+              <LazyReportPanel
+                params={effectiveParams}
+                series={series}
+                dimensionalMapping={dimensionalMapping}
+                regimeAssessment={applicabilityAssessment}
+                tipPenetration={tipPenetration}
+                cfdExportPayload={cfdReportPayload}
+                dataOverlays={appState.dataOverlays}
+                comparisonCases={appState.comparisonCases}
+                shareUrl={shareUrl}
+                text={text}
+              />
+            </Suspense>
           </CollapsibleSection>
           <CollapsibleSection
             title={text.sections.reducedModel}
@@ -487,28 +578,30 @@ function App() {
             collapseLabel={text.sections.collapseSection}
             defaultOpen
           >
-            <JetGeometry3D
-              series={series}
-              crossSectionZeta={appState.crossSectionZeta}
-              showSelectedCrossSection={appState.showSelectedCrossSection}
-              showAxisSwitchingSection={appState.showAxisSwitchingSection}
-              text={text}
-              onCrossSectionZetaChange={(crossSectionZeta) =>
-                setAppState((current) => ({
-                  ...current,
-                  crossSectionZeta: Math.min(
-                    Math.max(crossSectionZeta, 0),
-                    effectiveParams.zetaMax,
-                  ),
-                }))
-              }
-              onShowSelectedCrossSectionChange={(showSelectedCrossSection) =>
-                setAppState((current) => ({ ...current, showSelectedCrossSection }))
-              }
-              onShowAxisSwitchingSectionChange={(showAxisSwitchingSection) =>
-                setAppState((current) => ({ ...current, showAxisSwitchingSection }))
-              }
-            />
+            <Suspense fallback={<LazyPanelFallback label={text.loading.viewer3d} />}>
+              <LazyJetGeometry3D
+                series={series}
+                crossSectionZeta={appState.crossSectionZeta}
+                showSelectedCrossSection={appState.showSelectedCrossSection}
+                showAxisSwitchingSection={appState.showAxisSwitchingSection}
+                text={text}
+                onCrossSectionZetaChange={(crossSectionZeta) =>
+                  setAppState((current) => ({
+                    ...current,
+                    crossSectionZeta: Math.min(
+                      Math.max(crossSectionZeta, 0),
+                      effectiveParams.zetaMax,
+                    ),
+                  }))
+                }
+                onShowSelectedCrossSectionChange={(showSelectedCrossSection) =>
+                  setAppState((current) => ({ ...current, showSelectedCrossSection }))
+                }
+                onShowAxisSwitchingSectionChange={(showAxisSwitchingSection) =>
+                  setAppState((current) => ({ ...current, showAxisSwitchingSection }))
+                }
+              />
+            </Suspense>
           </CollapsibleSection>
           <CollapsibleSection
             title={text.sections.savedCases}
@@ -567,17 +660,19 @@ function App() {
             collapseLabel={text.sections.collapseSection}
             defaultOpen
           >
-            <Plots
-              series={series}
-              comparisonCases={appState.comparisonCases}
-              dataOverlays={appState.dataOverlays}
-              calibrationPreview={activeCalibrationPreview}
-              densityLogScale={appState.densityLogScale}
-              text={text}
-              onDensityLogScaleChange={(densityLogScale) =>
-                setAppState((current) => ({ ...current, densityLogScale }))
-              }
-            />
+            <Suspense fallback={<LazyPanelFallback label={text.loading.plots} />}>
+              <LazyPlots
+                series={series}
+                comparisonCases={appState.comparisonCases}
+                dataOverlays={appState.dataOverlays}
+                calibrationPreview={activeCalibrationPreview}
+                densityLogScale={appState.densityLogScale}
+                text={text}
+                onDensityLogScaleChange={(densityLogScale) =>
+                  setAppState((current) => ({ ...current, densityLogScale }))
+                }
+              />
+            </Suspense>
           </CollapsibleSection>
           <CollapsibleSection
             title={text.sections.tipPenetration}
@@ -585,12 +680,15 @@ function App() {
             expandLabel={text.sections.expandSection}
             collapseLabel={text.sections.collapseSection}
             defaultOpen={false}
+            mountWhenOpenOnly
           >
-            <TipPenetrationPanel
-              series={series}
-              dimensionalScales={dimensionalMapping?.scales}
-              text={text}
-            />
+            <Suspense fallback={<LazyPanelFallback label={text.loading.tipPenetration} />}>
+              <LazyTipPenetrationPanel
+                series={series}
+                dimensionalScales={dimensionalMapping?.scales}
+                text={text}
+              />
+            </Suspense>
           </CollapsibleSection>
           <CollapsibleSection
             title={text.sections.modelScope}
