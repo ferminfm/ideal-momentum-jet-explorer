@@ -26,6 +26,8 @@ const ENGLISH_TEXT = {
     description:
       'Explore how prescribed nozzle geometry and area growth affect bulk velocity, composite density, dynamic pressure, and entrainment in a conservative locally homogeneous two-phase jet model.',
     author: ENGLISH_AFFILIATION,
+    contactLabel: 'Contact',
+    contactEmail: 'fermin.franco *at* uabc.edu.mx',
     sourceCode: 'Source code',
     modelNotes: 'Model notes',
     researchmap: 'Researchmap profile',
@@ -208,6 +210,27 @@ const ENGLISH_TEXT = {
         symbol: String.raw`K_A`,
         meaning: 'generalized entrainment coefficient',
       },
+      directionalRates: {
+        symbol: String.raw`\lambda_1,\lambda_2`,
+        meaning:
+          'generic directional normalized growth rates in Ahat=(1+lambda_1 zeta)(1+lambda_2 zeta)',
+      },
+      beta: {
+        symbol: String.raw`\beta`,
+        meaning: 'rectangular width-direction growth rate, 2De tan(phi)/B0',
+      },
+      eta: {
+        symbol: String.raw`\eta`,
+        meaning: 'rectangular height-direction growth rate, 2De tan(theta)/H0',
+      },
+      alpha: {
+        symbol: String.raw`\alpha`,
+        meaning: 'elliptical major-axis growth rate, 2De tan(theta)/a0',
+      },
+      gamma: {
+        symbol: String.raw`\gamma`,
+        meaning: 'elliptical minor-axis growth rate, 2De tan(phi)/b0',
+      },
       rectangularDimensions: {
         symbol: String.raw`B_0,H_0`,
         meaning: 'initial rectangular width and height',
@@ -246,9 +269,27 @@ const ENGLISH_TEXT = {
       title: 'Coefficient reference values',
       nearFieldLimit: 'Near-field K_A(0)',
       farFieldLimit: 'Far-field K_A(∞)',
-      directionalRates: 'Directional rates',
+      directionalRates: 'Directional growth-rate factors',
       help:
-        'Dashed and dotted lines show the near-field value and far-field asymptote for the current settings.',
+        'K_A depends on both Ahat and dAhat/dzeta. Dashed and dotted lines show the near-field value and far-field asymptote for the current settings.',
+      rates: {
+        beta: {
+          label: 'lambda_1=beta: width-direction rate',
+          tooltip: 'beta = 2 De tan(phi) / B0',
+        },
+        eta: {
+          label: 'lambda_2=eta: height-direction rate',
+          tooltip: 'eta = 2 De tan(theta) / H0',
+        },
+        alpha: {
+          label: 'lambda_1=alpha: major-axis rate',
+          tooltip: 'alpha = 2 De tan(theta) / a0',
+        },
+        gamma: {
+          label: 'lambda_2=gamma: minor-axis rate',
+          tooltip: 'gamma = 2 De tan(phi) / b0',
+        },
+      },
     },
     definitions: {
       area: {
@@ -285,7 +326,8 @@ const ENGLISH_TEXT = {
         label: 'K_A',
         symbol: String.raw`K_A`,
         yTitle: 'Generalized entrainment coefficient, K_A',
-        description: 'generalized entrainment coefficient',
+        description:
+          'generalized entrainment coefficient; depends on both Ahat and dAhat/dzeta. Reference values use the directional growth rates shown below',
       },
     },
     overlays: {
@@ -395,6 +437,8 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       description:
         '指定したノズル形状と面積成長が、保存的な局所均質二相噴流モデルにおけるバルク速度、混合密度、動圧、エントレインメントに与える影響を調べます。',
       author: JAPANESE_AFFILIATION,
+      contactLabel: '連絡先',
+      contactEmail: 'fermin.franco *at* uabc.edu.mx',
       sourceCode: 'ソースコード',
       modelNotes: 'モデルノート',
       researchmap: 'researchmapプロフィール',
@@ -575,6 +619,27 @@ export const TRANSLATIONS: Record<Language, UiText> = {
           symbol: String.raw`K_A`,
           meaning: '一般化エントレインメント係数',
         },
+        directionalRates: {
+          symbol: String.raw`\lambda_1,\lambda_2`,
+          meaning:
+            'Ahat=(1+lambda_1 zeta)(1+lambda_2 zeta) における一般的な方向別正規化成長率',
+        },
+        beta: {
+          symbol: String.raw`\beta`,
+          meaning: '矩形の幅方向の成長率, 2De tan(phi)/B0',
+        },
+        eta: {
+          symbol: String.raw`\eta`,
+          meaning: '矩形の高さ方向の成長率, 2De tan(theta)/H0',
+        },
+        alpha: {
+          symbol: String.raw`\alpha`,
+          meaning: '楕円の長軸方向の成長率, 2De tan(theta)/a0',
+        },
+        gamma: {
+          symbol: String.raw`\gamma`,
+          meaning: '楕円の短軸方向の成長率, 2De tan(phi)/b0',
+        },
         rectangularDimensions: {
           symbol: String.raw`B_0,H_0`,
           meaning: '矩形出口の初期幅と高さ',
@@ -615,7 +680,25 @@ export const TRANSLATIONS: Record<Language, UiText> = {
         farFieldLimit: '遠方漸近 K_A(∞)',
         directionalRates: '方向別成長率',
         help:
-          '破線と点線は、現在の設定に対する近傍値と遠方漸近値を示します。',
+          'K_A は Ahat と dAhat/dzeta の両方に依存します。破線と点線は、現在の設定に対する近傍値と遠方漸近値を示します。',
+        rates: {
+          beta: {
+            label: 'lambda_1=beta: 幅方向の成長率',
+            tooltip: 'beta = 2 De tan(phi) / B0',
+          },
+          eta: {
+            label: 'lambda_2=eta: 高さ方向の成長率',
+            tooltip: 'eta = 2 De tan(theta) / H0',
+          },
+          alpha: {
+            label: 'lambda_1=alpha: 長軸方向の成長率',
+            tooltip: 'alpha = 2 De tan(theta) / a0',
+          },
+          gamma: {
+            label: 'lambda_2=gamma: 短軸方向の成長率',
+            tooltip: 'gamma = 2 De tan(phi) / b0',
+          },
+        },
       },
       definitions: {
         area: {
@@ -652,7 +735,8 @@ export const TRANSLATIONS: Record<Language, UiText> = {
           label: 'K_A',
           symbol: String.raw`K_A`,
           yTitle: '一般化エントレインメント係数, K_A',
-          description: '一般化エントレインメント係数',
+          description:
+            '一般化エントレインメント係数。Ahat と dAhat/dzeta の両方に依存し、参照値は下に示す方向別成長率を使います',
         },
       },
       overlays: {
@@ -758,6 +842,8 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       description:
         'Explore cómo la geometría de la boquilla y el crecimiento de área prescritos afectan la velocidad media, la densidad compuesta, la presión dinámica y el arrastre de gas en un modelo bifásico conservativo localmente homogéneo.',
       author: SPANISH_AFFILIATION,
+      contactLabel: 'Contacto',
+      contactEmail: 'fermin.franco *at* uabc.edu.mx',
       sourceCode: 'Código fuente',
       modelNotes: 'Notas del modelo',
       researchmap: 'Perfil researchmap',
@@ -944,6 +1030,27 @@ export const TRANSLATIONS: Record<Language, UiText> = {
           symbol: String.raw`K_A`,
           meaning: 'coeficiente generalizado de arrastre',
         },
+        directionalRates: {
+          symbol: String.raw`\lambda_1,\lambda_2`,
+          meaning:
+            'tasas direccionales normalizadas genéricas en Ahat=(1+lambda_1 zeta)(1+lambda_2 zeta)',
+        },
+        beta: {
+          symbol: String.raw`\beta`,
+          meaning: 'tasa rectangular en la dirección del ancho, 2De tan(phi)/B0',
+        },
+        eta: {
+          symbol: String.raw`\eta`,
+          meaning: 'tasa rectangular en la dirección de la altura, 2De tan(theta)/H0',
+        },
+        alpha: {
+          symbol: String.raw`\alpha`,
+          meaning: 'tasa elíptica en la dirección del eje mayor, 2De tan(theta)/a0',
+        },
+        gamma: {
+          symbol: String.raw`\gamma`,
+          meaning: 'tasa elíptica en la dirección del eje menor, 2De tan(phi)/b0',
+        },
         rectangularDimensions: {
           symbol: String.raw`B_0,H_0`,
           meaning: 'ancho y altura iniciales de la salida rectangular',
@@ -982,9 +1089,27 @@ export const TRANSLATIONS: Record<Language, UiText> = {
         title: 'Valores de referencia del coeficiente',
         nearFieldLimit: 'Campo cercano K_A(0)',
         farFieldLimit: 'Asíntota lejana K_A(∞)',
-        directionalRates: 'Tasas direccionales',
+        directionalRates: 'Factores de crecimiento direccional',
         help:
-          'Las líneas discontinua y punteada muestran el valor de campo cercano y la asíntota lejana para la configuración actual.',
+          'K_A depende tanto de Ahat como de dAhat/dzeta. Las líneas discontinua y punteada muestran el valor de campo cercano y la asíntota lejana para la configuración actual.',
+        rates: {
+          beta: {
+            label: 'lambda_1=beta: tasa en la dirección del ancho',
+            tooltip: 'beta = 2 De tan(phi) / B0',
+          },
+          eta: {
+            label: 'lambda_2=eta: tasa en la dirección de la altura',
+            tooltip: 'eta = 2 De tan(theta) / H0',
+          },
+          alpha: {
+            label: 'lambda_1=alpha: tasa en la dirección del eje mayor',
+            tooltip: 'alpha = 2 De tan(theta) / a0',
+          },
+          gamma: {
+            label: 'lambda_2=gamma: tasa en la dirección del eje menor',
+            tooltip: 'gamma = 2 De tan(phi) / b0',
+          },
+        },
       },
       definitions: {
         area: {
@@ -1021,7 +1146,8 @@ export const TRANSLATIONS: Record<Language, UiText> = {
           label: 'K_A',
           symbol: String.raw`K_A`,
           yTitle: 'Coeficiente generalizado de arrastre, K_A',
-          description: 'coeficiente generalizado de arrastre',
+          description:
+            'coeficiente generalizado de arrastre; depende de Ahat y dAhat/dzeta. Los valores de referencia usan las tasas direccionales indicadas abajo',
         },
       },
       overlays: {

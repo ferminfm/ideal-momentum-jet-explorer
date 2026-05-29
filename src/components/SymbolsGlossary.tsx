@@ -1,5 +1,6 @@
 import type { UiText } from '../i18n/translations'
 import { InlineMath } from './MathFormula'
+import { MathText } from './MathText'
 
 interface SymbolsGlossaryProps {
   text: UiText
@@ -15,6 +16,11 @@ const SYMBOL_KEYS = [
   'pressure',
   'gasEntrainment',
   'coefficient',
+  'directionalRates',
+  'beta',
+  'eta',
+  'alpha',
+  'gamma',
   'rectangularDimensions',
   'ellipticalDimensions',
   'angles',
@@ -41,7 +47,9 @@ export function SymbolsGlossary({ text }: SymbolsGlossaryProps) {
               <div className="symbol-token">
                 <InlineMath math={entry.symbol} />
               </div>
-              <p>{entry.meaning}</p>
+              <p>
+                <MathText text={entry.meaning} />
+              </p>
             </div>
           )
         })}

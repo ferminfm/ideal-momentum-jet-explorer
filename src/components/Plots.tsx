@@ -32,6 +32,7 @@ interface PlotsProps {
 }
 
 type PlotId = keyof UiText['plots']['definitions']
+type GrowthRateKey = keyof UiText['plots']['referenceValues']['rates']
 
 interface PlotDefinition {
   id: PlotId
@@ -95,6 +96,10 @@ export function Plots({
     [series.params],
   )
   const showCoefficientReferences = activePlot.id === 'coefficient'
+  const lambda1Rate =
+    text.plots.referenceValues.rates[coefficientLimits.lambda1Label as GrowthRateKey]
+  const lambda2Rate =
+    text.plots.referenceValues.rates[coefficientLimits.lambda2Label as GrowthRateKey]
 
   const plotData = useMemo(() => {
     const traces = buildModelCurveTraces({
@@ -218,6 +223,9 @@ export function Plots({
 
       {showCoefficientReferences ? (
         <div className="coefficient-reference-strip" aria-label={text.plots.referenceValues.title}>
+          <p className="coefficient-reference-title">
+            <MathText text={text.plots.referenceValues.directionalRates} />
+          </p>
           <div>
             <span>
               <MathText text={text.plots.referenceValues.nearFieldLimit} />
@@ -230,15 +238,15 @@ export function Plots({
             </span>
             <strong>{formatNumber(coefficientLimits.farField, 5)}</strong>
           </div>
-          <div>
+          <div title={lambda1Rate.tooltip}>
             <span>
-              <MathText text={`lambda_1=${coefficientLimits.lambda1Label}`} />
+              <MathText text={lambda1Rate.label} />
             </span>
             <strong>{formatNumber(coefficientLimits.lambda1, 5)}</strong>
           </div>
-          <div>
+          <div title={lambda2Rate.tooltip}>
             <span>
-              <MathText text={`lambda_2=${coefficientLimits.lambda2Label}`} />
+              <MathText text={lambda2Rate.label} />
             </span>
             <strong>{formatNumber(coefficientLimits.lambda2, 5)}</strong>
           </div>

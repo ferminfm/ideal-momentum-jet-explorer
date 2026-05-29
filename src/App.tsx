@@ -8,10 +8,9 @@ import { ExportPanel } from './components/ExportPanel'
 import { InterpretationPanel } from './components/InterpretationPanel'
 import { JetGeometry3D } from './components/JetGeometry3D'
 import { Layout } from './components/Layout'
-import { MathText } from './components/MathText'
 import { Plots } from './components/Plots'
 import { SymbolsGlossary } from './components/SymbolsGlossary'
-import { TRANSLATIONS, type Language, type UiText } from './i18n/translations'
+import { TRANSLATIONS, type Language } from './i18n/translations'
 import {
   MAX_COMPARISON_CASES,
   clearComparisonCases,
@@ -25,7 +24,6 @@ import { cloneParams } from './model/presets'
 import { PRESET_CUSTOM, type ExplorerState } from './types/appState'
 import { copyTextToClipboard } from './utils/clipboard'
 import { downloadJetCsv } from './utils/csvExport'
-import { formatNumber } from './utils/format'
 import {
   decodeStateFromQuery,
   encodeStateToQuery,
@@ -33,51 +31,6 @@ import {
   sanitizeDecodedState,
 } from './utils/urlState'
 import './styles.css'
-
-function TerminalStateSummary({
-  series,
-  text,
-}: {
-  series: ReturnType<typeof generateJetSeries>
-  text: UiText
-}) {
-  const terminal = series.states[series.states.length - 1]
-
-  return (
-    <section className="summary-bar" aria-label={text.summary.ariaLabel}>
-      <div>
-        <span>
-          <MathText text={text.summary.areaAtZetaMax} />
-        </span>
-        <strong>{formatNumber(terminal.normalizedArea, 3)}</strong>
-      </div>
-      <div>
-        <span>
-          <MathText text={text.summary.velocity} />
-        </span>
-        <strong>{formatNumber(terminal.velocityHat, 4)}</strong>
-      </div>
-      <div>
-        <span>
-          <MathText text={text.summary.density} />
-        </span>
-        <strong>{formatNumber(terminal.densityHat, 4)}</strong>
-      </div>
-      <div>
-        <span>
-          <MathText text={text.summary.gasEntrainment} />
-        </span>
-        <strong>{formatNumber(terminal.gasEntrainmentHat, 4)}</strong>
-      </div>
-      <div>
-        <span>
-          <MathText text={text.summary.coefficient} />
-        </span>
-        <strong>{formatNumber(terminal.entrainmentCoefficient, 4)}</strong>
-      </div>
-    </section>
-  )
-}
 
 function App() {
   const [appState, setAppState] = useState<ExplorerState>(() => {
@@ -228,7 +181,6 @@ function App() {
           </CollapsibleSection>
         </aside>
         <section className="main-rail">
-          <TerminalStateSummary series={series} text={text} />
           <CollapsibleSection
             title={text.sections.threeDJetView}
             expandLabel={text.sections.expandSection}
@@ -337,14 +289,7 @@ function App() {
           >
             <InterpretationPanel text={text} />
           </CollapsibleSection>
-          <CollapsibleSection
-            title={text.sections.citations}
-            expandLabel={text.sections.expandSection}
-            collapseLabel={text.sections.collapseSection}
-            defaultOpen={false}
-          >
-            <CitationPanel text={text} />
-          </CollapsibleSection>
+          <CitationPanel text={text} />
         </section>
       </div>
     </Layout>

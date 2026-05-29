@@ -94,6 +94,13 @@ a:hover {
   display: block;
 }
 
+.contact-line {
+  color: #607586;
+  font-size: 0.9rem;
+  font-weight: 650;
+  margin: 0.35rem 0 0;
+}
+
 .repo-link,
 .site-footer a {
   align-items: center;
@@ -831,6 +838,11 @@ main {
   font-size: 0.82rem;
   grid-column: 1 / -1;
   margin: 0;
+}
+
+.coefficient-reference-title {
+  color: #273847 !important;
+  font-weight: 800;
 }
 
 .geometry-panel {

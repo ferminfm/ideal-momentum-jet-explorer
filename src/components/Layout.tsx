@@ -21,6 +21,9 @@ export function Layout({ children, language, text, onLanguageChange }: LayoutPro
           <p className="subtitle">{text.layout.subtitle}</p>
           <p className="description-line">{text.layout.description}</p>
           <p className="author-line">{text.layout.author}</p>
+          <p className="contact-line">
+            {text.layout.contactLabel}: {text.layout.contactEmail}
+          </p>
         </div>
         <div className="header-actions" aria-label={text.layout.projectLinksLabel}>
           <div className="language-switcher" aria-label={text.layout.languageLabel}>
