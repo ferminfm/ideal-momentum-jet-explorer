@@ -2,6 +2,7 @@ import type { JetParameters } from '../model/jetModel'
 import { DEFAULT_PARAMS, cloneParams } from '../model/presets'
 import { DEFAULT_LANGUAGE, type Language } from '../i18n/translations'
 import type { ComparisonCase } from '../model/comparisonCases'
+import type { DataOverlay } from '../data/dataOverlayTypes'
 import {
   DEFAULT_GAS_PRESET_ID,
   DEFAULT_LIQUID_PRESET_ID,
@@ -36,6 +37,7 @@ export interface ExplorerState {
   densityLogScale: boolean
   overlayId: string
   comparisonCases: ComparisonCase[]
+  dataOverlays: DataOverlay[]
   crossSectionZeta: number
   showSelectedCrossSection: boolean
   showAxisSwitchingSection: boolean
@@ -64,6 +66,7 @@ export function createDefaultExplorerState(): ExplorerState {
     densityLogScale: false,
     overlayId: OVERLAY_NONE,
     comparisonCases: [],
+    dataOverlays: [],
     crossSectionZeta: DEFAULT_PARAMS.zetaMax / 2,
     showSelectedCrossSection: true,
     showAxisSwitchingSection: true,

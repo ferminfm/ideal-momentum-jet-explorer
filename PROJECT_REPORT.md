@@ -147,7 +147,7 @@
 - Three.js control-volume viewer with translucent rectangular or elliptical frustum geometry.
 - Traveling LHF fluid-element animation with conserved marker droplets in the 3D viewer.
 - GitHub Pages deployment through GitHub Actions.
-- Saved share URLs, CSV export, citation copying, velocity-overlay infrastructure, and 3D cross-section inspection.
+- Saved share URLs, CSV export, citation copying, data-overlay infrastructure, and 3D cross-section inspection.
 - Compact URL restoration for saved model comparisons.
 - English, Japanese, and Spanish interface modes with language state encoded in reproducible URLs.
 
@@ -157,7 +157,7 @@
 - Axis switching, vortex dynamics, breakup, turbulence, losses, and droplet-size distributions are outside the reduced-order model.
 - The traveling fluid-element markers are conceptual conserved-liquid markers and do not model droplet-size evolution or interactions.
 - Composite density needs independent phase-fraction or concentration validation.
-- No measured/literature velocity overlay dataset is bundled yet; the current overlay option is synthetic and only demonstrates the plotting mechanism.
+- No measured/literature data-overlay dataset is bundled yet; the current built-in overlay is synthetic and only demonstrates the plotting mechanism.
 - The initial JavaScript bundle is large because Plotly and Three.js are bundled client-side; code-splitting is a reasonable future optimization.
 - GitHub Pages is public; private manuscripts, PDFs, credentials, and non-public datasets must stay out of committed assets.
 
@@ -184,3 +184,19 @@
 - The checker is explicitly scoped as heuristic screening, not a validated breakup-regime map or engineering certification.
 - Validation before commit: `npm run test`, `npm run build`, `npm run lint`, and local `npm run smoke:visual` passed.
 - Next recommended unit: Unit 4 data overlay/import foundation.
+
+## Data Overlay Import Foundation Branch
+
+- Branch: `feature/data-overlay-foundation`.
+- Starting commit: `de85d95`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Added a general data-overlay model that is separate from saved model-generated comparison cases.
+- Added a built-in overlay registry. The current bundled overlay is a synthetic velocity demo only, not measured or literature data.
+- Added a local browser-side CSV importer for user comparison curves with x/y column selection, optional error columns, target-variable selection, and row/size validation.
+- Added a data-overlay manager panel for built-in overlays, CSV imports, show/hide, removal, and clearing user or all overlays.
+- Plotly plots now render visible data overlays only on matching variables, with markers, optional error bars, and source/notes hover text.
+- Saved URL behavior: built-in overlays can be encoded; imported CSV overlays are intentionally not encoded and remain session-local.
+- Documentation now states that overlays are comparison aids only, no measured public validation dataset is bundled yet, and this unit does not fit model parameters.
+- Validation before commit: `npm run test` passed with 18 test files and 76 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile.
+- Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
+- Next recommended unit: Unit 5 calibration/fitting of prescribed spreading angles.

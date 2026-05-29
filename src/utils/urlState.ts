@@ -1,8 +1,14 @@
-import { VELOCITY_OVERLAYS } from '../data/velocityOverlays'
+import {
+  BUILTIN_DATA_OVERLAYS,
+  cloneDataOverlay,
+  getBuiltinDataOverlay,
+  isBuiltinDataOverlay,
+} from '../data/dataOverlays'
 import {
   isGasPresetId,
   isLiquidPresetId,
 } from '../data/fluidPresets'
+import type { DataOverlay } from '../data/dataOverlayTypes'
 import type { Language } from '../i18n/translations'
 import {
   deserializeComparisonCases,
@@ -61,6 +67,7 @@ export interface DecodedUrlState {
   dischargeCoefficient?: number
   densityLogScale?: boolean
   overlayId?: string
+  builtinDataOverlays?: Array<{ id: string; visible: boolean }>
   comparisonCases?: ComparisonCase[]
   crossSectionZeta?: number
   showSelectedCrossSection?: boolean
@@ -124,6 +131,29 @@ function setNumber(params: URLSearchParams, key: string, value: number): void {
   params.set(key, Number(value.toPrecision(8)).toString())
 }
 
+function parseBuiltinDataOverlays(value: string | null): Array<{ id: string; visible: boolean }> | undefined {
+  if (!value) {
+    return undefined
+  }
+
+  const overlays = value
+    .split(',')
+    .map((entry) => {
+      const [id, visibleValue] = entry.split(':')
+      if (!id || !isBuiltinDataOverlay(id)) {
+        return undefined
+      }
+
+      return {
+        id,
+        visible: visibleValue === undefined ? true : visibleValue !== '0',
+      }
+    })
+    .filter((entry): entry is { id: string; visible: boolean } => entry !== undefined)
+
+  return overlays.length ? overlays : undefined
+}
+
 export function encodeStateToQuery(state: ExplorerState): URLSearchParams {
   const query = new URLSearchParams()
   const { params } = state
@@ -165,6 +195,17 @@ export function encodeStateToQuery(state: ExplorerState): URLSearchParams {
 
   query.set('densityLog', state.densityLogScale ? '1' : '0')
   query.set('overlay', state.overlayId)
+  const builtinDataOverlays = state.dataOverlays.filter((overlay) =>
+    isBuiltinDataOverlay(overlay.id),
+  )
+  if (builtinDataOverlays.length) {
+    query.set(
+      'dataOverlays',
+      builtinDataOverlays
+        .map((overlay) => `${overlay.id}:${overlay.visible ? '1' : '0'}`)
+        .join(','),
+    )
+  }
   const comparisonCases = serializeComparisonCases(state.comparisonCases)
   if (comparisonCases !== undefined) {
     query.set('cases', comparisonCases)
@@ -206,6 +247,7 @@ export function decodeStateFromQuery(search: string): DecodedUrlState {
     dischargeCoefficient: finiteNumber(query.get('Cd')),
     densityLogScale: boolValue(query.get('densityLog')),
     overlayId: query.get('overlay') ?? undefined,
+    builtinDataOverlays: parseBuiltinDataOverlays(query.get('dataOverlays')),
     comparisonCases: deserializeComparisonCases(query.get('cases') ?? undefined),
     crossSectionZeta: finiteNumber(query.get('crossSectionZeta')),
     showSelectedCrossSection: boolValue(query.get('showSection')),
@@ -231,6 +273,15 @@ export function sanitizeDecodedState(decoded: DecodedUrlState): Partial<Explorer
       : clamp(decoded.zetaMax, URL_LIMITS.zetaMax.min, URL_LIMITS.zetaMax.max)
   const geometry = decoded.geometry ?? seedParams.geometry.geometry
   const dimensionalDefaults = base.dimensionalSettings
+  const legacyOverlayId = BUILTIN_DATA_OVERLAYS.some(
+    (overlay) => overlay.id === decoded.overlayId,
+  )
+    ? decoded.overlayId ?? OVERLAY_NONE
+    : OVERLAY_NONE
+  const dataOverlays = buildBuiltinOverlaysFromDecoded(
+    decoded.builtinDataOverlays,
+    legacyOverlayId,
+  )
 
   const params: JetParameters = {
     ...seedParams,
@@ -344,10 +395,9 @@ export function sanitizeDecodedState(decoded: DecodedUrlState): Partial<Explorer
     params,
     selectedPresetId: preset ? preset.id : PRESET_CUSTOM,
     densityLogScale: decoded.densityLogScale ?? base.densityLogScale,
-    overlayId: VELOCITY_OVERLAYS.some((overlay) => overlay.id === decoded.overlayId)
-      ? decoded.overlayId
-      : OVERLAY_NONE,
+    overlayId: legacyOverlayId,
     comparisonCases: decoded.comparisonCases ?? base.comparisonCases,
+    dataOverlays,
     crossSectionZeta:
       decoded.crossSectionZeta === undefined
         ? Math.min(base.crossSectionZeta, zetaMax)
@@ -369,7 +419,25 @@ export function mergeStateWithDefaults(partial: Partial<ExplorerState>): Explore
       ? { ...base.dimensionalSettings, ...partial.dimensionalSettings }
       : { ...base.dimensionalSettings },
     params: partial.params ? cloneParams(partial.params) : cloneParams(base.params),
+    dataOverlays: partial.dataOverlays
+      ? partial.dataOverlays.map(cloneDataOverlay)
+      : base.dataOverlays.map(cloneDataOverlay),
   }
+}
+
+function buildBuiltinOverlaysFromDecoded(
+  decodedOverlays: Array<{ id: string; visible: boolean }> | undefined,
+  legacyOverlayId: string,
+): DataOverlay[] {
+  if (decodedOverlays !== undefined) {
+    return decodedOverlays.flatMap((decodedOverlay) => {
+      const overlay = getBuiltinDataOverlay(decodedOverlay.id)
+      return overlay ? [{ ...cloneDataOverlay(overlay), visible: decodedOverlay.visible }] : []
+    })
+  }
+
+  const legacyOverlay = getBuiltinDataOverlay(legacyOverlayId)
+  return legacyOverlay ? [cloneDataOverlay(legacyOverlay)] : []
 }
 
 function sanitizedNumber(

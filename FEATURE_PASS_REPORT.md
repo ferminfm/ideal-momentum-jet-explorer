@@ -263,3 +263,22 @@ The GitHub Pages app responded with HTTP 200 at `https://ferminfm.github.io/idea
 - Validation before commit: `npm run test` passed with 17 test files and 67 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed after starting the required Vite dev server.
 - Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
 - Next recommended unit: Unit 4 data overlay/import foundation.
+
+## 2026-05-29 Data Overlay Import Foundation Branch
+
+- Start time: `2026-05-29T20:48:14+09:00`.
+- Starting commit: `de85d95`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Branch: `feature/data-overlay-foundation`.
+- New files: `src/data/dataOverlayTypes.ts`, `src/data/dataOverlays.ts`, `src/components/DataOverlayPanel.tsx`, `src/utils/dataOverlayCsv.ts`, and `src/utils/dataOverlayCsv.test.ts`.
+- Modified files: `README.md`, `ROADMAP_INDUSTRY.md`, `PROJECT_REPORT.md`, `FEATURE_PASS_REPORT.md`, `src/App.tsx`, `src/components/Plots.tsx`, `src/data/velocityOverlays.ts`, `src/i18n/translations.ts`, `src/styles.css`, `src/types/appState.ts`, `src/utils/plotTraces.ts`, `src/utils/plotTraces.test.ts`, `src/utils/urlState.ts`, and `src/utils/urlState.test.ts`.
+- Added a general `DataOverlay` model for measured, literature, CFD, synthetic-demo, and user-imported comparison points.
+- Added a documented built-in overlay registry with the existing synthetic velocity curve relabeled as demo-only, not data.
+- Added a browser-side CSV importer for local user files with column selection, numeric validation, row/size limits, optional error columns, and no upload path.
+- Added a data-overlay manager UI that is separate from saved model cases.
+- Integrated visible matching data overlays into the relevant Plotly variable plot while preserving saved model-case comparison traces.
+- URL behavior: built-in overlays can be encoded compactly; user-imported CSV overlays are intentionally session-local and are not encoded in shareable URLs.
+- Validation before commit: `npm run test` passed with 18 test files and 76 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server.
+- Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
+- Limitations: no measured public validation dataset is bundled, overlay export is not implemented, imported overlays are not URL-persistent by design, and calibration/fitting is deferred.
+- Next recommended unit: Unit 5 calibration/fitting of prescribed spreading angles.

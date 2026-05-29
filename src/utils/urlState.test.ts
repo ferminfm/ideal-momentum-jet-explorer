@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest'
+import { cloneDataOverlay, getBuiltinDataOverlay } from '../data/dataOverlays'
+import type { DataOverlay } from '../data/dataOverlayTypes'
 import { createComparisonCase } from '../model/comparisonCases'
 import {
   DEFAULT_DIMENSIONAL_SETTINGS,
@@ -45,6 +47,8 @@ describe('URL state helpers', () => {
     expect(sanitized.language).toBe('ja')
     expect(sanitized.densityLogScale).toBe(true)
     expect(sanitized.overlayId).toBe('synthetic-equal-density-reference')
+    expect(sanitized.dataOverlays).toHaveLength(1)
+    expect(sanitized.dataOverlays[0].id).toBe('synthetic-equal-density-reference')
     expect(sanitized.crossSectionZeta).toBeCloseTo(12.5)
     expect(sanitized.comparisonCases).toHaveLength(1)
     expect(sanitized.comparisonCases[0].id).toBe('saved-case')
@@ -74,6 +78,52 @@ describe('URL state helpers', () => {
     expect(sanitized.overlayId).toBe('none')
     expect(sanitized.language).toBe('en')
     expect(sanitized.selectedPresetId).toBe(PRESET_CUSTOM)
+  })
+
+  it('round-trips built-in data overlay visibility without serializing user imports', () => {
+    const state = createDefaultExplorerState()
+    const builtin = getBuiltinDataOverlay('synthetic-equal-density-reference')
+    expect(builtin).toBeDefined()
+    state.dataOverlays = [{ ...cloneDataOverlay(builtin!), visible: false }]
+    state.dataOverlays.push({
+      id: 'imported-private-data',
+      label: 'Private lab data',
+      variable: 'velocity',
+      sourceKind: 'user-import',
+      source: 'Local CSV',
+      xLabel: 'zeta',
+      yLabel: 'vhat',
+      points: [{ x: 0, y: 1 }],
+      notes: 'Session-local data',
+      publicData: false,
+      visible: true,
+      color: '#236b8e',
+      createdAt: '2026-05-29T00:00:00.000Z',
+    } satisfies DataOverlay)
+
+    const query = encodeStateToQuery(state)
+    expect(query.toString()).toContain('dataOverlays=synthetic-equal-density-reference%3A0')
+    expect(query.toString()).not.toContain('imported-private-data')
+
+    const sanitized = mergeStateWithDefaults(
+      sanitizeDecodedState(decodeStateFromQuery(query.toString())),
+    )
+
+    expect(sanitized.dataOverlays).toHaveLength(1)
+    expect(sanitized.dataOverlays[0].id).toBe('synthetic-equal-density-reference')
+    expect(sanitized.dataOverlays[0].visible).toBe(false)
+  })
+
+  it('restores a legacy velocity overlay query as a built-in data overlay', () => {
+    const sanitized = mergeStateWithDefaults(
+      sanitizeDecodedState(
+        decodeStateFromQuery('?overlay=synthetic-equal-density-reference'),
+      ),
+    )
+
+    expect(sanitized.overlayId).toBe('synthetic-equal-density-reference')
+    expect(sanitized.dataOverlays).toHaveLength(1)
+    expect(sanitized.dataOverlays[0].sourceKind).toBe('synthetic-demo')
   })
 
   it('sanitizes supported language query parameters', () => {

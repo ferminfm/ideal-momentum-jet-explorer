@@ -3,6 +3,7 @@ import { CitationPanel } from './components/CitationPanel'
 import { CollapsibleSection } from './components/CollapsibleSection'
 import { ComparisonAddPanel, ComparisonPanel } from './components/ComparisonPanel'
 import { ControlPanel } from './components/ControlPanel'
+import { DataOverlayPanel } from './components/DataOverlayPanel'
 import { EquationPanel } from './components/EquationPanel'
 import { EngineeringSummaryPanel } from './components/EngineeringSummaryPanel'
 import { ExportPanel } from './components/ExportPanel'
@@ -13,6 +14,8 @@ import { Plots } from './components/Plots'
 import { RegimeApplicabilityPanel } from './components/RegimeApplicabilityPanel'
 import { SymbolsGlossary } from './components/SymbolsGlossary'
 import { TRANSLATIONS, type Language } from './i18n/translations'
+import { cloneDataOverlay } from './data/dataOverlays'
+import type { DataOverlay } from './data/dataOverlayTypes'
 import {
   MAX_COMPARISON_CASES,
   clearComparisonCases,
@@ -160,6 +163,29 @@ function App() {
     }
   }
 
+  function addDataOverlay(overlay: DataOverlay) {
+    setAppState((current) => {
+      const existingIndex = current.dataOverlays.findIndex(
+        (candidate) => candidate.id === overlay.id,
+      )
+      if (existingIndex >= 0 && overlay.sourceKind !== 'user-import') {
+        return {
+          ...current,
+          dataOverlays: current.dataOverlays.map((candidate, index) =>
+            index === existingIndex ? { ...candidate, visible: true } : candidate,
+          ),
+          overlayId: overlay.id,
+        }
+      }
+
+      return {
+        ...current,
+        dataOverlays: [...current.dataOverlays, cloneDataOverlay(overlay)],
+        overlayId: overlay.sourceKind === 'synthetic-demo' ? overlay.id : current.overlayId,
+      }
+    })
+  }
+
   return (
     <Layout
       language={appState.language}
@@ -224,6 +250,65 @@ function App() {
               notice={comparisonNotice}
               text={text}
               onAdd={addCurrentComparisonCase}
+            />
+          </CollapsibleSection>
+          <CollapsibleSection
+            title={text.sections.dataOverlays}
+            expandLabel={text.sections.expandSection}
+            collapseLabel={text.sections.collapseSection}
+            defaultOpen={false}
+          >
+            <DataOverlayPanel
+              overlays={appState.dataOverlays}
+              text={text}
+              onAddOverlay={addDataOverlay}
+              onToggleOverlay={(id, visible) =>
+                setAppState((current) => ({
+                  ...current,
+                  dataOverlays: current.dataOverlays.map((overlay) =>
+                    overlay.id === id ? { ...overlay, visible } : overlay,
+                  ),
+                }))
+              }
+              onRemoveOverlay={(id) =>
+                setAppState((current) => ({
+                  ...current,
+                  dataOverlays: current.dataOverlays.filter((overlay) => overlay.id !== id),
+                }))
+              }
+              onShowAll={() =>
+                setAppState((current) => ({
+                  ...current,
+                  dataOverlays: current.dataOverlays.map((overlay) => ({
+                    ...overlay,
+                    visible: true,
+                  })),
+                }))
+              }
+              onHideAll={() =>
+                setAppState((current) => ({
+                  ...current,
+                  dataOverlays: current.dataOverlays.map((overlay) => ({
+                    ...overlay,
+                    visible: false,
+                  })),
+                }))
+              }
+              onClearUser={() =>
+                setAppState((current) => ({
+                  ...current,
+                  dataOverlays: current.dataOverlays.filter(
+                    (overlay) => overlay.sourceKind !== 'user-import',
+                  ),
+                }))
+              }
+              onClearAll={() =>
+                setAppState((current) => ({
+                  ...current,
+                  dataOverlays: [],
+                  overlayId: 'none',
+                }))
+              }
             />
           </CollapsibleSection>
           <CollapsibleSection
@@ -353,14 +438,11 @@ function App() {
             <Plots
               series={series}
               comparisonCases={appState.comparisonCases}
+              dataOverlays={appState.dataOverlays}
               densityLogScale={appState.densityLogScale}
-              overlayId={appState.overlayId}
               text={text}
               onDensityLogScaleChange={(densityLogScale) =>
                 setAppState((current) => ({ ...current, densityLogScale }))
-              }
-              onOverlayChange={(overlayId) =>
-                setAppState((current) => ({ ...current, overlayId }))
               }
             />
           </CollapsibleSection>

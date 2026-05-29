@@ -42,6 +42,9 @@ requires independent validation.
 - Expected files/components: `src/data/`, overlay import utilities, plotting controls.
 - Dependencies: current overlay architecture and citation metadata.
 - Risk level: high. Data provenance and licensing must be explicit.
+- Status: implemented on `feature/data-overlay-foundation`.
+- Notes: no measured public validation dataset is bundled yet. User-imported CSV
+  overlays remain local in the browser and are not encoded in shareable URLs.
 
 ## 5. Calibration And Fitting Of Spreading Angles
 
@@ -49,6 +52,7 @@ requires independent validation.
 - Expected files/components: fitting utilities, objective-function tests, calibration UI.
 - Dependencies: public/user data import and robust dimensional state outputs.
 - Risk level: high. Optimization results need uncertainty and validation caveats.
+- Status: next recommended unit after review of the data-overlay foundation.
 
 ## 6. Lossy Model Extensions
 
