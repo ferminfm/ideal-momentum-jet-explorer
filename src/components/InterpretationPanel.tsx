@@ -37,6 +37,18 @@ export function InterpretationPanel({ text }: InterpretationPanelProps) {
             <MathText text={text.interpretation.notPredictedBody} />
           </p>
         </article>
+        <article className="disclaimer-card">
+          <h3>{text.interpretation.disclaimerTitle}</h3>
+          <p>
+            <MathText text={text.interpretation.disclaimerBody} />
+          </p>
+        </article>
+        <article className="license-card">
+          <h3>{text.interpretation.licenseTitle}</h3>
+          <p>
+            <MathText text={text.interpretation.licenseBody} />
+          </p>
+        </article>
       </div>
     </section>
   )

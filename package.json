@@ -4,6 +4,25 @@
   "version": "0.0.0",
   "description": "Browser-based scientific computing app for a reduced-order atomizing jet model.",
   "author": "Fermín Franco-Medrano — Ensenada Campus, Autonomous University of Baja California / Institute of Mathematics for Industry, Kyushu University",
+  "license": "MIT",
+  "homepage": "https://ferminfm.github.io/ideal-momentum-jet-explorer/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ferminfm/ideal-momentum-jet-explorer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ferminfm/ideal-momentum-jet-explorer/issues"
+  },
+  "keywords": [
+    "fluid-mechanics",
+    "scientific-computing",
+    "atomizing-jets",
+    "reduced-order-model",
+    "react",
+    "threejs",
+    "plotly",
+    "github-pages"
+  ],
   "type": "module",
   "scripts": {
     "dev": "vite",

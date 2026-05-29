@@ -32,6 +32,8 @@ const ENGLISH_TEXT = {
     footerLineage:
       'Model lineage: Franco, Fukumoto, Velte & Hodžić, JPSJ 2017 circular ideal momentum jet model; rectangular and elliptical area-growth extension; Kumamoto JSFM 2026 short conference version.',
     sourceRepository: 'Source repository',
+    licenseNotice:
+      'Code: MIT License. Scientific model and documentation © Fermín Franco-Medrano and collaborators as cited. Software provided as-is.',
   },
   summary: {
     ariaLabel: 'Terminal state summary',
@@ -141,6 +143,15 @@ const ENGLISH_TEXT = {
     coefficient: 'Generalized entrainment coefficient for arbitrary area-growth histories.',
     coefficientReferences:
       'On the K_A plot, dashed and dotted horizontal lines show K_A(0) and the far-field asymptote K_A(∞); for positive two-direction area growth, K_A(∞)=sqrt(lambda_1 lambda_2).',
+    conservationTitle: 'Conservation system',
+    conservationCaption:
+      'Two equations are solved for vhat and rhohat after prescribing Ahat(zeta).',
+    explicitTitle: 'Explicit state laws',
+    explicitCaption:
+      'These closed-form branches are the values used by the plots, CSV export, and comparison cases.',
+    derivedTitle: 'Derived quantities',
+    derivedCaption:
+      'Pressure, gas entrainment, and K_A are then evaluated from the solved bulk state and area-growth derivative.',
   },
   symbols: {
     eyebrow: 'Notation',
@@ -294,6 +305,23 @@ const ENGLISH_TEXT = {
     showElementDroplets: 'Show droplets in element',
     animationSpeed: 'Animation speed',
     elementZeta: 'Element zeta',
+    captureView: 'Capture 3D view',
+    captureSaved: '3D view saved.',
+    captureFailed: 'Could not capture the 3D view.',
+    cameraPresets: '3D camera presets',
+    viewX: 'X',
+    viewY: 'Y',
+    viewZ: 'Z',
+    viewOblique: '3/4',
+    resetView: 'Reset',
+    viewXTitle: 'Look along x',
+    viewYTitle: 'Look along y',
+    viewZTitle: 'Look along z',
+    viewObliqueTitle: 'Oblique view',
+    resetViewTitle: 'Reset camera',
+    showAxes: 'Show axes',
+    showNozzle: 'Show nozzle',
+    axesLegend: 'Axes: x red · y green · z blue',
     animationHelp:
       'Conceptual LHF element: conserved liquid markers redistributed inside the expanding control volume.',
   },
@@ -312,6 +340,12 @@ const ENGLISH_TEXT = {
     notPredictedTitle: 'Not predicted',
     notPredictedBody:
       'Axis switching, vortex dynamics, droplet-size distribution, breakup, losses, and spreading angles. Velocity can be compared with equal-density jet data; composite density requires phase-fraction or concentration data.',
+    disclaimerTitle: 'Research prototype',
+    disclaimerBody:
+      'This app is an exploratory research prototype. The model is under active validation work and should not be used as a predictive engineering design tool. Results are provided as-is, without warranty, and require independent validation before engineering use.',
+    licenseTitle: 'License',
+    licenseBody:
+      'Source code is released under the MIT License. The scientific model and documentation remain credited to Fermín Franco-Medrano and collaborators as cited.',
   },
   citations: {
     eyebrow: 'References',
@@ -353,6 +387,8 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       footerLineage:
         'モデルの系譜: Franco, Fukumoto, Velte & Hodžić, JPSJ 2017 の円形理想運動量噴流モデル; 矩形・楕円形の面積成長拡張; Kumamoto JSFM 2026 短報版。',
       sourceRepository: 'ソースリポジトリ',
+      licenseNotice:
+        'コード: MIT License。科学モデルと文書は、引用されたフランコ＝メドラノ・フェルミンおよび共同研究者に帰属します。ソフトウェアは現状有姿で提供されます。',
     },
     summary: {
       ariaLabel: '終端状態の概要',
@@ -460,6 +496,15 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       coefficient: '任意の面積成長履歴に対する一般化エントレインメント係数です。',
       coefficientReferences:
         'K_A プロットでは、破線と点線の水平線が K_A(0) と遠方漸近値 K_A(∞) を示します。正の二方向面積成長では K_A(∞)=sqrt(lambda_1 lambda_2) です。',
+      conservationTitle: '保存式系',
+      conservationCaption:
+        'Ahat(zeta) を規定した後、二つの式を vhat と rhohat について解きます。',
+      explicitTitle: '陽的な状態式',
+      explicitCaption:
+        'これらの閉形式の分岐が、プロット、CSV 出力、比較ケースで使われる値です。',
+      derivedTitle: '導出量',
+      derivedCaption:
+        '動圧、気相エントレインメント、K_A は、解いたバルク状態と面積成長の微分から評価します。',
     },
     symbols: {
       eyebrow: '記号',
@@ -613,6 +658,23 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       showElementDroplets: '要素内の液滴を表示',
       animationSpeed: 'アニメーション速度',
       elementZeta: '要素 zeta',
+      captureView: '3D表示を保存',
+      captureSaved: '3D表示を保存しました。',
+      captureFailed: '3D表示を保存できませんでした。',
+      cameraPresets: '3Dカメラプリセット',
+      viewX: 'X',
+      viewY: 'Y',
+      viewZ: 'Z',
+      viewOblique: '3/4',
+      resetView: 'リセット',
+      viewXTitle: 'x方向から見る',
+      viewYTitle: 'y方向から見る',
+      viewZTitle: 'z方向から見る',
+      viewObliqueTitle: '斜め方向の表示',
+      resetViewTitle: 'カメラをリセット',
+      showAxes: '軸を表示',
+      showNozzle: 'ノズルを表示',
+      axesLegend: '軸: x 赤 · y 緑 · z 青',
       animationHelp:
         'LHF の概念図：保存された液体マーカーが拡大する制御体積内に再分布します。',
     },
@@ -631,6 +693,12 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       notPredictedTitle: '予測しない量',
       notPredictedBody:
         '軸スイッチング、渦構造、液滴径分布、分裂、損失、広がり角は予測しません。速度は等密度噴流データと比較できますが、混合密度の検証には相分率または濃度データが必要です。',
+      disclaimerTitle: '研究プロトタイプ',
+      disclaimerBody:
+        'このアプリは探索的な研究プロトタイプです。モデルは現在検証作業中であり、予測的な工学設計ツールとして使用しないでください。結果は無保証の現状有姿で提供され、工学利用には独立した検証が必要です。',
+      licenseTitle: 'ライセンス',
+      licenseBody:
+        'ソースコードは MIT License で公開されています。科学モデルと文書は、引用されたフランコ＝メドラノ・フェルミンおよび共同研究者に帰属します。',
     },
     citations: {
       eyebrow: '参考文献',
@@ -668,6 +736,8 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       footerLineage:
         'Linaje del modelo: Franco, Fukumoto, Velte & Hodžić, JPSJ 2017, modelo circular de chorro ideal de cantidad de movimiento; extensión rectangular y elíptica de crecimiento de área; versión corta Kumamoto JSFM 2026.',
       sourceRepository: 'Repositorio fuente',
+      licenseNotice:
+        'Código: licencia MIT. Modelo científico y documentación © Fermín Franco-Medrano y colaboradores según las citas. Software provisto tal cual.',
     },
     summary: {
       ariaLabel: 'Resumen del estado final',
@@ -781,6 +851,15 @@ export const TRANSLATIONS: Record<Language, UiText> = {
         'Coeficiente generalizado de arrastre para historias arbitrarias de crecimiento de área.',
       coefficientReferences:
         'En la gráfica de K_A, las líneas horizontales discontinua y punteada muestran K_A(0) y la asíntota lejana K_A(∞); para crecimiento positivo en dos direcciones, K_A(∞)=sqrt(lambda_1 lambda_2).',
+      conservationTitle: 'Sistema de conservación',
+      conservationCaption:
+        'Dos ecuaciones se resuelven para vhat y rhohat después de prescribir Ahat(zeta).',
+      explicitTitle: 'Leyes explícitas de estado',
+      explicitCaption:
+        'Estas ramas en forma cerrada son los valores usados por las gráficas, CSV y casos comparativos.',
+      derivedTitle: 'Cantidades derivadas',
+      derivedCaption:
+        'La presión, el arrastre de gas y K_A se evalúan desde el estado medio resuelto y la derivada de crecimiento de área.',
     },
     symbols: {
       eyebrow: 'Notación',
@@ -935,6 +1014,23 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       showElementDroplets: 'Mostrar gotas en el elemento',
       animationSpeed: 'Velocidad de animación',
       elementZeta: 'zeta del elemento',
+      captureView: 'Capturar vista 3D',
+      captureSaved: 'Vista 3D guardada.',
+      captureFailed: 'No se pudo capturar la vista 3D.',
+      cameraPresets: 'Preajustes de cámara 3D',
+      viewX: 'X',
+      viewY: 'Y',
+      viewZ: 'Z',
+      viewOblique: '3/4',
+      resetView: 'Reiniciar',
+      viewXTitle: 'Mirar a lo largo de x',
+      viewYTitle: 'Mirar a lo largo de y',
+      viewZTitle: 'Mirar a lo largo de z',
+      viewObliqueTitle: 'Vista oblicua',
+      resetViewTitle: 'Reiniciar cámara',
+      showAxes: 'Mostrar ejes',
+      showNozzle: 'Mostrar boquilla',
+      axesLegend: 'Ejes: x rojo · y verde · z azul',
       animationHelp:
         'Elemento LHF conceptual: marcadores líquidos conservados redistribuidos dentro del volumen de control en expansión.',
     },
@@ -953,6 +1049,12 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       notPredictedTitle: 'No predice',
       notPredictedBody:
         'Cambio de eje, dinámica vorticial, distribución de tamaño de gotas, ruptura, pérdidas ni ángulos de expansión. La velocidad puede compararse con datos de chorros de igual densidad; la densidad compuesta requiere datos de fracción de fase o concentración.',
+      disclaimerTitle: 'Prototipo de investigación',
+      disclaimerBody:
+        'Esta app es un prototipo exploratorio de investigación. El modelo está en trabajo activo de validación y no debe usarse como herramienta predictiva de diseño de ingeniería. Los resultados se proporcionan tal cual, sin garantía, y requieren validación independiente antes de uso ingenieril.',
+      licenseTitle: 'Licencia',
+      licenseBody:
+        'El código fuente se publica bajo la licencia MIT. El modelo científico y la documentación conservan el crédito de Fermín Franco-Medrano y colaboradores según las citas.',
     },
     citations: {
       eyebrow: 'Referencias',

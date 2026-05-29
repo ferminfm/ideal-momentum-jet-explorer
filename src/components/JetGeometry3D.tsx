@@ -1,7 +1,8 @@
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Line, OrbitControls } from '@react-three/drei'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as THREE from 'three'
+import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import {
   computeAxisSwitchingZeta,
   getJetState,
@@ -17,7 +18,10 @@ import {
   getFluidElementFrame,
   wrapElementZeta,
 } from '../utils/fluidElementAnimation'
+import { downloadCanvasPng } from '../utils/capture3d'
 import { MathText } from './MathText'
+
+type CameraPreset = 'x' | 'y' | 'z' | 'oblique' | 'reset'
 
 interface JetGeometry3DProps {
   series: JetSeries
@@ -196,6 +200,201 @@ function createCrossSectionPoints(state: JetState, scale: number, segments: numb
   })
 }
 
+function SceneAxes({ axisEnd }: { axisEnd: number }) {
+  const originZ = -0.32
+  const crossAxisLength = Math.min(1.7, Math.max(0.9, axisEnd * 0.18))
+  const zAxisLength = Math.min(2.4, Math.max(1.2, axisEnd * 0.28))
+
+  return (
+    <group renderOrder={14}>
+      <Line
+        points={[
+          [0, 0, originZ],
+          [crossAxisLength, 0, originZ],
+        ]}
+        color="#b44a4a"
+        lineWidth={2}
+      />
+      <Line
+        points={[
+          [0, 0, originZ],
+          [0, crossAxisLength, originZ],
+        ]}
+        color="#4b8a59"
+        lineWidth={2}
+      />
+      <Line
+        points={[
+          [0, 0, originZ],
+          [0, 0, originZ + zAxisLength],
+        ]}
+        color="#174b91"
+        lineWidth={2}
+      />
+    </group>
+  )
+}
+
+function NozzleModel({
+  series,
+  scale,
+  inlet,
+}: {
+  series: JetSeries
+  scale: number
+  inlet: JetState
+}) {
+  const nozzleDepth = 0.34
+  const nozzleCenter = -nozzleDepth / 2
+
+  if (series.params.geometry.geometry === 'rectangular') {
+    return (
+      <mesh
+        position={[0, 0, nozzleCenter]}
+        scale={[inlet.primarySpan * scale, inlet.secondarySpan * scale, nozzleDepth]}
+        renderOrder={4}
+      >
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial color="#66727c" roughness={0.72} metalness={0.08} />
+      </mesh>
+    )
+  }
+
+  return (
+    <mesh
+      position={[0, 0, nozzleCenter]}
+      rotation={[Math.PI / 2, 0, 0]}
+      scale={[
+        (inlet.primarySpan * scale) / 2,
+        nozzleDepth,
+        (inlet.secondarySpan * scale) / 2,
+      ]}
+      renderOrder={4}
+    >
+      <cylinderGeometry args={[1, 1, 1, 64]} />
+      <meshStandardMaterial color="#66727c" roughness={0.72} metalness={0.08} />
+    </mesh>
+  )
+}
+
+function CameraController({
+  preset,
+  command,
+  axisEnd,
+}: {
+  preset: CameraPreset
+  command: number
+  axisEnd: number
+}) {
+  const controlsRef = useRef<OrbitControlsImpl>(null)
+  const { camera } = useThree()
+
+  useEffect(() => {
+    const target = new THREE.Vector3(0, 0, Math.max(axisEnd * 0.45, 0.8))
+    const distance = Math.max(8, axisEnd + 2.5)
+    const positions: Record<CameraPreset, THREE.Vector3> = {
+      x: new THREE.Vector3(distance, 0.08, target.z),
+      y: new THREE.Vector3(0.08, -distance, target.z),
+      z: new THREE.Vector3(0.08, -0.35, target.z + distance),
+      oblique: new THREE.Vector3(4.5, -6, 4.2),
+      reset: new THREE.Vector3(4.5, -6, 4.2),
+    }
+
+    camera.position.copy(positions[preset])
+    camera.lookAt(target)
+    camera.updateProjectionMatrix()
+
+    if (controlsRef.current) {
+      controlsRef.current.target.copy(target)
+      controlsRef.current.update()
+    }
+  }, [axisEnd, camera, command, preset])
+
+  return (
+    <OrbitControls
+      ref={controlsRef}
+      makeDefault
+      enableDamping
+      dampingFactor={0.08}
+      enablePan
+      enableZoom
+      enableRotate
+    />
+  )
+}
+
+interface GeometryViewControlsProps {
+  text: UiText
+  showAxes: boolean
+  showNozzle: boolean
+  captureStatus: string
+  onCapture: () => void
+  onCameraPreset: (preset: CameraPreset) => void
+  onShowAxesChange: (value: boolean) => void
+  onShowNozzleChange: (value: boolean) => void
+}
+
+export function GeometryViewControls({
+  text,
+  showAxes,
+  showNozzle,
+  captureStatus,
+  onCapture,
+  onCameraPreset,
+  onShowAxesChange,
+  onShowNozzleChange,
+}: GeometryViewControlsProps) {
+  return (
+    <div className="viewer-action-controls">
+      <button type="button" className="secondary-action" onClick={onCapture}>
+        {text.geometry.captureView}
+      </button>
+      <div className="camera-preset-group" aria-label={text.geometry.cameraPresets}>
+        <button type="button" title={text.geometry.viewXTitle} onClick={() => onCameraPreset('x')}>
+          {text.geometry.viewX}
+        </button>
+        <button type="button" title={text.geometry.viewYTitle} onClick={() => onCameraPreset('y')}>
+          {text.geometry.viewY}
+        </button>
+        <button type="button" title={text.geometry.viewZTitle} onClick={() => onCameraPreset('z')}>
+          {text.geometry.viewZ}
+        </button>
+        <button
+          type="button"
+          title={text.geometry.viewObliqueTitle}
+          onClick={() => onCameraPreset('oblique')}
+        >
+          {text.geometry.viewOblique}
+        </button>
+        <button
+          type="button"
+          title={text.geometry.resetViewTitle}
+          onClick={() => onCameraPreset('reset')}
+        >
+          {text.geometry.resetView}
+        </button>
+      </div>
+      <label className="toggle-control">
+        <input
+          type="checkbox"
+          checked={showAxes}
+          onChange={(event) => onShowAxesChange(event.target.checked)}
+        />
+        {text.geometry.showAxes}
+      </label>
+      <label className="toggle-control">
+        <input
+          type="checkbox"
+          checked={showNozzle}
+          onChange={(event) => onShowNozzleChange(event.target.checked)}
+        />
+        {text.geometry.showNozzle}
+      </label>
+      {captureStatus ? <span className="copy-status">{captureStatus}</span> : null}
+    </div>
+  )
+}
+
 function MovingFluidElement({
   series,
   scale,
@@ -304,49 +503,73 @@ function MovingFluidElement({
     <>
       {isRectangular ? (
         <>
-          <mesh ref={volumeRef}>
+          {/* Render order and depth settings keep this conceptual LHF slice visible inside the translucent control volume. */}
+          <mesh ref={volumeRef} renderOrder={10}>
             <boxGeometry args={[1, 1, 1]} />
             <meshStandardMaterial
               color="#63b7cc"
-              opacity={0.42}
+              opacity={0.62}
               transparent
               depthWrite={false}
+              depthTest
               roughness={0.35}
               metalness={0.05}
             />
           </mesh>
-          <mesh ref={wireframeRef}>
+          <mesh ref={wireframeRef} renderOrder={11}>
             <boxGeometry args={[1, 1, 1]} />
-            <meshBasicMaterial color="#0f5874" wireframe transparent opacity={0.9} />
+            <meshBasicMaterial
+              color="#0f5874"
+              wireframe
+              transparent
+              opacity={0.95}
+              depthWrite={false}
+              depthTest={false}
+            />
           </mesh>
         </>
       ) : (
         <>
-          <mesh ref={volumeRef} rotation={[Math.PI / 2, 0, 0]}>
+          {/* Render order and depth settings keep this conceptual LHF slice visible inside the translucent control volume. */}
+          <mesh ref={volumeRef} rotation={[Math.PI / 2, 0, 0]} renderOrder={10}>
             <cylinderGeometry args={[1, 1, 1, 64, 1, false]} />
             <meshStandardMaterial
               color="#63b7cc"
-              opacity={0.42}
+              opacity={0.62}
               transparent
               depthWrite={false}
+              depthTest
               roughness={0.35}
               metalness={0.05}
             />
           </mesh>
-          <mesh ref={wireframeRef} rotation={[Math.PI / 2, 0, 0]}>
+          <mesh ref={wireframeRef} rotation={[Math.PI / 2, 0, 0]} renderOrder={11}>
             <cylinderGeometry args={[1, 1, 1, 64, 1, false]} />
-            <meshBasicMaterial color="#0f5874" wireframe transparent opacity={0.9} />
+            <meshBasicMaterial
+              color="#0f5874"
+              wireframe
+              transparent
+              opacity={0.95}
+              depthWrite={false}
+              depthTest={false}
+            />
           </mesh>
         </>
       )}
       {showDroplets ? (
-        <instancedMesh ref={dropletsRef} args={[undefined, undefined, FLUID_ELEMENT_DROPLET_COUNT]}>
+        <instancedMesh
+          ref={dropletsRef}
+          args={[undefined, undefined, FLUID_ELEMENT_DROPLET_COUNT]}
+          renderOrder={12}
+        >
           <sphereGeometry args={[1, 14, 10]} />
           <meshStandardMaterial
             color="#0b5fa5"
             emissive="#083a61"
             emissiveIntensity={0.12}
             roughness={0.38}
+            depthWrite={false}
+            depthTest={false}
           />
         </instancedMesh>
       ) : null}
@@ -359,8 +582,12 @@ interface JetMeshProps {
   crossSectionZeta: number
   showSelectedCrossSection: boolean
   showAxisSwitchingSection: boolean
+  showAxes: boolean
+  showNozzle: boolean
   axisSwitchingZeta: number | null
   elementAnimation: FluidElementAnimationProps
+  cameraPreset: CameraPreset
+  cameraCommand: number
 }
 
 interface FluidElementAnimationProps {
@@ -377,8 +604,12 @@ function JetMesh({
   crossSectionZeta,
   showSelectedCrossSection,
   showAxisSwitchingSection,
+  showAxes,
+  showNozzle,
   axisSwitchingZeta,
   elementAnimation,
+  cameraPreset,
+  cameraCommand,
 }: JetMeshProps) {
   const sampledStates = useMemo(() => sampleStates(series.states, 36), [series.states])
   const scale = useMemo(() => getSceneScale(series.states), [series.states])
@@ -416,27 +647,29 @@ function JetMesh({
     <>
       <ambientLight intensity={0.65} />
       <directionalLight position={[3, -4, 5]} intensity={1.5} />
-      <mesh geometry={surfaceGeometry}>
+      <mesh geometry={surfaceGeometry} renderOrder={0}>
         <meshStandardMaterial
           color="#4e89ae"
-          opacity={0.28}
+          opacity={elementAnimation.isAnimating ? 0.2 : 0.26}
           transparent
+          depthWrite={false}
           side={THREE.DoubleSide}
           roughness={0.55}
           metalness={0.05}
         />
       </mesh>
-      <lineSegments>
+      <lineSegments renderOrder={1}>
         <wireframeGeometry args={[surfaceGeometry]} />
-        <lineBasicMaterial color="#355f7a" transparent opacity={0.26} />
+        <lineBasicMaterial color="#355f7a" transparent opacity={0.24} depthWrite={false} />
       </lineSegments>
-      <points geometry={dropletGeometry}>
+      <points geometry={dropletGeometry} renderOrder={2}>
         <pointsMaterial
           color={series.params.densityRatio < 0.01 ? '#b96332' : '#2a6f88'}
           size={0.035}
           sizeAttenuation
           transparent
           opacity={elementAnimation.showDroplets ? 0.42 : 0.72}
+          depthWrite={false}
         />
       </points>
       <MovingFluidElement
@@ -449,28 +682,8 @@ function JetMesh({
         resetNonce={elementAnimation.resetNonce}
         onElementZetaChange={elementAnimation.onElementZetaChange}
       />
-      {series.params.geometry.geometry === 'rectangular' ? (
-        <mesh
-          position={[0, 0, -0.09]}
-          scale={[inlet.primarySpan * scale, inlet.secondarySpan * scale, 0.18]}
-        >
-          <boxGeometry args={[1, 1, 1]} />
-          <meshStandardMaterial color="#697783" roughness={0.7} />
-        </mesh>
-      ) : (
-        <mesh
-          position={[0, 0, -0.09]}
-          rotation={[Math.PI / 2, 0, 0]}
-          scale={[
-            (inlet.primarySpan * scale) / 2,
-            0.18,
-            (inlet.secondarySpan * scale) / 2,
-          ]}
-        >
-          <cylinderGeometry args={[1, 1, 1, 64]} />
-          <meshStandardMaterial color="#697783" roughness={0.7} />
-        </mesh>
-      )}
+      {showNozzle ? <NozzleModel series={series} scale={scale} inlet={inlet} /> : null}
+      {showAxes ? <SceneAxes axisEnd={axisEnd} /> : null}
       <Line
         points={[
           [0, 0, -0.35],
@@ -489,14 +702,7 @@ function JetMesh({
       {showAxisSwitchingSection && switchingCrossSectionPoints ? (
         <Line points={switchingCrossSectionPoints} color="#c25732" lineWidth={4} />
       ) : null}
-      <OrbitControls
-        makeDefault
-        enableDamping
-        dampingFactor={0.08}
-        enablePan
-        enableZoom
-        enableRotate
-      />
+      <CameraController preset={cameraPreset} command={cameraCommand} axisEnd={axisEnd} />
     </>
   )
 }
@@ -511,11 +717,17 @@ export function JetGeometry3D({
   onShowSelectedCrossSectionChange,
   onShowAxisSwitchingSectionChange,
 }: JetGeometry3DProps) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const [isElementAnimating, setIsElementAnimating] = useState(false)
   const [elementZeta, setElementZeta] = useState(0)
   const [showElementDroplets, setShowElementDroplets] = useState(true)
   const [animationSpeed, setAnimationSpeed] = useState(1)
   const [resetNonce, setResetNonce] = useState(0)
+  const [showAxes, setShowAxes] = useState(true)
+  const [showNozzle, setShowNozzle] = useState(true)
+  const [cameraPreset, setCameraPreset] = useState<CameraPreset>('reset')
+  const [cameraCommand, setCameraCommand] = useState(0)
+  const [captureStatus, setCaptureStatus] = useState('')
   const axisSwitchingZeta = computeAxisSwitchingZeta(series.params)
   const selectedState = getJetState(series.params, crossSectionZeta)
   const canJumpToAxisSwitching = axisSwitchingZeta !== null
@@ -524,6 +736,28 @@ export function JetGeometry3D({
       ? text.controls.rectangular
       : text.controls.elliptical
   const displayedElementZeta = Math.min(elementZeta, series.params.zetaMax)
+
+  const requestCameraPreset = useCallback((preset: CameraPreset) => {
+    setCameraPreset(preset)
+    setCameraCommand((current) => current + 1)
+  }, [])
+
+  const capture3DView = useCallback(() => {
+    if (!canvasRef.current) {
+      setCaptureStatus(text.geometry.captureFailed)
+      return
+    }
+
+    void downloadCanvasPng(canvasRef.current)
+      .then(() => {
+        setCaptureStatus(text.geometry.captureSaved)
+        window.setTimeout(() => setCaptureStatus(''), 1800)
+      })
+      .catch(() => {
+        setCaptureStatus(text.geometry.captureFailed)
+        window.setTimeout(() => setCaptureStatus(''), 2200)
+      })
+  }, [text.geometry.captureFailed, text.geometry.captureSaved])
 
   return (
     <section className="panel geometry-panel" aria-labelledby="geometry-title">
@@ -575,6 +809,16 @@ export function JetGeometry3D({
           {text.geometry.jumpToSwitching}
         </button>
       </div>
+      <GeometryViewControls
+        text={text}
+        showAxes={showAxes}
+        showNozzle={showNozzle}
+        captureStatus={captureStatus}
+        onCapture={capture3DView}
+        onCameraPreset={requestCameraPreset}
+        onShowAxesChange={setShowAxes}
+        onShowNozzleChange={setShowNozzle}
+      />
       <div className="element-animation-controls">
         <button
           type="button"
@@ -657,6 +901,9 @@ export function JetGeometry3D({
           camera={{ position: [4.5, -6, 4.2], fov: 42 }}
           dpr={[1, 2]}
           gl={{ antialias: true, preserveDrawingBuffer: true }}
+          onCreated={({ gl }) => {
+            canvasRef.current = gl.domElement
+          }}
         >
           <color attach="background" args={['#f8fbfd']} />
           <JetMesh
@@ -664,7 +911,11 @@ export function JetGeometry3D({
             crossSectionZeta={crossSectionZeta}
             showSelectedCrossSection={showSelectedCrossSection}
             showAxisSwitchingSection={showAxisSwitchingSection}
+            showAxes={showAxes}
+            showNozzle={showNozzle}
             axisSwitchingZeta={axisSwitchingZeta}
+            cameraPreset={cameraPreset}
+            cameraCommand={cameraCommand}
             elementAnimation={{
               isAnimating: isElementAnimating,
               elementZeta: displayedElementZeta,
@@ -678,6 +929,7 @@ export function JetGeometry3D({
         <div className="viewer-overlay" aria-hidden="true">
           <span>{text.geometry.zAxis}</span>
           <span>{text.geometry.surface}</span>
+          {showAxes ? <span>{text.geometry.axesLegend}</span> : null}
           <span>{text.geometry.controlsHint}</span>
           <span>
             <MathText text="theta" /> {formatDegrees(series.params.thetaDeg)} /{' '}

@@ -8,8 +8,10 @@ describe('EquationPanel', () => {
     const { container } = render(<EquationPanel text={TRANSLATIONS.en} />)
 
     expect(screen.getByText('Ideal momentum closure')).toBeTruthy()
-    expect(screen.getByText(/Axial momentum flux/)).toBeTruthy()
-    expect(screen.getByText(/Generalized entrainment coefficient/)).toBeTruthy()
+    expect(screen.getByText('Conservation system')).toBeTruthy()
+    expect(screen.getByText('Explicit state laws')).toBeTruthy()
+    expect(screen.getByText('Derived quantities')).toBeTruthy()
+    expect(screen.getByText(/closed-form branches/)).toBeTruthy()
     expect(container.querySelectorAll('.katex-display').length).toBeGreaterThan(0)
   })
 })

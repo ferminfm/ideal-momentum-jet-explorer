@@ -54,7 +54,10 @@ export function Layout({ children, language, text, onLanguageChange }: LayoutPro
       <main>{children}</main>
 
       <footer className="site-footer">
-        <p>{text.layout.footerLineage}</p>
+        <div>
+          <p>{text.layout.footerLineage}</p>
+          <p className="license-line">{text.layout.licenseNotice}</p>
+        </div>
         <a href={GITHUB_URL} target="_blank" rel="noreferrer">
           {text.layout.sourceRepository}
         </a>

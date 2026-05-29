@@ -570,10 +570,35 @@ main {
   gap: 0.75rem;
 }
 
-.equation-item {
+.equation-group {
   border-left: 3px solid #7da6bd;
+  background: #f8fbfd;
+  border-radius: 6px;
   margin: 0;
-  padding-left: 0.75rem;
+  padding: 0.75rem 0.8rem;
+}
+
+.equation-group-highlight {
+  background: #f2f7fa;
+  border-left-color: #236b8e;
+  box-shadow: inset 0 0 0 1px #d7e5ee;
+}
+
+.equation-group h3 {
+  color: #132334;
+  font-size: 0.92rem;
+  margin: 0 0 0.45rem;
+}
+
+.equation-group p {
+  color: #536a7b;
+  font-size: 0.86rem;
+  margin: 0.45rem 0 0;
+}
+
+.equation-stack {
+  display: grid;
+  gap: 0.35rem;
 }
 
 .equation {
@@ -596,7 +621,6 @@ main {
   font-size: 1.12rem;
 }
 
-.equation + span,
 .interpretation-panel p {
   color: #536a7b;
   font-size: 0.9rem;
@@ -744,6 +768,9 @@ main {
   align-items: center;
   border: 1px solid #dce7ef;
   border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
   margin-bottom: 0.75rem;
   padding: 0.75rem;
 }
@@ -761,6 +788,46 @@ main {
   gap: 0.65rem;
   margin-bottom: 0.75rem;
   padding: 0.75rem;
+}
+
+.viewer-action-controls {
+  align-items: center;
+  border: 1px solid #dce7ef;
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem;
+}
+
+.camera-preset-group {
+  background: #eef4f8;
+  border: 1px solid #d1dee7;
+  border-radius: 8px;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+  padding: 0.22rem;
+}
+
+.camera-preset-group button {
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  color: #426073;
+  font-size: 0.82rem;
+  font-weight: 800;
+  min-height: 2rem;
+  min-width: 2.4rem;
+  padding: 0.35rem 0.5rem;
+}
+
+.camera-preset-group button:hover,
+.camera-preset-group button:focus-visible {
+  background: #ffffff;
+  box-shadow: 0 1px 5px rgba(29, 42, 53, 0.11);
+  color: #174b66;
 }
 
 .element-speed-field {
@@ -863,6 +930,15 @@ main {
   padding: 0.85rem;
 }
 
+.interpretation-grid .disclaimer-card {
+  background: #fff9f5;
+  border-color: #ead0bd;
+}
+
+.interpretation-grid .license-card {
+  background: #f7fafc;
+}
+
 .interpretation-grid h3 {
   color: #132334;
   font-size: 0.96rem;
@@ -919,6 +995,12 @@ main {
 
 .site-footer p {
   margin: 0;
+}
+
+.license-line {
+  color: #71808b;
+  font-size: 0.82rem;
+  margin-top: 0.25rem !important;
 }
 
 @media (max-width: 1180px) {
