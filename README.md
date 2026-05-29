@@ -92,6 +92,7 @@ For `rho* < 1e-8`, the implementation uses the limiting behavior `vhat ~= 1`, `r
 - English, Japanese, and Spanish interface controls for public teaching and research use.
 - KaTeX equation rendering for standard LaTeX notation such as `\widehat A`, `\widehat v`, and `\widehat\rho`.
 - Compact symbols glossary for normalized distance, equivalent diameter, density ratio, state variables, nozzle dimensions, and prescribed spreading angles.
+- 3D-first layout with a desktop sticky parameter sidebar and collapsible sections to reduce scrolling while inspecting the jet geometry.
 - Saved model-case comparisons: click **Add current case to comparison** to freeze the current curve, then move the sliders to compare the live case against saved model-generated curves.
 - Entrainment-coefficient references: the `K_A` plot shows horizontal lines for the near-field value `K_A(0)` and the far-field asymptote `K_A(∞)` for the current settings.
 - Saved parameter URLs: the current geometry, density ratio, dimensions, half-angles, plot options, overlay selection, saved comparison cases, and 3D cross-section controls are encoded in the query string.

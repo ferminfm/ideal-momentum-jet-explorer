@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { CitationPanel } from './components/CitationPanel'
+import { CollapsibleSection } from './components/CollapsibleSection'
 import { ComparisonAddPanel, ComparisonPanel } from './components/ComparisonPanel'
 import { ControlPanel } from './components/ControlPanel'
 import { EquationPanel } from './components/EquationPanel'
@@ -170,107 +171,180 @@ function App() {
     >
       <div className="app-grid">
         <aside className="left-rail">
-          <ControlPanel
-            params={params}
-            selectedPresetId={appState.selectedPresetId}
-            text={text}
-            onChange={updateParams}
-          />
-          <ComparisonAddPanel
-            caseCount={appState.comparisonCases.length}
-            notice={comparisonNotice}
-            text={text}
-            onAdd={addCurrentComparisonCase}
-          />
-          <ExportPanel
-            shareStatus={shareStatus}
-            text={text}
-            onCopyShareUrl={() => void copyShareableUrl()}
-            onDownloadCsv={() => downloadJetCsv(series, appState.comparisonCases)}
-          />
-          <EquationPanel text={text} />
-          <SymbolsGlossary text={text} />
+          <CollapsibleSection
+            title={text.sections.modelParameters}
+            expandLabel={text.sections.expandSection}
+            collapseLabel={text.sections.collapseSection}
+            defaultOpen
+          >
+            <ControlPanel
+              params={params}
+              selectedPresetId={appState.selectedPresetId}
+              text={text}
+              onChange={updateParams}
+            />
+          </CollapsibleSection>
+          <CollapsibleSection
+            title={text.sections.savedCases}
+            expandLabel={text.sections.expandSection}
+            collapseLabel={text.sections.collapseSection}
+            defaultOpen
+          >
+            <ComparisonAddPanel
+              caseCount={appState.comparisonCases.length}
+              notice={comparisonNotice}
+              text={text}
+              onAdd={addCurrentComparisonCase}
+            />
+          </CollapsibleSection>
+          <CollapsibleSection
+            title={text.sections.reproducibility}
+            expandLabel={text.sections.expandSection}
+            collapseLabel={text.sections.collapseSection}
+            defaultOpen={false}
+          >
+            <ExportPanel
+              shareStatus={shareStatus}
+              text={text}
+              onCopyShareUrl={() => void copyShareableUrl()}
+              onDownloadCsv={() => downloadJetCsv(series, appState.comparisonCases)}
+            />
+          </CollapsibleSection>
+          <CollapsibleSection
+            title={text.sections.reducedModel}
+            expandLabel={text.sections.expandSection}
+            collapseLabel={text.sections.collapseSection}
+            defaultOpen={false}
+          >
+            <EquationPanel text={text} />
+          </CollapsibleSection>
+          <CollapsibleSection
+            title={text.sections.symbolsGlossary}
+            expandLabel={text.sections.expandSection}
+            collapseLabel={text.sections.collapseSection}
+            defaultOpen={false}
+          >
+            <SymbolsGlossary text={text} />
+          </CollapsibleSection>
         </aside>
         <section className="main-rail">
           <TerminalStateSummary series={series} text={text} />
-          <ComparisonPanel
-            cases={appState.comparisonCases}
-            text={text}
-            onToggle={(id, visible) =>
-              setAppState((current) => ({
-                ...current,
-                comparisonCases: setComparisonCaseVisibility(
-                  current.comparisonCases,
-                  id,
-                  visible,
-                ),
-              }))
-            }
-            onRemove={(id) =>
-              setAppState((current) => ({
-                ...current,
-                comparisonCases: removeComparisonCase(current.comparisonCases, id),
-              }))
-            }
-            onClear={() =>
-              setAppState((current) => ({
-                ...current,
-                comparisonCases: clearComparisonCases(),
-              }))
-            }
-            onShowAll={() =>
-              setAppState((current) => ({
-                ...current,
-                comparisonCases: setAllComparisonCasesVisibility(
-                  current.comparisonCases,
-                  true,
-                ),
-              }))
-            }
-            onHideAll={() =>
-              setAppState((current) => ({
-                ...current,
-                comparisonCases: setAllComparisonCasesVisibility(
-                  current.comparisonCases,
-                  false,
-                ),
-              }))
-            }
-          />
-          <Plots
-            series={series}
-            comparisonCases={appState.comparisonCases}
-            densityLogScale={appState.densityLogScale}
-            overlayId={appState.overlayId}
-            text={text}
-            onDensityLogScaleChange={(densityLogScale) =>
-              setAppState((current) => ({ ...current, densityLogScale }))
-            }
-            onOverlayChange={(overlayId) =>
-              setAppState((current) => ({ ...current, overlayId }))
-            }
-          />
-          <JetGeometry3D
-            series={series}
-            crossSectionZeta={appState.crossSectionZeta}
-            showSelectedCrossSection={appState.showSelectedCrossSection}
-            showAxisSwitchingSection={appState.showAxisSwitchingSection}
-            text={text}
-            onCrossSectionZetaChange={(crossSectionZeta) =>
-              setAppState((current) => ({
-                ...current,
-                crossSectionZeta: Math.min(Math.max(crossSectionZeta, 0), params.zetaMax),
-              }))
-            }
-            onShowSelectedCrossSectionChange={(showSelectedCrossSection) =>
-              setAppState((current) => ({ ...current, showSelectedCrossSection }))
-            }
-            onShowAxisSwitchingSectionChange={(showAxisSwitchingSection) =>
-              setAppState((current) => ({ ...current, showAxisSwitchingSection }))
-            }
-          />
-          <InterpretationPanel text={text} />
-          <CitationPanel text={text} />
+          <CollapsibleSection
+            title={text.sections.threeDJetView}
+            expandLabel={text.sections.expandSection}
+            collapseLabel={text.sections.collapseSection}
+            defaultOpen
+          >
+            <JetGeometry3D
+              series={series}
+              crossSectionZeta={appState.crossSectionZeta}
+              showSelectedCrossSection={appState.showSelectedCrossSection}
+              showAxisSwitchingSection={appState.showAxisSwitchingSection}
+              text={text}
+              onCrossSectionZetaChange={(crossSectionZeta) =>
+                setAppState((current) => ({
+                  ...current,
+                  crossSectionZeta: Math.min(
+                    Math.max(crossSectionZeta, 0),
+                    params.zetaMax,
+                  ),
+                }))
+              }
+              onShowSelectedCrossSectionChange={(showSelectedCrossSection) =>
+                setAppState((current) => ({ ...current, showSelectedCrossSection }))
+              }
+              onShowAxisSwitchingSectionChange={(showAxisSwitchingSection) =>
+                setAppState((current) => ({ ...current, showAxisSwitchingSection }))
+              }
+            />
+          </CollapsibleSection>
+          <CollapsibleSection
+            title={text.sections.savedCases}
+            expandLabel={text.sections.expandSection}
+            collapseLabel={text.sections.collapseSection}
+            defaultOpen
+          >
+            <ComparisonPanel
+              cases={appState.comparisonCases}
+              text={text}
+              onToggle={(id, visible) =>
+                setAppState((current) => ({
+                  ...current,
+                  comparisonCases: setComparisonCaseVisibility(
+                    current.comparisonCases,
+                    id,
+                    visible,
+                  ),
+                }))
+              }
+              onRemove={(id) =>
+                setAppState((current) => ({
+                  ...current,
+                  comparisonCases: removeComparisonCase(current.comparisonCases, id),
+                }))
+              }
+              onClear={() =>
+                setAppState((current) => ({
+                  ...current,
+                  comparisonCases: clearComparisonCases(),
+                }))
+              }
+              onShowAll={() =>
+                setAppState((current) => ({
+                  ...current,
+                  comparisonCases: setAllComparisonCasesVisibility(
+                    current.comparisonCases,
+                    true,
+                  ),
+                }))
+              }
+              onHideAll={() =>
+                setAppState((current) => ({
+                  ...current,
+                  comparisonCases: setAllComparisonCasesVisibility(
+                    current.comparisonCases,
+                    false,
+                  ),
+                }))
+              }
+            />
+          </CollapsibleSection>
+          <CollapsibleSection
+            title={text.sections.plots}
+            expandLabel={text.sections.expandSection}
+            collapseLabel={text.sections.collapseSection}
+            defaultOpen
+          >
+            <Plots
+              series={series}
+              comparisonCases={appState.comparisonCases}
+              densityLogScale={appState.densityLogScale}
+              overlayId={appState.overlayId}
+              text={text}
+              onDensityLogScaleChange={(densityLogScale) =>
+                setAppState((current) => ({ ...current, densityLogScale }))
+              }
+              onOverlayChange={(overlayId) =>
+                setAppState((current) => ({ ...current, overlayId }))
+              }
+            />
+          </CollapsibleSection>
+          <CollapsibleSection
+            title={text.sections.modelScope}
+            expandLabel={text.sections.expandSection}
+            collapseLabel={text.sections.collapseSection}
+            defaultOpen
+          >
+            <InterpretationPanel text={text} />
+          </CollapsibleSection>
+          <CollapsibleSection
+            title={text.sections.citations}
+            expandLabel={text.sections.expandSection}
+            collapseLabel={text.sections.collapseSection}
+            defaultOpen={false}
+          >
+            <CitationPanel text={text} />
+          </CollapsibleSection>
         </section>
       </div>
     </Layout>
