@@ -298,3 +298,15 @@ The GitHub Pages app responded with HTTP 200 at `https://ferminfm.github.io/idea
 - Polished imported overlay default labels to use neutral data-overlay wording.
 - Validation before commit: `npm run test` passed with 18 test files and 81 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server.
 - Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
+
+## 2026-05-29 Units 1-4 Main Merge
+
+- Previous main commit: `4ba550d`.
+- Merged branch: `origin/feature/data-overlay-foundation`.
+- Reviewed branch commit: `7a645ce`.
+- Merge commit: `086d071`.
+- Safety backup branch: `backup/main-before-units-1-4-merge-20260529-2131`.
+- Pre-merge branch validation: `npm run test` passed with 18 test files and 81 tests; `npm run build` passed with the expected large-bundle warning; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile.
+- Post-merge main validation: `npm run test` passed with 18 test files and 81 tests; `npm run build` passed with the expected large-bundle warning; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile.
+- Scope check: Unit 5 calibration code was not merged; Unit 6 lossy model remains deferred.
+- Deployment status: pending push to `origin/main` and GitHub Pages workflow.
