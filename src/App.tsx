@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { CalibrationPanel } from './components/CalibrationPanel'
+import { CfdExportPanel } from './components/CfdExportPanel'
 import { CitationPanel } from './components/CitationPanel'
 import { CollapsibleSection } from './components/CollapsibleSection'
 import { ComparisonAddPanel, ComparisonPanel } from './components/ComparisonPanel'
@@ -31,6 +32,7 @@ import { buildDimensionalMapping } from './model/dimensionalMapping'
 import { generateJetSeries, getAspectRatio, type JetParameters } from './model/jetModel'
 import { cloneParams } from './model/presets'
 import { assessModelApplicability } from './model/regimeChecker'
+import { computeTipPenetration, dimensionalizeTipPenetration } from './model/tipPenetration'
 import {
   PRESET_CUSTOM,
   type DimensionalSettings,
@@ -81,6 +83,16 @@ function App() {
     () => dimensionalMapping?.normalizedSeries ?? generateJetSeries(effectiveParams),
     [dimensionalMapping, effectiveParams],
   )
+  const tipPenetration = useMemo(() => {
+    const normalizedTip = computeTipPenetration(series, {
+      pointCount: 180,
+      useSeriesRange: true,
+    })
+
+    return dimensionalMapping?.scales
+      ? dimensionalizeTipPenetration(normalizedTip, dimensionalMapping.scales)
+      : normalizedTip
+  }, [dimensionalMapping, series])
   const applicabilityAssessment = useMemo(
     () =>
       assessModelApplicability({
@@ -401,6 +413,17 @@ function App() {
                   scales: dimensionalMapping?.scales,
                 })
               }
+            />
+            <CfdExportPanel
+              params={effectiveParams}
+              series={series}
+              dimensionalMapping={dimensionalMapping}
+              regimeAssessment={applicabilityAssessment}
+              tipPenetration={tipPenetration}
+              dataOverlays={appState.dataOverlays}
+              comparisonCases={appState.comparisonCases}
+              shareUrl={typeof window === 'undefined' ? undefined : window.location.href}
+              text={text}
             />
           </CollapsibleSection>
           <CollapsibleSection

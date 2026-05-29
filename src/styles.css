@@ -1020,6 +1020,35 @@ main {
   font-variant-numeric: tabular-nums;
 }
 
+.cfd-export-panel {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 0.85rem;
+}
+
+.cfd-export-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.cfd-export-options {
+  border: 1px solid #dce7ef;
+  border-radius: 8px;
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 0.75rem;
+}
+
+.cfd-export-option {
+  white-space: normal;
+}
+
+.cfd-export-option:has(input:disabled) {
+  color: #8996a0;
+}
+
 .subdued-warning {
   background: #fffaf0;
   border: 1px solid #edd8a2;
@@ -1529,6 +1558,8 @@ main {
     .calibration-bounds,
     .calibration-result-grid,
     .tip-penetration-summary,
+    .cfd-export-grid,
+    .cfd-export-options,
     .preset-grid,
   .metrics-strip,
   .engineering-summary-grid,

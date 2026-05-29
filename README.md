@@ -195,6 +195,24 @@ It is not a full transient spray simulation and does not model startup, vortex
 formation, breakup, compressibility waves, droplet drag, wall impingement, or
 full spray-tip physics.
 
+## CFD / Configuration Export
+
+The CFD/configuration export panel downloads solver-agnostic setup summaries for
+downstream CFD preparation, scripting, reports, or surrogate-model workflows.
+Available formats include JSON, YAML-like text, Markdown, and
+OpenFOAM-oriented notes.
+
+Exports can include the current reduced-order model parameters, normalized
+geometry, dimensional operating point and material presets when dimensional mode
+is active, nondimensional groups, sampled normalized and dimensional states,
+regime/applicability assessment, quasi-steady tip-penetration results, saved
+model comparison cases, and data overlays when explicitly selected.
+
+These exports are setup aids only. They do not generate a solver-ready CFD case,
+mesh, solver dictionaries, Fluent journal, validated boundary conditions,
+multiphase model, turbulence model, or numerical schemes. Users must choose and
+verify all solver settings independently.
+
 ## Interactive Features
 
 - English, Japanese, and Spanish interface controls for public teaching and research use.
@@ -203,6 +221,7 @@ full spray-tip physics.
 - Dimensional engineering mode with fluid presets, physical nozzle dimensions, velocity/pressure-drop operating point, and nondimensional spray/nozzle groups.
 - Regime/applicability checker with conservative heuristic warnings for Reynolds, Weber, Ohnesorge, Mach estimate, density ratio, aspect ratio, and spreading angles.
 - Quasi-steady tip-penetration plot and CSV export based on the steady `vhat(zeta)` field.
+- CFD/configuration export for JSON, YAML-like text, Markdown summaries, and OpenFOAM-oriented setup notes that are explicitly not solver-ready CFD cases.
 - Data-overlay manager for built-in comparison aids and user-imported CSV curves. Imported CSV overlays stay local in the browser and are not encoded in shareable URLs.
 - Calibration aid for fitting prescribed spreading half-angles to selected overlay data, with fitted-curve preview and optional saved comparison case.
 - 3D-first layout with a desktop sticky parameter sidebar and collapsible sections to reduce scrolling while inspecting the jet geometry.

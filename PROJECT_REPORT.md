@@ -238,3 +238,17 @@
 - Added a compact panel below the main plots with penetration summary values, Plotly curve, and penetration CSV export.
 - The module is explicitly scoped as a research/visualization estimate, not a full transient spray model or validation claim.
 - Validation before commit: `npm run test` passed with 22 test files and 98 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server; targeted browser check passed for normalized and dimensional penetration-panel output.
+
+## CFD Configuration Export Branch
+
+- Branch: `feature/cfd-config-export`.
+- Starting commit: `4cf0f47`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Added a typed CFD/configuration export payload for solver-agnostic reduced-order setup summaries.
+- Added browser-side downloads for JSON, YAML-like text, Markdown summaries, and OpenFOAM-oriented setup notes.
+- The OpenFOAM output is intentionally notes-only: it does not generate a solver-ready case, mesh, dictionaries, boundary conditions, multiphase setup, or numerical schemes.
+- Export options can include sampled normalized states, dimensional states when dimensional mode is active, regime assessment, quasi-steady tip penetration, data overlays by explicit opt-in, and saved model comparison cases.
+- Added a compact multilingual export panel in the reproducibility section.
+- Validation before commit: `npm run test` passed with 25 test files and 109 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server.
+- Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
+- Next recommended unit: Unit 9 report generator.
