@@ -196,3 +196,20 @@ The GitHub Pages app responded with HTTP 200 at `https://ferminfm.github.io/idea
 - Deployment: feature commit pushed to `origin/main`; GitHub Actions run `26630791545` completed successfully; `curl -I https://ferminfm.github.io/ideal-momentum-jet-explorer/` returned HTTP 200; live `SMOKE_URL=https://ferminfm.github.io/ideal-momentum-jet-explorer/ npm run smoke:visual` passed.
 - Known warnings: GitHub Actions reported the upstream Node.js 20 action-runtime deprecation for current action versions; local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
 - Remaining TODO: consider future bundle splitting for Plotly/Three/KaTeX assets and updating GitHub Actions runtime settings before Node.js 20 action-runtime removal.
+
+## 2026-05-29 Top Layout And Growth-Rate Notation Pass
+
+- Start time: `2026-05-29T19:53:41+09:00`.
+- Starting commit: `77ae1b1`.
+- Feature commit: `88e340f`.
+- Branch: `main`.
+- Files changed: `src/App.tsx`, `src/components/Layout.tsx`, `src/components/Layout.test.tsx`, `src/components/Plots.tsx`, `src/components/SymbolsGlossary.tsx`, `src/components/SymbolsGlossary.test.tsx`, `src/i18n/translations.ts`, and `src/styles.css`.
+- Removed the terminal summary cards from the top of the main rail so the 3D jet view is the first major main panel.
+- Removed the collapsible wrapper around `CitationPanel`; citations remain visible/open in the main rail.
+- Added the obfuscated header contact line `fermin.franco *at* uabc.edu.mx` without a `mailto:` link or machine-readable address.
+- Clarified the `K_A` coefficient reference strip with directional growth-rate labels: rectangular `beta`/`eta` as width/height-direction rates and elliptical `alpha`/`gamma` as major/minor-axis rates.
+- Added glossary entries for `lambda_1,lambda_2`, `beta`, `eta`, `alpha`, and `gamma` in English, Japanese, and Spanish.
+- Validation: `npm run test` passed with 13 test files and 41 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed; targeted Playwright smoke confirmed the summary cards were absent, email was visible, citations were open, 3D preceded plots, and `K_A` growth-rate labels changed correctly between rectangular and elliptical geometry.
+- Deployment: feature commit pushed to `origin/main`; GitHub Actions run `26633143946` completed successfully; `curl -I https://ferminfm.github.io/ideal-momentum-jet-explorer/` returned HTTP 200; live `SMOKE_URL=https://ferminfm.github.io/ideal-momentum-jet-explorer/ npm run smoke:visual` passed.
+- Known warnings: GitHub Actions reported the upstream Node.js 20 action-runtime deprecation for current action versions; local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
+- Remaining TODO: consider future bundle splitting for Plotly/Three/KaTeX assets and updating GitHub Actions runtime settings before Node.js 20 action-runtime removal.
