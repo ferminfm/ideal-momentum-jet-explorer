@@ -213,6 +213,23 @@ mesh, solver dictionaries, Fluent journal, validated boundary conditions,
 multiphase model, turbulence model, or numerical schemes. Users must choose and
 verify all solver settings independently.
 
+## Report Generator
+
+The report generator creates a compact browser-side technical note from the
+current app state. The report can be previewed in the app, printed or saved as
+PDF through the browser print dialog, downloaded as Markdown, or downloaded as a
+self-contained HTML file.
+
+Optional sections include dimensional engineering summary, heuristic
+regime/applicability screening, sampled reduced-order state tables, saved model
+cases, data overlays, quasi-steady tip penetration, CFD/configuration export
+summary, citations, and the research-use disclaimer. User-imported overlays and
+large sampled tables are excluded by default and should be included only when the
+report is intended to contain that local/private data.
+
+No report data are uploaded. The report is a reproducibility and discussion aid,
+not a validated design certificate or solver-ready CFD report.
+
 ## Interactive Features
 
 - English, Japanese, and Spanish interface controls for public teaching and research use.
@@ -222,6 +239,7 @@ verify all solver settings independently.
 - Regime/applicability checker with conservative heuristic warnings for Reynolds, Weber, Ohnesorge, Mach estimate, density ratio, aspect ratio, and spreading angles.
 - Quasi-steady tip-penetration plot and CSV export based on the steady `vhat(zeta)` field.
 - CFD/configuration export for JSON, YAML-like text, Markdown summaries, and OpenFOAM-oriented setup notes that are explicitly not solver-ready CFD cases.
+- Browser-side report generator with in-app preview, browser print/save-as-PDF, Markdown download, and HTML download.
 - Data-overlay manager for built-in comparison aids and user-imported CSV curves. Imported CSV overlays stay local in the browser and are not encoded in shareable URLs.
 - Calibration aid for fitting prescribed spreading half-angles to selected overlay data, with fitted-curve preview and optional saved comparison case.
 - 3D-first layout with a desktop sticky parameter sidebar and collapsible sections to reduce scrolling while inspecting the jet geometry.

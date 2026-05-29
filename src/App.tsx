@@ -14,6 +14,7 @@ import { JetGeometry3D } from './components/JetGeometry3D'
 import { Layout } from './components/Layout'
 import { Plots } from './components/Plots'
 import { RegimeApplicabilityPanel } from './components/RegimeApplicabilityPanel'
+import { ReportPanel } from './components/ReportPanel'
 import { SymbolsGlossary } from './components/SymbolsGlossary'
 import { TipPenetrationPanel } from './components/TipPenetrationPanel'
 import { TRANSLATIONS, type Language } from './i18n/translations'
@@ -28,6 +29,7 @@ import {
   setAllComparisonCasesVisibility,
   setComparisonCaseVisibility,
 } from './model/comparisonCases'
+import { DEFAULT_CFD_EXPORT_OPTIONS, buildCfdExportPayload } from './model/cfdExport'
 import { buildDimensionalMapping } from './model/dimensionalMapping'
 import { generateJetSeries, getAspectRatio, type JetParameters } from './model/jetModel'
 import { cloneParams } from './model/presets'
@@ -67,6 +69,12 @@ function App() {
   } | null>(null)
   const { params } = appState
   const text = TRANSLATIONS[appState.language]
+  const shareUrl =
+    typeof window === 'undefined'
+      ? undefined
+      : `${window.location.origin}${window.location.pathname}?${encodeStateToQuery(
+          appState,
+        ).toString()}${window.location.hash}`
   const dimensionalMapping = useMemo(
     () =>
       appState.inputMode === 'dimensional'
@@ -104,6 +112,23 @@ function App() {
         inputMode: appState.inputMode,
       }),
     [appState.inputMode, dimensionalMapping?.groups, effectiveParams],
+  )
+  const cfdReportPayload = useMemo(
+    () =>
+      buildCfdExportPayload({
+        params: effectiveParams,
+        series,
+        dimensionalMapping,
+        regimeAssessment: applicabilityAssessment,
+        tipPenetration,
+        shareUrl,
+        options: {
+          ...DEFAULT_CFD_EXPORT_OPTIONS,
+          includeDataOverlays: false,
+          includeComparisonCases: false,
+        },
+      }),
+    [applicabilityAssessment, dimensionalMapping, effectiveParams, series, shareUrl, tipPenetration],
   )
 
   useEffect(() => {
@@ -422,7 +447,19 @@ function App() {
               tipPenetration={tipPenetration}
               dataOverlays={appState.dataOverlays}
               comparisonCases={appState.comparisonCases}
-              shareUrl={typeof window === 'undefined' ? undefined : window.location.href}
+              shareUrl={shareUrl}
+              text={text}
+            />
+            <ReportPanel
+              params={effectiveParams}
+              series={series}
+              dimensionalMapping={dimensionalMapping}
+              regimeAssessment={applicabilityAssessment}
+              tipPenetration={tipPenetration}
+              cfdExportPayload={cfdReportPayload}
+              dataOverlays={appState.dataOverlays}
+              comparisonCases={appState.comparisonCases}
+              shareUrl={shareUrl}
               text={text}
             />
           </CollapsibleSection>

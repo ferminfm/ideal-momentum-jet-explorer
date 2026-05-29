@@ -101,7 +101,10 @@ requires independent validation.
 - Expected files/components: browser-side report builder, print CSS, citation helpers.
 - Dependencies: dimensional UI, plot export, and regime checks.
 - Risk level: medium. Wording must remain conservative.
-- Status: next recommended unit.
+- Status: implemented on `feature/report-generator`.
+- Notes: implemented as browser-side HTML/Markdown generation with in-app
+  preview and browser print/save-as-PDF. It does not add server-side or heavy PDF
+  generation dependencies.
 
 ## 10. Performance / Tutorial / Showcase Polish
 
@@ -109,3 +112,4 @@ requires independent validation.
 - Expected files/components: route-level code splitting, examples, documentation.
 - Dependencies: stable feature set and performance measurements.
 - Risk level: low to medium. Main risk is UI clutter.
+- Status: next recommended unit.
