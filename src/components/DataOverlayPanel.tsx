@@ -10,6 +10,7 @@ import type { UiText } from '../i18n/translations'
 import {
   buildOverlayFromCsvSelection,
   getNumericColumns,
+  inferOverlayVariableFromColumnName,
   parseCsvText,
   type ParsedCsvTable,
 } from '../utils/dataOverlayCsv'
@@ -44,6 +45,25 @@ const PLOTTABLE_VARIABLES: OverlayVariable[] = [
   'coefficient',
 ]
 
+const EXAMPLE_CSV_DOWNLOADS = [
+  {
+    key: 'squareVelocity',
+    href: '/ideal-momentum-jet-explorer/examples/calibration-overlays/square_velocity_theta8_phi8.csv',
+  },
+  {
+    key: 'rectangularArea',
+    href: '/ideal-momentum-jet-explorer/examples/calibration-overlays/rectangular_area_theta9p61_phi5p75.csv',
+  },
+  {
+    key: 'ellipticalDensity',
+    href: '/ideal-momentum-jet-explorer/examples/calibration-overlays/elliptical_density_theta9p61_phi5p75.csv',
+  },
+  {
+    key: 'noisyVelocity',
+    href: '/ideal-momentum-jet-explorer/examples/calibration-overlays/noisy_velocity_with_error_theta8_phi8.csv',
+  },
+] as const
+
 export function DataOverlayPanel({
   overlays,
   text,
@@ -63,6 +83,7 @@ export function DataOverlayPanel({
   const [xErrorColumn, setXErrorColumn] = useState('')
   const [yErrorColumn, setYErrorColumn] = useState('')
   const [variable, setVariable] = useState<OverlayVariable>('velocity')
+  const [variableWasAutoSelected, setVariableWasAutoSelected] = useState(true)
   const [label, setLabel] = useState(text.dataOverlays.defaultImportedLabel)
   const [source, setSource] = useState('User-imported CSV')
   const [notes, setNotes] = useState('')
@@ -100,6 +121,8 @@ export function DataOverlayPanel({
         setCsvError('')
         setXColumn(numeric[0])
         setYColumn(numeric[1])
+        setVariable(inferOverlayVariableFromColumnName(numeric[1]) ?? 'velocity')
+        setVariableWasAutoSelected(true)
         setXErrorColumn('')
         setYErrorColumn('')
       } catch (error) {
@@ -112,6 +135,21 @@ export function DataOverlayPanel({
       setCsvError(text.dataOverlays.errors.parseFailed)
     }
     reader.readAsText(file)
+  }
+
+  function handleYColumnChange(nextColumn: string) {
+    setYColumn(nextColumn)
+    if (variableWasAutoSelected) {
+      const inferredVariable = inferOverlayVariableFromColumnName(nextColumn)
+      if (inferredVariable) {
+        setVariable(inferredVariable)
+      }
+    }
+  }
+
+  function handleVariableChange(nextVariable: OverlayVariable) {
+    setVariable(nextVariable)
+    setVariableWasAutoSelected(false)
   }
 
   function addCsvOverlay() {
@@ -150,6 +188,7 @@ export function DataOverlayPanel({
 
       <div className="data-overlay-block">
         <label className="control-label">{text.dataOverlays.builtinOverlays}</label>
+        <p className="helper-text">{text.dataOverlays.builtinSyntheticHelp}</p>
         <div className="overlay-add-row">
           <select
             value={selectedBuiltinId}
@@ -178,8 +217,10 @@ export function DataOverlayPanel({
 
       <div className="data-overlay-block">
         <label className="control-label">{text.dataOverlays.importCsv}</label>
+        <CsvImportGuide text={text} />
         <input type="file" accept=".csv,text/csv" onChange={handleCsvFile} />
         <p className="helper-text">{text.dataOverlays.localOnly}</p>
+        <p className="helper-text">{text.dataOverlays.targetVariableHelp}</p>
 
         {parsedTable ? (
           <div className="data-overlay-import-grid">
@@ -195,7 +236,10 @@ export function DataOverlayPanel({
             </label>
             <label className="field">
               <span>{text.dataOverlays.yColumn}</span>
-              <select value={yColumn} onChange={(event) => setYColumn(event.target.value)}>
+              <select
+                value={yColumn}
+                onChange={(event) => handleYColumnChange(event.target.value)}
+              >
                 {numericColumns.map((column) => (
                   <option key={column} value={column}>
                     {column}
@@ -235,7 +279,9 @@ export function DataOverlayPanel({
               <span>{text.dataOverlays.targetVariable}</span>
               <select
                 value={variable}
-                onChange={(event) => setVariable(event.target.value as OverlayVariable)}
+                onChange={(event) =>
+                  handleVariableChange(event.target.value as OverlayVariable)
+                }
               >
                 {PLOTTABLE_VARIABLES.map((candidate) => (
                   <option key={candidate} value={candidate}>
@@ -243,6 +289,7 @@ export function DataOverlayPanel({
                   </option>
                 ))}
               </select>
+              <small>{text.dataOverlays.targetVariableHelp}</small>
             </label>
             <label className="field">
               <span>{text.dataOverlays.label}</span>
@@ -322,5 +369,34 @@ export function DataOverlayPanel({
         )}
       </div>
     </section>
+  )
+}
+
+function CsvImportGuide({ text }: { text: UiText }) {
+  return (
+    <details className="csv-import-guide">
+      <summary>{text.dataOverlays.csvGuideTitle}</summary>
+      <div className="csv-import-guide-content">
+        <p>{text.dataOverlays.csvGuideIntro}</p>
+        <ul>
+          <li>{text.dataOverlays.csvGuideHeader}</li>
+          <li>{text.dataOverlays.csvGuideXColumn}</li>
+          <li>{text.dataOverlays.csvGuideYColumn}</li>
+          <li>{text.dataOverlays.csvGuideErrors}</li>
+          <li>{text.dataOverlays.csvGuideNondimensional}</li>
+          <li>{text.dataOverlays.csvGuideWorkflow}</li>
+        </ul>
+        <p className="helper-text">{text.dataOverlays.csvGuideVariableMap}</p>
+        <pre>{'zeta,vhat,vhat_err\n0,1,0.02\n5,0.82,0.016\n10,0.68,0.014'}</pre>
+        <div className="example-downloads" aria-label={text.dataOverlays.downloadExampleCsvs}>
+          <span>{text.dataOverlays.downloadExampleCsvs}</span>
+          {EXAMPLE_CSV_DOWNLOADS.map((example) => (
+            <a key={example.key} href={example.href} download>
+              {text.dataOverlays.exampleCsvLinks[example.key]}
+            </a>
+          ))}
+        </div>
+      </div>
+    </details>
   )
 }

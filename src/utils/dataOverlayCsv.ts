@@ -66,6 +66,48 @@ export function getNumericColumns(table: ParsedCsvTable): string[] {
   )
 }
 
+export function inferOverlayVariableFromColumnName(
+  column: string,
+): OverlayVariable | null {
+  const normalized = column.toLowerCase().replace(/[^a-z0-9]/g, '')
+
+  if (['ahat', 'a', 'area', 'normalizedarea'].includes(normalized)) {
+    return 'area'
+  }
+
+  if (['vhat', 'v', 'velocity', 'u', 'speed'].includes(normalized)) {
+    return 'velocity'
+  }
+
+  if (
+    ['rhohat', 'rho', 'density', 'compositedensity', 'mixturedensity'].includes(
+      normalized,
+    )
+  ) {
+    return 'density'
+  }
+
+  if (['phat', 'p', 'pressure', 'dynamicpressure'].includes(normalized)) {
+    return 'pressure'
+  }
+
+  if (
+    ['mhatg', 'mg', 'mdot', 'mdotg', 'entrainment', 'gasentrainment'].includes(
+      normalized,
+    )
+  ) {
+    return 'entrainment'
+  }
+
+  if (
+    ['ka', 'kacoef', 'coefficient', 'entrainmentcoefficient'].includes(normalized)
+  ) {
+    return 'coefficient'
+  }
+
+  return null
+}
+
 export function buildOverlayFromCsvSelection({
   table,
   xColumn,

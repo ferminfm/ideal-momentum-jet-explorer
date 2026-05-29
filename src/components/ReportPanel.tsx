@@ -151,6 +151,7 @@ export function ReportPanel({
                 updateOption('stateSampleStride', Number(event.target.value))
               }
             />
+            <small>{text.report.stateSampleStrideHelp}</small>
           </label>
         </div>
 

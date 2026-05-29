@@ -35,6 +35,7 @@ describe('CFD export payload builder', () => {
 
     expect(payload.schemaVersion).toBe('1.0.0')
     expect(payload.app.name).toBe('Ideal Momentum Jet Explorer')
+    expect(payload.app.version).toBe('0.2.0')
     expect(payload.model.geometry).toBe('rectangular')
     expect(payload.citations.length).toBeGreaterThanOrEqual(3)
     expect(payload.disclaimers.join(' ')).toMatch(/not a solver-ready CFD case/i)

@@ -1,4 +1,5 @@
 import { CITATIONS } from '../data/citations'
+import { APP_METADATA } from '../data/appMetadata'
 import type { DataOverlay } from '../data/dataOverlayTypes'
 import type { ComparisonCase } from './comparisonCases'
 import type { CfdExportPayload } from './cfdExport'
@@ -38,6 +39,7 @@ export interface ReportPayload {
   author: string
   app: {
     name: string
+    version?: string
     liveUrl: string
     repositoryUrl: string
     shareUrl?: string
@@ -71,12 +73,6 @@ export const DEFAULT_REPORT_OPTIONS: ReportOptions = {
   authorName: 'Fermín Franco-Medrano',
 }
 
-const APP_INFO = {
-  name: 'Ideal Momentum Jet Explorer',
-  liveUrl: 'https://ferminfm.github.io/ideal-momentum-jet-explorer/',
-  repositoryUrl: 'https://github.com/ferminfm/ideal-momentum-jet-explorer',
-}
-
 export function buildReportPayload(args: {
   params: JetParameters
   series: JetSeries
@@ -99,7 +95,10 @@ export function buildReportPayload(args: {
     title: args.options.reportTitle.trim() || DEFAULT_REPORT_OPTIONS.reportTitle,
     author: args.options.authorName.trim() || DEFAULT_REPORT_OPTIONS.authorName,
     app: {
-      ...APP_INFO,
+      name: APP_METADATA.name,
+      version: APP_METADATA.version,
+      liveUrl: APP_METADATA.liveUrl,
+      repositoryUrl: APP_METADATA.repositoryUrl,
       shareUrl: args.shareUrl,
     },
     modelSummary: buildModelSummary(params),

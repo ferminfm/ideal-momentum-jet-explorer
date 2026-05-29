@@ -159,6 +159,7 @@ export function CalibrationPanel({
       </div>
 
       <p className="helper-text">{text.calibration.helper}</p>
+      <p className="helper-text">{text.calibration.overlayAssumptionHelp}</p>
 
       {supportedOverlays.length === 0 ? (
         <p className="warning-text">{text.calibration.noSupportedOverlays}</p>
@@ -209,6 +210,10 @@ export function CalibrationPanel({
               </select>
             </label>
           </div>
+
+          {selectedOverlay?.sourceKind === 'synthetic-demo' ? (
+            <p className="helper-text">{text.calibration.syntheticOverlayNotice}</p>
+          ) : null}
 
           <div className="calibration-bounds">
             <span className="control-label">{text.calibration.bounds}</span>

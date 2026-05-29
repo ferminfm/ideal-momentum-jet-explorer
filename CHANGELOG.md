@@ -2,6 +2,23 @@
 
 ## Unreleased / Industry Feature Integration
 
+- Post-v0.2.0 polish: app version is visible in the UI and shared metadata.
+- Fixed CFD/config export and report-generator option layout so checkbox labels
+  wrap without overlap on narrow panels.
+- Renamed the user-facing state-stride label to "Export every Nth sampled
+  state" and added helper text.
+- Stabilized near-constant plotted model traces so the equal-density symmetric
+  `K_A` branch does not display roundoff as visual spikes.
+- Removed the duplicate normalized preset button grid from the controls rail;
+  quick-start examples remain the single visible example mechanism.
+- Added public-data discovery and analytics-option documentation without
+  bundling unverified datasets or enabling tracking.
+- Added built-in synthetic calibration overlay examples and downloadable
+  synthetic CSV fixtures. These are generated from the app model and are not
+  measured or validation data.
+- Improved CSV overlay import guidance with normalized x/y mapping help,
+  target-variable explanations, optional error-column notes, and variable
+  auto-suggestion from common column names.
 - Added the dimensional engineering core foundation with SI-unit scales,
   dimensional state conversion, fluid presets, and nondimensional groups.
 - Added dimensional engineering mode with material presets, physical nozzle

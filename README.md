@@ -7,8 +7,11 @@
 
 Interactive reduced-order model for circular, rectangular, and elliptical atomizing jets.
 
-Live app: https://ferminfm.github.io/ideal-momentum-jet-explorer/  
+Live app: https://ferminfm.github.io/ideal-momentum-jet-explorer/
+
 Source: https://github.com/ferminfm/ideal-momentum-jet-explorer
+
+Current release: v0.2.0
 
 Author: Fermín Franco-Medrano — Ensenada Campus, Autonomous University of Baja California / Institute of Mathematics for Industry, Kyushu University
 
@@ -146,12 +149,20 @@ are session-local and are not included in shareable URLs, because imported files
 may be private and can make URLs too large. Built-in overlays can be restored by
 URL when they are bundled with the public app.
 
-No measured public validation dataset is bundled yet. The included synthetic
-overlay is labeled as a demo only and must not be interpreted as validation.
+No measured public validation dataset is bundled yet. The included built-in
+overlays are synthetic examples generated from the app model for testing import
+and calibration workflows. They are not measured data and must not be
+interpreted as validation.
 Comparison to single-phase or equal-density data may test only reduced branches
 of the model; composite-density validation requires phase-fraction,
 mixture-fraction, density, or concentration data. This unit does not fit model
 parameters.
+
+Public dataset discovery is tracked in
+[`docs/public-data-discovery.md`](docs/public-data-discovery.md). Use CSV import
+for local, private, or unpublished comparisons.
+Synthetic CSV examples are also available under
+`public/examples/calibration-overlays/` for checking the import workflow.
 
 Example normalized CSV format:
 
@@ -164,6 +175,12 @@ zeta,vhat
 
 Use normalized variables unless you have applied the dimensional conversion
 consistently outside the app.
+
+When importing a CSV, the x column is usually `zeta = z / De`; the y column
+should match the selected overlay variable, such as `Ahat`, `vhat`, `rhohat`,
+`phat`, `mhat_g`, or `K_A`. Optional y-error columns are used as calibration
+weights when selected. The importer assumes the columns are already
+nondimensionalized and does not infer or convert physical units.
 
 ## Calibration / Fitting Of Prescribed Spreading Angles
 
@@ -229,6 +246,8 @@ geometry, dimensional operating point and material presets when dimensional mode
 is active, nondimensional groups, sampled normalized and dimensional states,
 regime/applicability assessment, quasi-steady tip-penetration results, saved
 model comparison cases, and data overlays when explicitly selected.
+The "Export every Nth sampled state" option controls how many sampled model
+points are written, for example every fifth point plus the final point.
 
 These exports are setup aids only. They do not generate a solver-ready CFD case,
 mesh, solver dictionaries, Fluent journal, validated boundary conditions,
@@ -248,9 +267,14 @@ cases, data overlays, quasi-steady tip penetration, CFD/configuration export
 summary, citations, and the research-use disclaimer. User-imported overlays and
 large sampled tables are excluded by default and should be included only when the
 report is intended to contain that local/private data.
+The "Export every Nth sampled state" option has the same meaning in reports.
 
 No report data are uploaded. The report is a reproducibility and discussion aid,
 not a validated design certificate or solver-ready CFD report.
+
+Analytics are not enabled by default. Current public-interest checks should use
+GitHub repository traffic first; future analytics options are documented in
+[`docs/analytics-options.md`](docs/analytics-options.md).
 
 ## Interactive Features
 

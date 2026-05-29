@@ -79,6 +79,19 @@ describe('CalibrationPanel', () => {
 
     expect(screen.getByText('Not enough points')).toBeTruthy()
   })
+
+  it('shows a synthetic-example notice for synthetic demo overlays', async () => {
+    renderPanel([
+      {
+        ...createOverlay('synthetic-overlay', 'velocity'),
+        sourceKind: 'synthetic-demo',
+      },
+    ])
+
+    await waitFor(() => expect(targetSelect().value).toBe('velocity'))
+
+    expect(screen.getByText(/use this for interface testing, not validation/i)).toBeTruthy()
+  })
 })
 
 function renderPanel(overlays: DataOverlay[], onPreviewChange = vi.fn()) {

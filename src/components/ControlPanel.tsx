@@ -7,7 +7,7 @@ import {
 import type { UiText } from '../i18n/translations'
 import type { JetParameters } from '../model/jetModel'
 import { getAspectRatio, getEquivalentDiameter, getInitialArea } from '../model/jetModel'
-import { PRESETS, cloneParams } from '../model/presets'
+import { cloneParams } from '../model/presets'
 import type {
   DimensionalSettings,
   InputMode,
@@ -17,7 +17,6 @@ import { MathText } from './MathText'
 
 interface ControlPanelProps {
   params: JetParameters
-  selectedPresetId: string
   inputMode: InputMode
   dimensionalSettings: DimensionalSettings
   text: UiText
@@ -93,7 +92,6 @@ function fluidSummary(
 
 export function ControlPanel({
   params,
-  selectedPresetId,
   inputMode,
   dimensionalSettings,
   text,
@@ -357,52 +355,26 @@ export function ControlPanel({
       <SharedSamplingControls params={params} text={text} setParams={setParams} />
 
       {inputMode === 'normalized' ? (
-        <>
-          <div className="metrics-strip" aria-label={text.controls.derivedGeometryAria}>
-            <div>
-              <span>
-                <MathText text="A0" />
-              </span>
-              <strong>{formatNumber(initialArea, 4)}</strong>
-            </div>
-            <div>
-              <span>
-                <MathText text="De" />
-              </span>
-              <strong>{formatNumber(equivalentDiameter, 4)}</strong>
-            </div>
-            <div>
-              <span>
-                <MathText text="AR" />
-              </span>
-              <strong>{formatNumber(aspectRatio, 3)}</strong>
-            </div>
+        <div className="metrics-strip" aria-label={text.controls.derivedGeometryAria}>
+          <div>
+            <span>
+              <MathText text="A0" />
+            </span>
+            <strong>{formatNumber(initialArea, 4)}</strong>
           </div>
-
-          <div className="control-block">
-            <label className="control-label">{text.controls.presets}</label>
-            <div className="preset-grid">
-              {PRESETS.map((preset) => {
-                const presetCopy =
-                  text.controls.presetsCopy[
-                    preset.id as keyof typeof text.controls.presetsCopy
-                  ] ?? preset
-
-                return (
-                  <button
-                    key={preset.id}
-                    type="button"
-                    className={selectedPresetId === preset.id ? 'active' : ''}
-                    title={presetCopy.description}
-                    onClick={() => setParams(preset.params, preset.id)}
-                  >
-                    {presetCopy.name}
-                  </button>
-                )
-              })}
-            </div>
+          <div>
+            <span>
+              <MathText text="De" />
+            </span>
+            <strong>{formatNumber(equivalentDiameter, 4)}</strong>
           </div>
-        </>
+          <div>
+            <span>
+              <MathText text="AR" />
+            </span>
+            <strong>{formatNumber(aspectRatio, 3)}</strong>
+          </div>
+        </div>
       ) : null}
     </section>
   )

@@ -21,6 +21,8 @@ describe('ReportPanel', () => {
 
     expect(screen.getByText('Report generator')).toBeTruthy()
     expect(screen.getByText('Preview report')).toBeTruthy()
+    expect(screen.getByText('Export every Nth sampled state')).toBeTruthy()
+    expect(screen.getByText(/included in the report/i)).toBeTruthy()
     expect(screen.getByText('Download Markdown')).toBeTruthy()
 
     fireEvent.click(screen.getByText('Preview report'))
