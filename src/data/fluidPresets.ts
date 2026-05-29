@@ -44,3 +44,22 @@ export const GAS_PRESETS: FluidProperties[] = [
 
 export const WATER_ROOM_TEMPERATURE = LIQUID_PRESETS[0]
 export const AIR_ROOM_CONDITIONS = GAS_PRESETS[0]
+
+export const DEFAULT_LIQUID_PRESET_ID = WATER_ROOM_TEMPERATURE.id
+export const DEFAULT_GAS_PRESET_ID = AIR_ROOM_CONDITIONS.id
+
+export function getLiquidPresetById(id: string): FluidProperties {
+  return LIQUID_PRESETS.find((preset) => preset.id === id) ?? WATER_ROOM_TEMPERATURE
+}
+
+export function getGasPresetById(id: string): FluidProperties {
+  return GAS_PRESETS.find((preset) => preset.id === id) ?? AIR_ROOM_CONDITIONS
+}
+
+export function isLiquidPresetId(id: string): boolean {
+  return LIQUID_PRESETS.some((preset) => preset.id === id)
+}
+
+export function isGasPresetId(id: string): boolean {
+  return GAS_PRESETS.some((preset) => preset.id === id)
+}

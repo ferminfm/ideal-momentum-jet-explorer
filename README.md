@@ -87,24 +87,33 @@ For `rho* < 1e-8`, the implementation uses the limiting behavior `vhat ~= 1`, `r
 - Rectangular or elliptical expanding control-volume geometry in 3D.
 - Axis-switching location when the two cross-stream dimensions become equal within the sampled range.
 
-## Engineering Roadmap
+## Engineering Mode
 
-Dimensional engineering calculations are being introduced first as a tested
-model-layer foundation. The engineering core provides SI-unit scaling utilities,
-fluid-property presets, and basic nondimensional groups for future dimensional
-UI work. The public interface currently remains centered on the normalized
-research model. See `ROADMAP_INDUSTRY.md` for the staged implementation plan.
+The app includes a dimensional engineering input mode alongside the original
+normalized model controls. In dimensional mode, physical nozzle dimensions are
+entered in millimeters, liquid/gas properties are selected from representative
+presets, and the app converts the physical nozzle to equivalent-diameter
+normalized geometry before evaluating the same reduced-order model.
+
+The engineering summary reports equivalent diameter, initial area, density
+ratio, injection velocity or pressure-drop scaling, liquid mass flow, liquid
+momentum flux, dynamic-pressure scale, Reynolds number, Weber number,
+Ohnesorge number, and an approximate gas Mach number. Material properties are
+representative exploratory values and must be verified before engineering use.
+Dimensional mode still uses prescribed spreading half-angles; it does not infer
+spray spreading or validate design performance.
 
 ## Interactive Features
 
 - English, Japanese, and Spanish interface controls for public teaching and research use.
 - KaTeX equation rendering for standard LaTeX notation such as `\widehat A`, `\widehat v`, and `\widehat\rho`.
 - Compact symbols glossary for normalized distance, equivalent diameter, density ratio, state variables, nozzle dimensions, and prescribed spreading angles.
+- Dimensional engineering mode with fluid presets, physical nozzle dimensions, velocity/pressure-drop operating point, and nondimensional spray/nozzle groups.
 - 3D-first layout with a desktop sticky parameter sidebar and collapsible sections to reduce scrolling while inspecting the jet geometry.
 - Saved model-case comparisons: click **Add current case to comparison** to freeze the current curve, then move the sliders to compare the live case against saved model-generated curves.
 - Entrainment-coefficient references: the `K_A` plot shows horizontal lines for the near-field value `K_A(0)` and the far-field asymptote `K_A(∞)` for the current settings.
 - Saved parameter URLs: the current geometry, density ratio, dimensions, half-angles, plot options, overlay selection, saved comparison cases, and 3D cross-section controls are encoded in the query string.
-- CSV export: sampled model states can be downloaded for reproducible figures and follow-up analysis. The CSV includes a `caseLabel` column for the current curve and visible saved comparison cases.
+- CSV export: sampled model states can be downloaded for reproducible figures and follow-up analysis. The CSV includes a `caseLabel` column for the current curve and visible saved comparison cases; dimensional mode adds SI-unit columns for the current curve.
 - Velocity overlays: the app includes overlay infrastructure and one disabled-by-default synthetic example curve. No measured/literature numeric dataset is bundled yet, so overlays must not be interpreted as validation unless a documented public dataset is added later.
 - Citation panel: copy references in plain text, BibTeX, LaTeX snippet, or Word/APA-style format.
 - 3D cross-section tools: inspect a selected downstream cross-section and highlight the computed axis-switching section when it exists.
@@ -181,6 +190,8 @@ GitHub Pages sites are public. Keep private PDFs, unpublished manuscripts, crede
 ## Roadmap
 
 - Add documented public velocity-overlay datasets when permissible numerical data are available.
+- Add dimensional plot-unit toggles for area, velocity, density, pressure, and gas entrainment.
+- Add regime/applicability checks for dimensional operating points.
 - Add profile-resolved or phase-fraction validation datasets when public data are available.
 - Add optional bundle splitting for Plotly and Three.js to reduce initial JavaScript payload.
 - Add a concise derivation note for the density and entrainment branches.

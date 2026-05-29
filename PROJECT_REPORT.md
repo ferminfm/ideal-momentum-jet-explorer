@@ -160,3 +160,15 @@
 - No measured/literature velocity overlay dataset is bundled yet; the current overlay option is synthetic and only demonstrates the plotting mechanism.
 - The initial JavaScript bundle is large because Plotly and Three.js are bundled client-side; code-splitting is a reasonable future optimization.
 - GitHub Pages is public; private manuscripts, PDFs, credentials, and non-public datasets must stay out of committed assets.
+
+## Dimensional Engineering Mode Branch
+
+- Branch: `feature/dimensional-mode-ui`.
+- Starting commit: `083a3b2`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Added a dimensional input mode on top of the engineering core foundation.
+- Added fluid preset selectors, physical nozzle dimension sliders in mm, velocity/pressure-drop operating inputs, discharge coefficient control, and an engineering summary panel.
+- Dimensional mode maps physical nozzle geometry to the existing equivalent-diameter normalized model and preserves normalized mode as the default behavior.
+- Saved URL state now includes dimensional-mode settings; CSV export adds SI-unit current-curve columns in dimensional mode.
+- Validation before commit: `npm run test`, `npm run build`, `npm run lint`, and local `npm run smoke:visual` passed.
+- Deferred: dimensional plot-unit toggles and regime/applicability checks.

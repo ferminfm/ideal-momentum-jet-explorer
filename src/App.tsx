@@ -4,6 +4,7 @@ import { CollapsibleSection } from './components/CollapsibleSection'
 import { ComparisonAddPanel, ComparisonPanel } from './components/ComparisonPanel'
 import { ControlPanel } from './components/ControlPanel'
 import { EquationPanel } from './components/EquationPanel'
+import { EngineeringSummaryPanel } from './components/EngineeringSummaryPanel'
 import { ExportPanel } from './components/ExportPanel'
 import { InterpretationPanel } from './components/InterpretationPanel'
 import { JetGeometry3D } from './components/JetGeometry3D'
@@ -19,9 +20,15 @@ import {
   setAllComparisonCasesVisibility,
   setComparisonCaseVisibility,
 } from './model/comparisonCases'
+import { buildDimensionalMapping } from './model/dimensionalMapping'
 import { generateJetSeries, type JetParameters } from './model/jetModel'
 import { cloneParams } from './model/presets'
-import { PRESET_CUSTOM, type ExplorerState } from './types/appState'
+import {
+  PRESET_CUSTOM,
+  type DimensionalSettings,
+  type ExplorerState,
+  type InputMode,
+} from './types/appState'
 import { copyTextToClipboard } from './utils/clipboard'
 import { downloadJetCsv } from './utils/csvExport'
 import {
@@ -46,7 +53,18 @@ function App() {
   const [comparisonNotice, setComparisonNotice] = useState('')
   const { params } = appState
   const text = TRANSLATIONS[appState.language]
-  const series = useMemo(() => generateJetSeries(params), [params])
+  const dimensionalMapping = useMemo(
+    () =>
+      appState.inputMode === 'dimensional'
+        ? buildDimensionalMapping(params, appState.dimensionalSettings)
+        : null,
+    [appState.dimensionalSettings, appState.inputMode, params],
+  )
+  const effectiveParams = dimensionalMapping?.normalizedParams ?? params
+  const series = useMemo(
+    () => dimensionalMapping?.normalizedSeries ?? generateJetSeries(effectiveParams),
+    [dimensionalMapping, effectiveParams],
+  )
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -76,6 +94,14 @@ function App() {
     }))
   }
 
+  function updateInputMode(inputMode: InputMode) {
+    setAppState((current) => ({ ...current, inputMode }))
+  }
+
+  function updateDimensionalSettings(dimensionalSettings: DimensionalSettings) {
+    setAppState((current) => ({ ...current, dimensionalSettings }))
+  }
+
   async function copyShareableUrl() {
     await copyTextToClipboard(window.location.href)
     setShareStatus(text.export.copied)
@@ -92,6 +118,9 @@ function App() {
   }
 
   function addCurrentComparisonCase() {
+    const comparisonParams =
+      appState.inputMode === 'dimensional' ? effectiveParams : appState.params
+
     setAppState((current) => {
       if (current.comparisonCases.length >= MAX_COMPARISON_CASES) {
         return current
@@ -101,8 +130,9 @@ function App() {
         ...current,
         comparisonCases: [
           ...current.comparisonCases,
-          createComparisonCase(current.params, {
-            presetId: current.selectedPresetId,
+          createComparisonCase(comparisonParams, {
+            presetId:
+              current.inputMode === 'dimensional' ? PRESET_CUSTOM : current.selectedPresetId,
             index: current.comparisonCases.length,
           }),
         ],
@@ -133,10 +163,28 @@ function App() {
             <ControlPanel
               params={params}
               selectedPresetId={appState.selectedPresetId}
+              inputMode={appState.inputMode}
+              dimensionalSettings={appState.dimensionalSettings}
               text={text}
+              onInputModeChange={updateInputMode}
+              onDimensionalSettingsChange={updateDimensionalSettings}
               onChange={updateParams}
             />
           </CollapsibleSection>
+          {appState.inputMode === 'dimensional' && dimensionalMapping ? (
+            <CollapsibleSection
+              title={text.engineering.title}
+              expandLabel={text.sections.expandSection}
+              collapseLabel={text.sections.collapseSection}
+              defaultOpen
+            >
+              <EngineeringSummaryPanel
+                mapping={dimensionalMapping}
+                settings={appState.dimensionalSettings}
+                text={text}
+              />
+            </CollapsibleSection>
+          ) : null}
           <CollapsibleSection
             title={text.sections.savedCases}
             expandLabel={text.sections.expandSection}
@@ -160,7 +208,14 @@ function App() {
               shareStatus={shareStatus}
               text={text}
               onCopyShareUrl={() => void copyShareableUrl()}
-              onDownloadCsv={() => downloadJetCsv(series, appState.comparisonCases)}
+              onDownloadCsv={() =>
+                downloadJetCsv(series, appState.comparisonCases, {
+                  inputMode: appState.inputMode,
+                  dimensionalSeries: dimensionalMapping?.dimensionalSeries,
+                  groups: dimensionalMapping?.groups,
+                  scales: dimensionalMapping?.scales,
+                })
+              }
             />
           </CollapsibleSection>
           <CollapsibleSection
@@ -198,7 +253,7 @@ function App() {
                   ...current,
                   crossSectionZeta: Math.min(
                     Math.max(crossSectionZeta, 0),
-                    params.zetaMax,
+                    effectiveParams.zetaMax,
                   ),
                 }))
               }

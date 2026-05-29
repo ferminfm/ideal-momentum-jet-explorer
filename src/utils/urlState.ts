@@ -1,4 +1,8 @@
 import { VELOCITY_OVERLAYS } from '../data/velocityOverlays'
+import {
+  isGasPresetId,
+  isLiquidPresetId,
+} from '../data/fluidPresets'
 import type { Language } from '../i18n/translations'
 import {
   deserializeComparisonCases,
@@ -8,24 +12,32 @@ import {
 import type { JetParameters } from '../model/jetModel'
 import { PRESETS, cloneParams } from '../model/presets'
 import {
+  DEFAULT_DIMENSIONAL_SETTINGS,
   OVERLAY_NONE,
   PRESET_CUSTOM,
   createDefaultExplorerState,
+  type DimensionalVelocityMode,
   type ExplorerState,
+  type InputMode,
 } from '../types/appState'
 
 export const URL_LIMITS = {
   densityRatio: { min: 1e-4, max: 1 },
   dimension: { min: 0.25, max: 4 },
+  dimensionMm: { min: 0.05, max: 10 },
   angle: { min: 0, max: 20 },
   zetaMax: { min: 10, max: 60 },
   samples: { min: 50, max: 200 },
+  injectionVelocity: { min: 0.1, max: 300 },
+  pressureDropKPa: { min: 1, max: 30000 },
+  dischargeCoefficient: { min: 0.1, max: 1.2 },
 }
 
 type GeometryName = JetParameters['geometry']['geometry']
 
 export interface DecodedUrlState {
   language?: Language
+  inputMode?: InputMode
   geometry?: GeometryName
   densityRatio?: number
   width?: number
@@ -37,6 +49,16 @@ export interface DecodedUrlState {
   zetaMax?: number
   samples?: number
   selectedPresetId?: string
+  liquidId?: string
+  gasId?: string
+  rectangularWidthMm?: number
+  rectangularHeightMm?: number
+  ellipticalMajorAxisMm?: number
+  ellipticalMinorAxisMm?: number
+  velocityMode?: DimensionalVelocityMode
+  injectionVelocity?: number
+  pressureDropKPa?: number
+  dischargeCoefficient?: number
   densityLogScale?: boolean
   overlayId?: string
   comparisonCases?: ComparisonCase[]
@@ -82,6 +104,22 @@ function languageValue(value: string | null): Language | undefined {
   return undefined
 }
 
+function inputModeValue(value: string | null): InputMode | undefined {
+  if (value === 'normalized' || value === 'dimensional') {
+    return value
+  }
+
+  return undefined
+}
+
+function velocityModeValue(value: string | null): DimensionalVelocityMode | undefined {
+  if (value === 'velocity' || value === 'pressureDrop') {
+    return value
+  }
+
+  return undefined
+}
+
 function setNumber(params: URLSearchParams, key: string, value: number): void {
   params.set(key, Number(value.toPrecision(8)).toString())
 }
@@ -91,6 +129,7 @@ export function encodeStateToQuery(state: ExplorerState): URLSearchParams {
   const { params } = state
 
   query.set('lang', state.language)
+  query.set('mode', state.inputMode)
   query.set('geometry', params.geometry.geometry)
   setNumber(query, 'rhoStar', params.densityRatio)
   setNumber(query, 'theta', params.thetaDeg)
@@ -108,6 +147,20 @@ export function encodeStateToQuery(state: ExplorerState): URLSearchParams {
 
   if (state.selectedPresetId !== PRESET_CUSTOM) {
     query.set('preset', state.selectedPresetId)
+  }
+
+  if (state.inputMode === 'dimensional') {
+    const settings = state.dimensionalSettings
+    query.set('liquid', settings.liquidId)
+    query.set('gas', settings.gasId)
+    setNumber(query, 'Bmm', settings.rectangularWidthMm)
+    setNumber(query, 'Hmm', settings.rectangularHeightMm)
+    setNumber(query, 'amm', settings.ellipticalMajorAxisMm)
+    setNumber(query, 'bmm', settings.ellipticalMinorAxisMm)
+    query.set('vmode', settings.velocityMode)
+    setNumber(query, 'v0', settings.injectionVelocity)
+    setNumber(query, 'dpkPa', settings.pressureDropKPa)
+    setNumber(query, 'Cd', settings.dischargeCoefficient)
   }
 
   query.set('densityLog', state.densityLogScale ? '1' : '0')
@@ -129,6 +182,7 @@ export function decodeStateFromQuery(search: string): DecodedUrlState {
 
   return {
     language: languageValue(query.get('lang')),
+    inputMode: inputModeValue(query.get('mode')),
     geometry: geometry === 'rectangular' || geometry === 'elliptical' ? geometry : undefined,
     densityRatio: finiteNumber(query.get('rhoStar')),
     width: finiteNumber(query.get('B0')),
@@ -140,6 +194,16 @@ export function decodeStateFromQuery(search: string): DecodedUrlState {
     zetaMax: finiteNumber(query.get('zetaMax')),
     samples: finiteNumber(query.get('sampleCount')),
     selectedPresetId: query.get('preset') ?? undefined,
+    liquidId: query.get('liquid') ?? undefined,
+    gasId: query.get('gas') ?? undefined,
+    rectangularWidthMm: finiteNumber(query.get('Bmm')),
+    rectangularHeightMm: finiteNumber(query.get('Hmm')),
+    ellipticalMajorAxisMm: finiteNumber(query.get('amm')),
+    ellipticalMinorAxisMm: finiteNumber(query.get('bmm')),
+    velocityMode: velocityModeValue(query.get('vmode')),
+    injectionVelocity: finiteNumber(query.get('v0')),
+    pressureDropKPa: finiteNumber(query.get('dpkPa')),
+    dischargeCoefficient: finiteNumber(query.get('Cd')),
     densityLogScale: boolValue(query.get('densityLog')),
     overlayId: query.get('overlay') ?? undefined,
     comparisonCases: deserializeComparisonCases(query.get('cases') ?? undefined),
@@ -166,6 +230,7 @@ export function sanitizeDecodedState(decoded: DecodedUrlState): Partial<Explorer
       ? seedParams.zetaMax
       : clamp(decoded.zetaMax, URL_LIMITS.zetaMax.min, URL_LIMITS.zetaMax.max)
   const geometry = decoded.geometry ?? seedParams.geometry.geometry
+  const dimensionalDefaults = base.dimensionalSettings
 
   const params: JetParameters = {
     ...seedParams,
@@ -222,6 +287,60 @@ export function sanitizeDecodedState(decoded: DecodedUrlState): Partial<Explorer
 
   return {
     language: decoded.language ?? base.language,
+    inputMode: decoded.inputMode ?? base.inputMode,
+    dimensionalSettings: {
+      liquidId:
+        decoded.liquidId !== undefined && isLiquidPresetId(decoded.liquidId)
+          ? decoded.liquidId
+          : dimensionalDefaults.liquidId,
+      gasId:
+        decoded.gasId !== undefined && isGasPresetId(decoded.gasId)
+          ? decoded.gasId
+          : dimensionalDefaults.gasId,
+      rectangularWidthMm: sanitizedNumber(
+        decoded.rectangularWidthMm,
+        DEFAULT_DIMENSIONAL_SETTINGS.rectangularWidthMm,
+        URL_LIMITS.dimensionMm.min,
+        URL_LIMITS.dimensionMm.max,
+      ),
+      rectangularHeightMm: sanitizedNumber(
+        decoded.rectangularHeightMm,
+        DEFAULT_DIMENSIONAL_SETTINGS.rectangularHeightMm,
+        URL_LIMITS.dimensionMm.min,
+        URL_LIMITS.dimensionMm.max,
+      ),
+      ellipticalMajorAxisMm: sanitizedNumber(
+        decoded.ellipticalMajorAxisMm,
+        DEFAULT_DIMENSIONAL_SETTINGS.ellipticalMajorAxisMm,
+        URL_LIMITS.dimensionMm.min,
+        URL_LIMITS.dimensionMm.max,
+      ),
+      ellipticalMinorAxisMm: sanitizedNumber(
+        decoded.ellipticalMinorAxisMm,
+        DEFAULT_DIMENSIONAL_SETTINGS.ellipticalMinorAxisMm,
+        URL_LIMITS.dimensionMm.min,
+        URL_LIMITS.dimensionMm.max,
+      ),
+      velocityMode: decoded.velocityMode ?? dimensionalDefaults.velocityMode,
+      injectionVelocity: sanitizedNumber(
+        decoded.injectionVelocity,
+        DEFAULT_DIMENSIONAL_SETTINGS.injectionVelocity,
+        URL_LIMITS.injectionVelocity.min,
+        URL_LIMITS.injectionVelocity.max,
+      ),
+      pressureDropKPa: sanitizedNumber(
+        decoded.pressureDropKPa,
+        DEFAULT_DIMENSIONAL_SETTINGS.pressureDropKPa,
+        URL_LIMITS.pressureDropKPa.min,
+        URL_LIMITS.pressureDropKPa.max,
+      ),
+      dischargeCoefficient: sanitizedNumber(
+        decoded.dischargeCoefficient,
+        DEFAULT_DIMENSIONAL_SETTINGS.dischargeCoefficient,
+        URL_LIMITS.dischargeCoefficient.min,
+        URL_LIMITS.dischargeCoefficient.max,
+      ),
+    },
     params,
     selectedPresetId: preset ? preset.id : PRESET_CUSTOM,
     densityLogScale: decoded.densityLogScale ?? base.densityLogScale,
@@ -246,6 +365,22 @@ export function mergeStateWithDefaults(partial: Partial<ExplorerState>): Explore
   return {
     ...base,
     ...partial,
+    dimensionalSettings: partial.dimensionalSettings
+      ? { ...base.dimensionalSettings, ...partial.dimensionalSettings }
+      : { ...base.dimensionalSettings },
     params: partial.params ? cloneParams(partial.params) : cloneParams(base.params),
   }
+}
+
+function sanitizedNumber(
+  value: number | undefined,
+  fallback: number,
+  min: number,
+  max: number,
+): number {
+  if (value === undefined || !Number.isFinite(value)) {
+    return fallback
+  }
+
+  return clamp(value, min, max)
 }

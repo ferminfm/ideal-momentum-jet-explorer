@@ -370,6 +370,11 @@ main {
   grid-column: span 2;
 }
 
+.sampling-grid .field:first-child,
+.sampling-grid .field:nth-last-child(-n + 2) {
+  grid-column: auto;
+}
+
 .field input[type="number"] {
   appearance: textfield;
 }
@@ -394,6 +399,59 @@ main {
   color: #516879;
   font-variant-numeric: tabular-nums;
   justify-self: end;
+}
+
+.field small,
+.control-helper {
+  color: #657887;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.control-helper {
+  margin: 0;
+}
+
+.engineering-summary-grid {
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.engineering-summary-item {
+  background: #f7fafc;
+  border: 1px solid #dce7ef;
+  border-radius: 8px;
+  min-width: 0;
+  padding: 0.65rem;
+}
+
+.engineering-summary-item span {
+  color: #607586;
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.engineering-summary-item strong {
+  color: #132334;
+  display: block;
+  font-size: 0.98rem;
+  font-variant-numeric: tabular-nums;
+  margin-top: 0.15rem;
+}
+
+.engineering-summary-item small {
+  color: #657887;
+  display: block;
+  font-size: 0.75rem;
+  margin-top: 0.1rem;
+}
+
+.summary-symbol {
+  margin-bottom: 0.1rem;
 }
 
 .math {
@@ -1123,6 +1181,7 @@ main {
   .control-grid,
   .preset-grid,
   .metrics-strip,
+  .engineering-summary-grid,
   .summary-bar,
   .interpretation-grid,
   .overlay-controls,

@@ -229,3 +229,21 @@ The GitHub Pages app responded with HTTP 200 at `https://ferminfm.github.io/idea
 - Validation before commit: `npm run test` passed with 14 test files and 48 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed after starting the required Vite dev server.
 - Limitations: engineering utilities are not yet exposed in the UI, fluid properties are representative values only, and regime/applicability logic is not implemented in this unit.
 - Next recommended unit: dimensional-mode UI and material presets connected to this model-layer foundation.
+
+## 2026-05-29 Dimensional Engineering Mode UI Branch
+
+- Start time: `2026-05-29T20:20:29+09:00`.
+- Starting commit: `083a3b2`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Branch: `feature/dimensional-mode-ui`.
+- New files: `src/model/dimensionalMapping.ts`, `src/model/dimensionalMapping.test.ts`, and `src/components/EngineeringSummaryPanel.tsx`.
+- Modified files: `README.md`, `ROADMAP_INDUSTRY.md`, `src/App.tsx`, `src/components/ControlPanel.tsx`, `src/data/fluidPresets.ts`, `src/i18n/translations.ts`, `src/styles.css`, `src/types/appState.ts`, `src/utils/csvExport.ts`, `src/utils/csvExport.test.ts`, `src/utils/urlState.ts`, and `src/utils/urlState.test.ts`.
+- Added a normalized/dimensional input-mode switch while keeping normalized mode as the default.
+- Added dimensional engineering controls for liquid/gas presets, physical rectangular or elliptical nozzle dimensions in mm, velocity or pressure-drop operating input, discharge coefficient, spreading half-angles, zeta range, and sample count.
+- Added dimensional mapping from physical nozzle dimensions to equivalent-diameter normalized model geometry, with fluid-property density ratio feeding the existing normalized jet model.
+- Added an engineering summary panel for `D_e`, `A_0`, density ratio, injection velocity, pressure drop, `C_d`, liquid mass flow, liquid momentum flux, dynamic-pressure scale, `Re_l`, `We_l`, `Oh_l`, and approximate gas Mach number.
+- Extended saved URLs with dimensional mode keys and added sanitization tests for dimensional settings.
+- Extended CSV export so dimensional mode adds SI-unit columns for the current curve while preserving normalized CSV behavior and visible saved comparison cases.
+- Validation: `npm run test` passed with 15 test files and 56 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; `npm run smoke:visual` passed against the local Vite server.
+- Deferred: dimensional plot-unit toggles are documented for a later Unit 2b/Unit 3-adjacent pass.
+- Next recommended unit: regime/applicability checker using the dimensional operating point and nondimensional groups.

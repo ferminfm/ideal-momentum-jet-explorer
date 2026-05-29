@@ -16,12 +16,14 @@ requires independent validation.
 
 ## 2. Dimensional UI And Material Presets
 
-- Goal: expose dimensional inputs for liquid/gas selection, equivalent diameter,
-  injection velocity, pressure drop, and discharge coefficient.
-- Expected files/components: `ControlPanel`, new engineering input panel, URL state,
-  CSV export extensions.
+- Goal: expose dimensional inputs for liquid/gas selection, physical nozzle
+  dimensions, injection velocity, pressure drop, and discharge coefficient.
+- Expected files/components: `ControlPanel`, `EngineeringSummaryPanel`,
+  `src/model/dimensionalMapping.ts`, URL state, CSV export extensions.
 - Dependencies: Unit 1 engineering model foundation.
 - Risk level: medium. Requires UI state migration without breaking saved URLs.
+- Status: implemented on `feature/dimensional-mode-ui`.
+- Deferred: dimensional plot-unit toggles remain a Unit 2b/Unit 3-adjacent item.
 
 ## 3. Regime And Applicability Checker
 

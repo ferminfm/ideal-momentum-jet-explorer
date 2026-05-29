@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { createComparisonCase } from '../model/comparisonCases'
+import { buildDimensionalMapping } from '../model/dimensionalMapping'
 import { generateJetSeries, type JetParameters } from '../model/jetModel'
+import { DEFAULT_DIMENSIONAL_SETTINGS } from '../types/appState'
 import { buildJetCsv } from './csvExport'
 
 const params: JetParameters = {
@@ -61,5 +63,26 @@ describe('CSV export', () => {
     expect(rows).toHaveLength(params.samples * 2 + 1)
     expect(rows.some((row) => row.startsWith('Visible comparison,'))).toBe(true)
     expect(rows.some((row) => row.startsWith('Hidden comparison,'))).toBe(false)
+  })
+
+  it('adds dimensional columns for dimensional engineering exports', () => {
+    const mapping = buildDimensionalMapping(params, DEFAULT_DIMENSIONAL_SETTINGS)
+    const csv = buildJetCsv(mapping.normalizedSeries, [], {
+      inputMode: 'dimensional',
+      dimensionalSeries: mapping.dimensionalSeries,
+    })
+    const rows = csv.split('\n')
+    const header = rows[0]
+    const firstRow = rows[1].split(',')
+    const zIndex = header.split(',').indexOf('z_m')
+    const velocityIndex = header.split(',').indexOf('velocity_m_s')
+    const reynoldsIndex = header.split(',').indexOf('Reynolds')
+
+    expect(header).toContain('inputMode,z_m,area_m2,velocity_m_s')
+    expect(header).toContain('Reynolds,Weber,Ohnesorge,gasMachEstimate')
+    expect(firstRow[header.split(',').indexOf('inputMode')]).toBe('dimensional')
+    expect(Number(firstRow[zIndex])).toBeCloseTo(0)
+    expect(Number(firstRow[velocityIndex])).toBeCloseTo(10)
+    expect(Number(firstRow[reynoldsIndex])).toBeGreaterThan(0)
   })
 })

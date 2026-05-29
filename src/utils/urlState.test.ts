@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { createComparisonCase } from '../model/comparisonCases'
-import { PRESET_CUSTOM, createDefaultExplorerState } from '../types/appState'
+import {
+  DEFAULT_DIMENSIONAL_SETTINGS,
+  PRESET_CUSTOM,
+  createDefaultExplorerState,
+} from '../types/appState'
 import {
   decodeStateFromQuery,
   encodeStateToQuery,
@@ -78,6 +82,72 @@ describe('URL state helpers', () => {
     )
 
     expect(sanitized.language).toBe('es')
+  })
+
+  it('round-trips dimensional engineering settings', () => {
+    const state = createDefaultExplorerState()
+    state.inputMode = 'dimensional'
+    state.params.geometry = {
+      geometry: 'rectangular',
+      width: 1,
+      height: 1,
+    }
+    state.dimensionalSettings = {
+      ...DEFAULT_DIMENSIONAL_SETTINGS,
+      liquidId: 'diesel-like-fuel',
+      gasId: 'high-density-chamber-gas',
+      rectangularWidthMm: 1.5,
+      rectangularHeightMm: 0.4,
+      ellipticalMajorAxisMm: 2.25,
+      ellipticalMinorAxisMm: 0.75,
+      velocityMode: 'pressureDrop',
+      injectionVelocity: 18,
+      pressureDropKPa: 2500,
+      dischargeCoefficient: 0.82,
+    }
+
+    const decoded = decodeStateFromQuery(encodeStateToQuery(state).toString())
+    const sanitized = mergeStateWithDefaults(sanitizeDecodedState(decoded))
+
+    expect(sanitized.inputMode).toBe('dimensional')
+    expect(sanitized.dimensionalSettings.liquidId).toBe('diesel-like-fuel')
+    expect(sanitized.dimensionalSettings.gasId).toBe('high-density-chamber-gas')
+    expect(sanitized.dimensionalSettings.rectangularWidthMm).toBeCloseTo(1.5)
+    expect(sanitized.dimensionalSettings.rectangularHeightMm).toBeCloseTo(0.4)
+    expect(sanitized.dimensionalSettings.ellipticalMajorAxisMm).toBeCloseTo(2.25)
+    expect(sanitized.dimensionalSettings.ellipticalMinorAxisMm).toBeCloseTo(0.75)
+    expect(sanitized.dimensionalSettings.velocityMode).toBe('pressureDrop')
+    expect(sanitized.dimensionalSettings.injectionVelocity).toBeCloseTo(18)
+    expect(sanitized.dimensionalSettings.pressureDropKPa).toBeCloseTo(2500)
+    expect(sanitized.dimensionalSettings.dischargeCoefficient).toBeCloseTo(0.82)
+  })
+
+  it('sanitizes invalid dimensional query parameters', () => {
+    const sanitized = mergeStateWithDefaults(
+      sanitizeDecodedState(
+        decodeStateFromQuery(
+          '?mode=dimensional&liquid=unknown&gas=bad&Bmm=200&Hmm=-2&amm=0&bmm=abc&vmode=bad&v0=1000&dpkPa=0&Cd=9',
+        ),
+      ),
+    )
+
+    expect(sanitized.inputMode).toBe('dimensional')
+    expect(sanitized.dimensionalSettings.liquidId).toBe(
+      DEFAULT_DIMENSIONAL_SETTINGS.liquidId,
+    )
+    expect(sanitized.dimensionalSettings.gasId).toBe(DEFAULT_DIMENSIONAL_SETTINGS.gasId)
+    expect(sanitized.dimensionalSettings.rectangularWidthMm).toBe(10)
+    expect(sanitized.dimensionalSettings.rectangularHeightMm).toBe(0.05)
+    expect(sanitized.dimensionalSettings.ellipticalMajorAxisMm).toBe(0.05)
+    expect(sanitized.dimensionalSettings.ellipticalMinorAxisMm).toBe(
+      DEFAULT_DIMENSIONAL_SETTINGS.ellipticalMinorAxisMm,
+    )
+    expect(sanitized.dimensionalSettings.velocityMode).toBe(
+      DEFAULT_DIMENSIONAL_SETTINGS.velocityMode,
+    )
+    expect(sanitized.dimensionalSettings.injectionVelocity).toBe(300)
+    expect(sanitized.dimensionalSettings.pressureDropKPa).toBe(1)
+    expect(sanitized.dimensionalSettings.dischargeCoefficient).toBe(1.2)
   })
 
   it('uses a valid preset as the parameter seed', () => {
