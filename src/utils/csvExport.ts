@@ -1,5 +1,11 @@
 import type { ComparisonCase } from '../model/comparisonCases'
+import type {
+  DimensionalJetSeries,
+  DimensionlessGroups,
+  EngineeringScales,
+} from '../model/engineering'
 import type { JetSeries } from '../model/jetModel'
+import type { InputMode } from '../types/appState'
 
 const CSV_COLUMNS = [
   'caseLabel',
@@ -23,7 +29,37 @@ const CSV_COLUMNS = [
   'b0',
 ]
 
-function csvValue(value: string | number): string {
+const DIMENSIONAL_CSV_COLUMNS = [
+  'inputMode',
+  'z_m',
+  'area_m2',
+  'velocity_m_s',
+  'compositeDensity_kg_m3',
+  'dynamicPressure_Pa',
+  'gasEntrainment_kg_s',
+  'equivalentDiameter_m',
+  'injectionVelocity_m_s',
+  'liquidDensity_kg_m3',
+  'gasDensity_kg_m3',
+  'Reynolds',
+  'Weber',
+  'WeberGas',
+  'Ohnesorge',
+  'gasMachEstimate',
+]
+
+export interface CsvEngineeringContext {
+  inputMode: InputMode
+  dimensionalSeries?: DimensionalJetSeries
+  scales?: EngineeringScales
+  groups?: DimensionlessGroups
+}
+
+function csvValue(value: string | number | null | undefined): string {
+  if (value === null || value === undefined) {
+    return ''
+  }
+
   if (typeof value === 'number') {
     return Number.isFinite(value) ? value.toPrecision(12) : ''
   }
@@ -35,19 +71,41 @@ function csvValue(value: string | number): string {
   return value
 }
 
-export function buildJetCsv(series: JetSeries, comparisonCases: ComparisonCase[] = []): string {
+export function buildJetCsv(
+  series: JetSeries,
+  comparisonCases: ComparisonCase[] = [],
+  engineeringContext?: CsvEngineeringContext,
+): string {
   const visibleCases = comparisonCases.filter((comparisonCase) => comparisonCase.visible)
+  const includeDimensionalColumns =
+    engineeringContext?.inputMode === 'dimensional' &&
+    engineeringContext.dimensionalSeries !== undefined
+  const columns = includeDimensionalColumns
+    ? [...CSV_COLUMNS, ...DIMENSIONAL_CSV_COLUMNS]
+    : CSV_COLUMNS
   const rows = [
-    ...buildRows('Current', series),
+    ...buildRows(
+      'Current',
+      series,
+      includeDimensionalColumns ? engineeringContext : undefined,
+    ),
     ...visibleCases.flatMap((comparisonCase) =>
-      buildRows(comparisonCase.label, comparisonCase.series),
+      buildRows(
+        comparisonCase.label,
+        comparisonCase.series,
+        includeDimensionalColumns ? { inputMode: 'normalized' } : undefined,
+      ),
     ),
   ]
 
-  return [CSV_COLUMNS, ...rows].map((row) => row.join(',')).join('\n')
+  return [columns, ...rows].map((row) => row.join(',')).join('\n')
 }
 
-function buildRows(caseLabel: string, series: JetSeries): string[][] {
+function buildRows(
+  caseLabel: string,
+  series: JetSeries,
+  engineeringContext?: CsvEngineeringContext,
+): string[][] {
   const { params } = series
   const geometry = params.geometry.geometry
   const B0 = geometry === 'rectangular' ? params.geometry.width : ''
@@ -55,8 +113,13 @@ function buildRows(caseLabel: string, series: JetSeries): string[][] {
   const a0 = geometry === 'elliptical' ? params.geometry.majorAxis : ''
   const b0 = geometry === 'elliptical' ? params.geometry.minorAxis : ''
 
-  return series.states.map((state, index) =>
-    [
+  return series.states.map((state, index) => {
+    const dimensionalState = engineeringContext?.dimensionalSeries?.states[index]
+    const scales =
+      engineeringContext?.scales ?? engineeringContext?.dimensionalSeries?.scales
+    const groups =
+      engineeringContext?.groups ?? engineeringContext?.dimensionalSeries?.dimensionlessGroups
+    const row: Array<string | number | null | undefined> = [
       caseLabel,
       index.toString(),
       state.axialZeta,
@@ -76,8 +139,31 @@ function buildRows(caseLabel: string, series: JetSeries): string[][] {
       H0,
       a0,
       b0,
-    ].map(csvValue),
-  )
+    ]
+
+    if (engineeringContext !== undefined) {
+      row.push(
+        dimensionalState === undefined ? '' : engineeringContext.inputMode,
+        dimensionalState?.z,
+        dimensionalState?.area,
+        dimensionalState?.velocity,
+        dimensionalState?.compositeDensity,
+        dimensionalState?.dynamicPressure,
+        dimensionalState?.gasMassEntrainmentRate,
+        scales?.equivalentDiameter,
+        scales?.injectionVelocity,
+        scales?.liquidDensity,
+        scales?.gasDensity,
+        groups?.reynoldsLiquid,
+        groups?.weberLiquid,
+        groups?.weberGas,
+        groups?.ohnesorgeLiquid,
+        groups?.gasMachEstimate,
+      )
+    }
+
+    return row.map(csvValue)
+  })
 }
 
 export function createCsvFilename(series: JetSeries, date = new Date()): string {
@@ -85,8 +171,12 @@ export function createCsvFilename(series: JetSeries, date = new Date()): string 
   return `ideal-momentum-jet_${series.params.geometry.geometry}_${timestamp}.csv`
 }
 
-export function downloadJetCsv(series: JetSeries, comparisonCases: ComparisonCase[] = []): void {
-  const csv = buildJetCsv(series, comparisonCases)
+export function downloadJetCsv(
+  series: JetSeries,
+  comparisonCases: ComparisonCase[] = [],
+  engineeringContext?: CsvEngineeringContext,
+): void {
+  const csv = buildJetCsv(series, comparisonCases, engineeringContext)
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')

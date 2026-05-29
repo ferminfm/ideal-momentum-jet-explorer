@@ -147,7 +147,7 @@
 - Three.js control-volume viewer with translucent rectangular or elliptical frustum geometry.
 - Traveling LHF fluid-element animation with conserved marker droplets in the 3D viewer.
 - GitHub Pages deployment through GitHub Actions.
-- Saved share URLs, CSV export, citation copying, velocity-overlay infrastructure, and 3D cross-section inspection.
+- Saved share URLs, CSV export, citation copying, data-overlay infrastructure, and 3D cross-section inspection.
 - Compact URL restoration for saved model comparisons.
 - English, Japanese, and Spanish interface modes with language state encoded in reproducible URLs.
 
@@ -157,6 +157,60 @@
 - Axis switching, vortex dynamics, breakup, turbulence, losses, and droplet-size distributions are outside the reduced-order model.
 - The traveling fluid-element markers are conceptual conserved-liquid markers and do not model droplet-size evolution or interactions.
 - Composite density needs independent phase-fraction or concentration validation.
-- No measured/literature velocity overlay dataset is bundled yet; the current overlay option is synthetic and only demonstrates the plotting mechanism.
+- No measured/literature data-overlay dataset is bundled yet; the current built-in overlay is synthetic and only demonstrates the plotting mechanism.
 - The initial JavaScript bundle is large because Plotly and Three.js are bundled client-side; code-splitting is a reasonable future optimization.
 - GitHub Pages is public; private manuscripts, PDFs, credentials, and non-public datasets must stay out of committed assets.
+
+## Dimensional Engineering Mode Branch
+
+- Branch: `feature/dimensional-mode-ui`.
+- Starting commit: `083a3b2`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Added a dimensional input mode on top of the engineering core foundation.
+- Added fluid preset selectors, physical nozzle dimension sliders in mm, velocity/pressure-drop operating inputs, discharge coefficient control, and an engineering summary panel.
+- Dimensional mode maps physical nozzle geometry to the existing equivalent-diameter normalized model and preserves normalized mode as the default behavior.
+- Saved URL state now includes dimensional-mode settings; CSV export adds SI-unit current-curve columns in dimensional mode.
+- Validation before commit: `npm run test`, `npm run build`, `npm run lint`, and local `npm run smoke:visual` passed.
+- Deferred: dimensional plot-unit toggles and regime/applicability checks.
+
+## Regime Applicability Checker Branch
+
+- Branch: `feature/regime-applicability-checker`.
+- Starting commit: `b45b0f6`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Added gas Weber number to dimensional engineering groups.
+- Added a heuristic regime/applicability checker for `Re_l`, `We_l`, `We_g`, `Oh_l`, gas Mach estimate, density ratio, aspect ratio, spreading angles, and dimensional-mode availability.
+- Added a compact app panel that reports overall applicability, nondimensional groups, recommended use, and concise warnings.
+- The checker is explicitly scoped as heuristic screening, not a validated breakup-regime map or engineering certification.
+- Validation before commit: `npm run test`, `npm run build`, `npm run lint`, and local `npm run smoke:visual` passed.
+- Next recommended unit: Unit 4 data overlay/import foundation.
+
+## Data Overlay Import Foundation Branch
+
+- Branch: `feature/data-overlay-foundation`.
+- Starting commit: `de85d95`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Added a general data-overlay model that is separate from saved model-generated comparison cases.
+- Added a built-in overlay registry. The current bundled overlay is a synthetic velocity demo only, not measured or literature data.
+- Added a local browser-side CSV importer for user comparison curves with x/y column selection, optional error columns, target-variable selection, and row/size validation.
+- Added a data-overlay manager panel for built-in overlays, CSV imports, show/hide, removal, and clearing user or all overlays.
+- Plotly plots now render visible data overlays only on matching variables, with markers, optional error bars, and source/notes hover text.
+- Saved URL behavior: built-in overlays can be encoded; imported CSV overlays are intentionally not encoded and remain session-local.
+- Documentation now states that overlays are comparison aids only, no measured public validation dataset is bundled yet, and this unit does not fit model parameters.
+- Validation before commit: `npm run test` passed with 18 test files and 76 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile.
+- Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
+- Next recommended unit: Unit 5 calibration/fitting of prescribed spreading angles.
+
+## Post Unit 4 Steering Cleanup
+
+- Branch: `feature/data-overlay-foundation`.
+- Starting commit: `c118447`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Marked Unit 6 lossy model extensions as deferred until the governing equations, assumptions, and validation strategy are formally documented.
+- Corrected Unit 7 roadmap dependencies so quasi-steady tip penetration can proceed independently from the deferred lossy model.
+- Clarified liquid-gas surface/interfacial tension terminology for engineering presets and dimensionless groups.
+- Clarified engineering summary labels for initial liquid mass flow rate and initial liquid momentum flux at the nozzle.
+- Adjusted regime-checker angle thresholds so maximum UI half-angles can trigger the intended warning.
+- Confirmed user-imported overlay data remain session-local and are not encoded in shareable URLs; built-in overlays are encoded only by ID and visibility.
+- Validation before commit: `npm run test` passed with 18 test files and 81 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile.
+- Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.

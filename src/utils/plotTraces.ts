@@ -1,3 +1,4 @@
+import type { DataOverlay, OverlayVariable } from '../data/dataOverlayTypes'
 import type { ComparisonCase } from '../model/comparisonCases'
 import type {
   EntrainmentCoefficientLimits,
@@ -110,6 +111,66 @@ export function buildEntrainmentReferenceTraces(
   ]
 }
 
+export function buildDataOverlayTraces(
+  dataOverlays: DataOverlay[],
+  variable: OverlayVariable,
+): Array<Record<string, unknown>> {
+  return dataOverlays
+    .filter((overlay) => overlay.visible && overlay.variable === variable)
+    .map((overlay) => {
+      const hasXError = overlay.points.some((point) => point.xError !== undefined)
+      const hasYError = overlay.points.some((point) => point.yError !== undefined)
+      const lineAllowed =
+        overlay.points.length > 1 &&
+        (overlay.sourceKind === 'cfd' || overlay.sourceKind === 'synthetic-demo')
+
+      return {
+        x: overlay.points.map((point) => point.x),
+        y: overlay.points.map((point) => point.y),
+        type: 'scatter',
+        mode: lineAllowed ? 'lines+markers' : 'markers',
+        name: `${overlay.label} (${overlay.sourceKind})`,
+        marker: {
+          color: overlay.color,
+          size: overlay.sourceKind === 'synthetic-demo' ? 8 : 9,
+          symbol: overlay.sourceKind === 'synthetic-demo' ? 'diamond-open' : 'circle-open',
+          line: { width: 1.5 },
+        },
+        line: lineAllowed
+          ? {
+              color: overlay.color,
+              width: 1.6,
+              dash: overlay.sourceKind === 'synthetic-demo' ? 'dot' : 'solid',
+            }
+          : undefined,
+        error_x: hasXError
+          ? {
+              type: 'data',
+              array: overlay.points.map((point) => point.xError ?? 0),
+              visible: true,
+            }
+          : undefined,
+        error_y: hasYError
+          ? {
+              type: 'data',
+              array: overlay.points.map((point) => point.yError ?? 0),
+              visible: true,
+            }
+          : undefined,
+        hovertemplate:
+          `${escapeHoverText(overlay.xLabel)}=%{x:.5g}<br>${escapeHoverText(overlay.yLabel)}=%{y:.5g}<br>` +
+          `${escapeHoverText(overlay.source)}<br>${escapeHoverText(overlay.notes)}<extra>${escapeHoverText(overlay.label)}</extra>`,
+      }
+    })
+}
+
 function formatHoverNumber(value: number): string {
   return Number.isFinite(value) ? value.toPrecision(5) : 'n/a'
+}
+
+function escapeHoverText(value: string): string {
+  return value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
 }

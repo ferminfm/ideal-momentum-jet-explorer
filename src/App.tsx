@@ -3,14 +3,19 @@ import { CitationPanel } from './components/CitationPanel'
 import { CollapsibleSection } from './components/CollapsibleSection'
 import { ComparisonAddPanel, ComparisonPanel } from './components/ComparisonPanel'
 import { ControlPanel } from './components/ControlPanel'
+import { DataOverlayPanel } from './components/DataOverlayPanel'
 import { EquationPanel } from './components/EquationPanel'
+import { EngineeringSummaryPanel } from './components/EngineeringSummaryPanel'
 import { ExportPanel } from './components/ExportPanel'
 import { InterpretationPanel } from './components/InterpretationPanel'
 import { JetGeometry3D } from './components/JetGeometry3D'
 import { Layout } from './components/Layout'
 import { Plots } from './components/Plots'
+import { RegimeApplicabilityPanel } from './components/RegimeApplicabilityPanel'
 import { SymbolsGlossary } from './components/SymbolsGlossary'
 import { TRANSLATIONS, type Language } from './i18n/translations'
+import { cloneDataOverlay } from './data/dataOverlays'
+import type { DataOverlay } from './data/dataOverlayTypes'
 import {
   MAX_COMPARISON_CASES,
   clearComparisonCases,
@@ -19,9 +24,16 @@ import {
   setAllComparisonCasesVisibility,
   setComparisonCaseVisibility,
 } from './model/comparisonCases'
-import { generateJetSeries, type JetParameters } from './model/jetModel'
+import { buildDimensionalMapping } from './model/dimensionalMapping'
+import { generateJetSeries, getAspectRatio, type JetParameters } from './model/jetModel'
 import { cloneParams } from './model/presets'
-import { PRESET_CUSTOM, type ExplorerState } from './types/appState'
+import { assessModelApplicability } from './model/regimeChecker'
+import {
+  PRESET_CUSTOM,
+  type DimensionalSettings,
+  type ExplorerState,
+  type InputMode,
+} from './types/appState'
 import { copyTextToClipboard } from './utils/clipboard'
 import { downloadJetCsv } from './utils/csvExport'
 import {
@@ -46,7 +58,30 @@ function App() {
   const [comparisonNotice, setComparisonNotice] = useState('')
   const { params } = appState
   const text = TRANSLATIONS[appState.language]
-  const series = useMemo(() => generateJetSeries(params), [params])
+  const dimensionalMapping = useMemo(
+    () =>
+      appState.inputMode === 'dimensional'
+        ? buildDimensionalMapping(params, appState.dimensionalSettings)
+        : null,
+    [appState.dimensionalSettings, appState.inputMode, params],
+  )
+  const effectiveParams = dimensionalMapping?.normalizedParams ?? params
+  const series = useMemo(
+    () => dimensionalMapping?.normalizedSeries ?? generateJetSeries(effectiveParams),
+    [dimensionalMapping, effectiveParams],
+  )
+  const applicabilityAssessment = useMemo(
+    () =>
+      assessModelApplicability({
+        densityRatio: effectiveParams.densityRatio,
+        dimensionlessGroups: dimensionalMapping?.groups,
+        geometryAspectRatio: getAspectRatio(effectiveParams.geometry),
+        thetaDeg: effectiveParams.thetaDeg,
+        phiDeg: effectiveParams.phiDeg,
+        inputMode: appState.inputMode,
+      }),
+    [appState.inputMode, dimensionalMapping?.groups, effectiveParams],
+  )
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -76,6 +111,14 @@ function App() {
     }))
   }
 
+  function updateInputMode(inputMode: InputMode) {
+    setAppState((current) => ({ ...current, inputMode }))
+  }
+
+  function updateDimensionalSettings(dimensionalSettings: DimensionalSettings) {
+    setAppState((current) => ({ ...current, dimensionalSettings }))
+  }
+
   async function copyShareableUrl() {
     await copyTextToClipboard(window.location.href)
     setShareStatus(text.export.copied)
@@ -92,6 +135,9 @@ function App() {
   }
 
   function addCurrentComparisonCase() {
+    const comparisonParams =
+      appState.inputMode === 'dimensional' ? effectiveParams : appState.params
+
     setAppState((current) => {
       if (current.comparisonCases.length >= MAX_COMPARISON_CASES) {
         return current
@@ -101,8 +147,9 @@ function App() {
         ...current,
         comparisonCases: [
           ...current.comparisonCases,
-          createComparisonCase(current.params, {
-            presetId: current.selectedPresetId,
+          createComparisonCase(comparisonParams, {
+            presetId:
+              current.inputMode === 'dimensional' ? PRESET_CUSTOM : current.selectedPresetId,
             index: current.comparisonCases.length,
           }),
         ],
@@ -114,6 +161,29 @@ function App() {
     } else {
       showComparisonNotice(text.comparison.added)
     }
+  }
+
+  function addDataOverlay(overlay: DataOverlay) {
+    setAppState((current) => {
+      const existingIndex = current.dataOverlays.findIndex(
+        (candidate) => candidate.id === overlay.id,
+      )
+      if (existingIndex >= 0 && overlay.sourceKind !== 'user-import') {
+        return {
+          ...current,
+          dataOverlays: current.dataOverlays.map((candidate, index) =>
+            index === existingIndex ? { ...candidate, visible: true } : candidate,
+          ),
+          overlayId: overlay.id,
+        }
+      }
+
+      return {
+        ...current,
+        dataOverlays: [...current.dataOverlays, cloneDataOverlay(overlay)],
+        overlayId: overlay.sourceKind === 'synthetic-demo' ? overlay.id : current.overlayId,
+      }
+    })
   }
 
   return (
@@ -133,8 +203,40 @@ function App() {
             <ControlPanel
               params={params}
               selectedPresetId={appState.selectedPresetId}
+              inputMode={appState.inputMode}
+              dimensionalSettings={appState.dimensionalSettings}
               text={text}
+              onInputModeChange={updateInputMode}
+              onDimensionalSettingsChange={updateDimensionalSettings}
               onChange={updateParams}
+            />
+          </CollapsibleSection>
+          {appState.inputMode === 'dimensional' && dimensionalMapping ? (
+            <CollapsibleSection
+              title={text.engineering.title}
+              expandLabel={text.sections.expandSection}
+              collapseLabel={text.sections.collapseSection}
+              defaultOpen
+            >
+              <EngineeringSummaryPanel
+                mapping={dimensionalMapping}
+                settings={appState.dimensionalSettings}
+                text={text}
+              />
+            </CollapsibleSection>
+          ) : null}
+          <CollapsibleSection
+            key={`regime-${appState.inputMode}`}
+            title={text.sections.regimeApplicability}
+            expandLabel={text.sections.expandSection}
+            collapseLabel={text.sections.collapseSection}
+            defaultOpen={appState.inputMode === 'dimensional'}
+          >
+            <RegimeApplicabilityPanel
+              assessment={applicabilityAssessment}
+              densityRatio={effectiveParams.densityRatio}
+              groups={dimensionalMapping?.groups}
+              text={text}
             />
           </CollapsibleSection>
           <CollapsibleSection
@@ -151,6 +253,65 @@ function App() {
             />
           </CollapsibleSection>
           <CollapsibleSection
+            title={text.sections.dataOverlays}
+            expandLabel={text.sections.expandSection}
+            collapseLabel={text.sections.collapseSection}
+            defaultOpen={false}
+          >
+            <DataOverlayPanel
+              overlays={appState.dataOverlays}
+              text={text}
+              onAddOverlay={addDataOverlay}
+              onToggleOverlay={(id, visible) =>
+                setAppState((current) => ({
+                  ...current,
+                  dataOverlays: current.dataOverlays.map((overlay) =>
+                    overlay.id === id ? { ...overlay, visible } : overlay,
+                  ),
+                }))
+              }
+              onRemoveOverlay={(id) =>
+                setAppState((current) => ({
+                  ...current,
+                  dataOverlays: current.dataOverlays.filter((overlay) => overlay.id !== id),
+                }))
+              }
+              onShowAll={() =>
+                setAppState((current) => ({
+                  ...current,
+                  dataOverlays: current.dataOverlays.map((overlay) => ({
+                    ...overlay,
+                    visible: true,
+                  })),
+                }))
+              }
+              onHideAll={() =>
+                setAppState((current) => ({
+                  ...current,
+                  dataOverlays: current.dataOverlays.map((overlay) => ({
+                    ...overlay,
+                    visible: false,
+                  })),
+                }))
+              }
+              onClearUser={() =>
+                setAppState((current) => ({
+                  ...current,
+                  dataOverlays: current.dataOverlays.filter(
+                    (overlay) => overlay.sourceKind !== 'user-import',
+                  ),
+                }))
+              }
+              onClearAll={() =>
+                setAppState((current) => ({
+                  ...current,
+                  dataOverlays: [],
+                  overlayId: 'none',
+                }))
+              }
+            />
+          </CollapsibleSection>
+          <CollapsibleSection
             title={text.sections.reproducibility}
             expandLabel={text.sections.expandSection}
             collapseLabel={text.sections.collapseSection}
@@ -160,7 +321,14 @@ function App() {
               shareStatus={shareStatus}
               text={text}
               onCopyShareUrl={() => void copyShareableUrl()}
-              onDownloadCsv={() => downloadJetCsv(series, appState.comparisonCases)}
+              onDownloadCsv={() =>
+                downloadJetCsv(series, appState.comparisonCases, {
+                  inputMode: appState.inputMode,
+                  dimensionalSeries: dimensionalMapping?.dimensionalSeries,
+                  groups: dimensionalMapping?.groups,
+                  scales: dimensionalMapping?.scales,
+                })
+              }
             />
           </CollapsibleSection>
           <CollapsibleSection
@@ -198,7 +366,7 @@ function App() {
                   ...current,
                   crossSectionZeta: Math.min(
                     Math.max(crossSectionZeta, 0),
-                    params.zetaMax,
+                    effectiveParams.zetaMax,
                   ),
                 }))
               }
@@ -270,14 +438,11 @@ function App() {
             <Plots
               series={series}
               comparisonCases={appState.comparisonCases}
+              dataOverlays={appState.dataOverlays}
               densityLogScale={appState.densityLogScale}
-              overlayId={appState.overlayId}
               text={text}
               onDensityLogScaleChange={(densityLogScale) =>
                 setAppState((current) => ({ ...current, densityLogScale }))
-              }
-              onOverlayChange={(overlayId) =>
-                setAppState((current) => ({ ...current, overlayId }))
               }
             />
           </CollapsibleSection>

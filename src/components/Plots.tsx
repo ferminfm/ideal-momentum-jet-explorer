@@ -1,10 +1,6 @@
 import { useMemo, useState, type ComponentType } from 'react'
 import PlotModule from 'react-plotly.js'
-import {
-  VELOCITY_OVERLAYS,
-  VELOCITY_OVERLAY_NONE,
-  getVelocityOverlay,
-} from '../data/velocityOverlays'
+import type { DataOverlay } from '../data/dataOverlayTypes'
 import type { UiText } from '../i18n/translations'
 import type { ComparisonCase } from '../model/comparisonCases'
 import {
@@ -15,6 +11,7 @@ import {
 import { formatNumber } from '../utils/format'
 import { toMathPlainText } from '../utils/mathPlainText'
 import {
+  buildDataOverlayTraces,
   buildEntrainmentReferenceTraces,
   buildModelCurveTraces,
 } from '../utils/plotTraces'
@@ -24,11 +21,10 @@ import { MathText } from './MathText'
 interface PlotsProps {
   series: JetSeries
   comparisonCases: ComparisonCase[]
+  dataOverlays: DataOverlay[]
   densityLogScale: boolean
-  overlayId: string
   text: UiText
   onDensityLogScaleChange: (value: boolean) => void
-  onOverlayChange: (overlayId: string) => void
 }
 
 type PlotId = keyof UiText['plots']['definitions']
@@ -76,21 +72,16 @@ const Plot = (
 export function Plots({
   series,
   comparisonCases,
+  dataOverlays,
   densityLogScale,
-  overlayId,
   text,
   onDensityLogScaleChange,
-  onOverlayChange,
 }: PlotsProps) {
   const [activeId, setActiveId] = useState<PlotId>(PLOT_DEFINITIONS[0].id)
   const activePlot =
     PLOT_DEFINITIONS.find((definition) => definition.id === activeId) ??
     PLOT_DEFINITIONS[0]
   const activePlotCopy = text.plots.definitions[activePlot.id]
-  const selectedOverlay = getVelocityOverlay(overlayId)
-  const selectedOverlayCopy = selectedOverlay
-    ? text.plots.overlays[selectedOverlay.id as keyof typeof text.plots.overlays]
-    : undefined
   const coefficientLimits = useMemo(
     () => computeEntrainmentCoefficientLimits(series.params),
     [series.params],
@@ -111,27 +102,7 @@ export function Plots({
       currentLabel: text.comparison.currentLabel,
     })
 
-    if (activePlot.id === 'velocity' && selectedOverlay) {
-      const overlayLabel = selectedOverlayCopy?.label ?? selectedOverlay.label
-      const overlaySource = selectedOverlayCopy?.source ?? selectedOverlay.source
-
-      traces.push({
-        x: selectedOverlay.points.map((point) => point.zeta),
-        y: selectedOverlay.points.map((point) => point.vhat),
-        type: 'scatter',
-        mode: 'markers',
-        name: overlayLabel,
-        marker: {
-          color: selectedOverlay.publicData ? '#94424e' : '#b35a2a',
-          size: 9,
-          symbol: selectedOverlay.publicData ? 'circle' : 'diamond-open',
-          line: { width: 1.5 },
-        },
-        hovertemplate:
-          `${toMathPlainText(text.plots.hoverZeta)}=%{x:.3f}<br>${toMathPlainText('vhat')}=%{y:.5g}<br>` +
-          `${overlayLabel}<br>${overlaySource}<extra></extra>`,
-      })
-    }
+    traces.push(...buildDataOverlayTraces(dataOverlays, activePlot.id))
 
     if (activePlot.id === 'coefficient') {
       traces.push(
@@ -147,8 +118,7 @@ export function Plots({
     activePlot,
     comparisonCases,
     coefficientLimits,
-    selectedOverlay,
-    selectedOverlayCopy,
+    dataOverlays,
     series,
     text.comparison.currentLabel,
     text.plots.hoverValue,
@@ -198,28 +168,7 @@ export function Plots({
         <InlineMath math={activePlotCopy.symbol} /> - {activePlotCopy.description}
       </p>
 
-      <div className="overlay-controls">
-        <label className="field">
-          <span>{text.plots.velocityOverlay}</span>
-          <select
-            value={overlayId}
-            onChange={(event) => onOverlayChange(event.target.value)}
-          >
-            <option value={VELOCITY_OVERLAY_NONE}>{text.plots.none}</option>
-            {VELOCITY_OVERLAYS.map((overlay) => (
-              <option key={overlay.id} value={overlay.id}>
-                {text.plots.overlays[overlay.id as keyof typeof text.plots.overlays]
-                  ?.label ?? overlay.label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <p className="helper-text">
-          {selectedOverlay
-            ? selectedOverlayCopy?.notes ?? selectedOverlay.notes
-            : text.plots.defaultOverlayNote}
-        </p>
-      </div>
+      <p className="helper-text">{text.plots.defaultOverlayNote}</p>
 
       {showCoefficientReferences ? (
         <div className="coefficient-reference-strip" aria-label={text.plots.referenceValues.title}>
