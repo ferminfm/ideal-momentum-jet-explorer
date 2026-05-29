@@ -179,3 +179,20 @@ The GitHub Pages app responded with HTTP 200 at `https://ferminfm.github.io/idea
 - Deployment: feature commit pushed to `origin/main`; GitHub Actions run `26619350360` completed successfully; `curl -I https://ferminfm.github.io/ideal-momentum-jet-explorer/` returned HTTP 200; live `SMOKE_URL=https://ferminfm.github.io/ideal-momentum-jet-explorer/ npm run smoke:visual` passed.
 - Known warnings: GitHub Actions reported the upstream Node.js 20 action-runtime deprecation for current action versions; local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
 - Remaining TODO: consider updating the GitHub Actions workflow actions/runtime settings before the Node.js 20 action-runtime removal window.
+
+## 2026-05-29 UX Layout And Collapsible Sections Pass
+
+- Start time: `2026-05-29T18:58:14+09:00`.
+- Starting commit: `c51f74a`.
+- Feature commit: `38af99d`.
+- Branch: `main`.
+- Files changed: `README.md`, `src/App.tsx`, `src/components/CollapsibleSection.tsx`, `src/components/CollapsibleSection.test.tsx`, `src/i18n/translations.ts`, and `src/styles.css`.
+- Reordered the main rail so the terminal summary is followed by the 3D jet view, saved model cases, plots, model scope, and citations.
+- Added an accessible reusable collapsible-section wrapper with `aria-expanded`, `aria-controls`, keyboard-friendly button headers, and English/Japanese/Spanish section labels.
+- Wrapped major left-rail sections: model parameters, saved cases, reproducibility/export, reduced model equations, and symbols glossary.
+- Wrapped major main-rail sections: 3D jet view, saved model cases, plots, model scope/disclaimer, and citations.
+- Made the desktop left rail sticky and internally scrollable with `max-height: calc(100vh - 2rem)`; mobile/tablet layout falls back to normal stacked scrolling.
+- Validation: `npm run test` passed with 12 test files and 40 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed; targeted Playwright UX smoke confirmed 3D-before-plots ordering, sticky controls, collapsible toggles, live geometry switching, and canvas rendering with zero console errors.
+- Deployment: feature commit pushed to `origin/main`; GitHub Actions run `26630791545` completed successfully; `curl -I https://ferminfm.github.io/ideal-momentum-jet-explorer/` returned HTTP 200; live `SMOKE_URL=https://ferminfm.github.io/ideal-momentum-jet-explorer/ npm run smoke:visual` passed.
+- Known warnings: GitHub Actions reported the upstream Node.js 20 action-runtime deprecation for current action versions; local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
+- Remaining TODO: consider future bundle splitting for Plotly/Three/KaTeX assets and updating GitHub Actions runtime settings before Node.js 20 action-runtime removal.
