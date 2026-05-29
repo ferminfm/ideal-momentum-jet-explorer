@@ -213,3 +213,18 @@ The GitHub Pages app responded with HTTP 200 at `https://ferminfm.github.io/idea
 - Deployment: feature commit pushed to `origin/main`; GitHub Actions run `26633143946` completed successfully; `curl -I https://ferminfm.github.io/ideal-momentum-jet-explorer/` returned HTTP 200; live `SMOKE_URL=https://ferminfm.github.io/ideal-momentum-jet-explorer/ npm run smoke:visual` passed.
 - Known warnings: GitHub Actions reported the upstream Node.js 20 action-runtime deprecation for current action versions; local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
 - Remaining TODO: consider future bundle splitting for Plotly/Three/KaTeX assets and updating GitHub Actions runtime settings before Node.js 20 action-runtime removal.
+
+## 2026-05-29 Engineering Core Foundation Branch
+
+- Start time: `2026-05-29T20:01:22+09:00`.
+- Starting commit: `4ba550d`.
+- Branch: `feature/engineering-core-foundation`.
+- New files: `src/model/engineering.ts`, `src/model/engineering.test.ts`, `src/data/fluidPresets.ts`, and `ROADMAP_INDUSTRY.md`.
+- Modified files: `README.md` and `FEATURE_PASS_REPORT.md`.
+- Added a pure TypeScript SI-unit engineering layer for fluid properties, dimensional operating points, engineering scales, dimensionless groups, and dimensionalized jet states.
+- Added representative exploratory fluid presets for water, diesel-like fuel, gasoline-like fuel, air, and a high-density chamber gas example.
+- Implemented velocity-mode and pressure-drop-mode injection velocity, equivalent-diameter area, density ratio from fluids, dynamic pressure scale, liquid mass flow rate, liquid momentum flux, `Re_l`, `We_l`, `Oh_l`, approximate gas Mach number, and dimensionalized state/series utilities.
+- The normalized model, UI, saved URLs, plots, 3D view, and CSV export were not changed.
+- Validation before commit: `npm run test` passed with 14 test files and 48 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed after starting the required Vite dev server.
+- Limitations: engineering utilities are not yet exposed in the UI, fluid properties are representative values only, and regime/applicability logic is not implemented in this unit.
+- Next recommended unit: dimensional-mode UI and material presets connected to this model-layer foundation.

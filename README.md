@@ -87,6 +87,14 @@ For `rho* < 1e-8`, the implementation uses the limiting behavior `vhat ~= 1`, `r
 - Rectangular or elliptical expanding control-volume geometry in 3D.
 - Axis-switching location when the two cross-stream dimensions become equal within the sampled range.
 
+## Engineering Roadmap
+
+Dimensional engineering calculations are being introduced first as a tested
+model-layer foundation. The engineering core provides SI-unit scaling utilities,
+fluid-property presets, and basic nondimensional groups for future dimensional
+UI work. The public interface currently remains centered on the normalized
+research model. See `ROADMAP_INDUSTRY.md` for the staged implementation plan.
+
 ## Interactive Features
 
 - English, Japanese, and Spanish interface controls for public teaching and research use.
