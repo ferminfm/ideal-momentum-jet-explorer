@@ -147,3 +147,21 @@ The GitHub Pages app responded with HTTP 200 at `https://ferminfm.github.io/idea
 - Live deployment: feature commit pushed to `origin/main`; GitHub Actions run `26602572873` completed successfully; `curl -I https://ferminfm.github.io/ideal-momentum-jet-explorer/` returned HTTP 200; live `SMOKE_URL=https://ferminfm.github.io/ideal-momentum-jet-explorer/ npm run smoke:visual` passed.
 - Known warning: Vite/browser smoke still reports the existing `THREE.Clock` deprecation warning from the 3D stack; no MathJax/KaTeX hat-rendering warnings remained after switching to direct KaTeX rendering.
 - Remaining TODO: consider future bundle splitting for Plotly, Three.js, and KaTeX assets if initial load size becomes a priority.
+
+## 2026-05-29 3D Controls And Model Explanation Pass
+
+- Start time: `2026-05-29T13:53:12+09:00`.
+- Starting commit: `9e65324`.
+- Feature commit: `32b8e74`.
+- Branch: `main`.
+- Files changed: `README.md`, `package.json`, `package-lock.json`, `src/components/EquationPanel.tsx`, `src/components/EquationPanel.test.tsx`, `src/components/InterpretationPanel.tsx`, `src/components/JetGeometry3D.tsx`, `src/components/JetGeometry3D.test.tsx`, `src/components/Layout.tsx`, `src/i18n/translations.ts`, `src/styles.css`, `src/utils/capture3d.ts`, and `src/utils/capture3d.test.ts`.
+- Fixed traveling-element visibility by reducing outer control-volume opacity while animating, disabling depth writes on the translucent surface and wireframe, and assigning higher render order plus stronger outline/highlight materials to the moving LHF element and its conserved liquid markers.
+- Added browser-side 3D canvas PNG capture with filenames of the form `ideal-momentum-jet-3d-view_<timestamp>.png`.
+- Added camera preset buttons for x, y, z, oblique 3/4, and reset views.
+- Added visible 3D axes and a small rectangular/elliptical nozzle model with show/hide toggles.
+- Reworked the equation panel into conservation system, highlighted explicit state laws, and derived quantities. The explicit velocity and composite-density formulas are now prominent.
+- Added visible research-prototype/no-warranty wording and MIT license notice in the app, README, and package metadata.
+- Validation: `npm run test` passed with 11 test files and 39 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile; targeted Playwright interaction smoke passed for play, camera presets, axes/nozzle toggles, and PNG capture with zero console errors.
+- Deployment: pushed to `origin/main`; GitHub Actions run `26618729298` completed successfully; `curl -I https://ferminfm.github.io/ideal-momentum-jet-explorer/` returned HTTP 200; live `SMOKE_URL=https://ferminfm.github.io/ideal-momentum-jet-explorer/ npm run smoke:visual` passed.
+- Known warning: Vite/browser smoke still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
+- Remaining TODO: consider updating the GitHub Actions workflow actions when Node.js 20 action-runtime deprecation becomes urgent.

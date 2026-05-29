@@ -25,17 +25,18 @@
 - Remote: `origin` -> `https://github.com/ferminfm/ideal-momentum-jet-explorer.git`
 - GitHub Pages workflow: `.github/workflows/deploy.yml`
 - Vite project base: `/ideal-momentum-jet-explorer/`
-- Latest deployed feature commit: `fdacbc3f7bbef1c3a19ed22cdd08e2ca6787bf3f`
-- Latest verified deployment run: GitHub Actions run `26602572873`, completed successfully.
+- Latest deployed feature commit: `32b8e74`
+- Latest verified deployment run: GitHub Actions run `26618729298`, completed successfully.
 - Live Pages check: `curl -I https://ferminfm.github.io/ideal-momentum-jet-explorer/` returned HTTP 200.
 
 ## Validation Status
 
-- `npm run test`: passed, 9 test files and 37 tests after adding comparison-case, plot-trace, URL, CSV, language-state, math formatter, entrainment-coefficient reference, traveling-element helper, equation-panel, and symbols-glossary coverage.
+- `npm run test`: passed, 11 test files and 39 tests after adding comparison-case, plot-trace, URL, CSV, language-state, math formatter, entrainment-coefficient reference, traveling-element helper, equation-panel, symbols-glossary, 3D-control, and capture-helper coverage.
 - `npm run build`: passed with no TypeScript errors. Vite reported the expected large-bundle warning because Plotly and Three.js are bundled client-side.
 - `npm run lint`: passed.
 - `npm run smoke:visual`: passed on desktop and mobile; Plotly line output and Three.js canvas pixel checks both rendered.
 - Live `npm run smoke:visual` with `SMOKE_URL=https://ferminfm.github.io/ideal-momentum-jet-explorer/`: passed on desktop and mobile.
+- Local targeted 3D interaction smoke: passed for play, camera presets, axes/nozzle toggles, and PNG capture.
 - Live interaction smoke: passed for add saved case, change geometry, hide/show saved case, settings tooltip, and remove saved case.
 - Local `K_A` reference interaction smoke: passed for reference lines, slider update to zero growth, and saved comparison overlay coexistence.
 - Live `K_A` reference interaction smoke: passed for reference lines, slider update to zero growth, and saved comparison overlay coexistence.
@@ -76,6 +77,18 @@
 - Added a compact multilingual symbols glossary covering `zeta`, `De`, `rho*`, normalized state variables, nozzle dimensions, spreading angles, `A0`, and `A(z)`.
 - Added active plot-variable descriptions and concise parameter tooltip definitions.
 - Added component tests for the equation panel and symbols glossary.
+
+## 3D Controls And Model Explanation Summary
+
+- Starting commit for this pass: `9e65324`.
+- Feature commit for this pass: `32b8e74`.
+- The traveling LHF element now remains visible inside the translucent jet after axis switching by using non-depth-writing outer surfaces, lower outer opacity while animating, and higher render order for the highlighted moving element, outline, and marker droplets.
+- Added a browser-side `Capture 3D view` PNG export for the current WebGL canvas.
+- Added 3D camera preset buttons for x, y, z, oblique 3/4, and reset views.
+- Added visible 3D axes and a small geometry-aware nozzle model with toggles.
+- Reworked the equation panel so the explicit `Delta`, `vhat`, `rho_tilde`, and `rhohat` solved formulas are highlighted separately from the conservation system.
+- Added visible research-prototype/no-warranty wording and MIT license notices in the app and README.
+- Added package metadata for MIT license, repository, homepage, bugs URL, and keywords.
 
 ## Control Range Updates
 
