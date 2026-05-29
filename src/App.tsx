@@ -14,6 +14,7 @@ import { Layout } from './components/Layout'
 import { Plots } from './components/Plots'
 import { RegimeApplicabilityPanel } from './components/RegimeApplicabilityPanel'
 import { SymbolsGlossary } from './components/SymbolsGlossary'
+import { TipPenetrationPanel } from './components/TipPenetrationPanel'
 import { TRANSLATIONS, type Language } from './i18n/translations'
 import { cloneDataOverlay } from './data/dataOverlays'
 import type { DataOverlay } from './data/dataOverlayTypes'
@@ -509,13 +510,26 @@ function App() {
             <Plots
               series={series}
               comparisonCases={appState.comparisonCases}
-            dataOverlays={appState.dataOverlays}
-            calibrationPreview={activeCalibrationPreview}
+              dataOverlays={appState.dataOverlays}
+              calibrationPreview={activeCalibrationPreview}
               densityLogScale={appState.densityLogScale}
               text={text}
               onDensityLogScaleChange={(densityLogScale) =>
                 setAppState((current) => ({ ...current, densityLogScale }))
               }
+            />
+          </CollapsibleSection>
+          <CollapsibleSection
+            title={text.sections.tipPenetration}
+            subtitle={text.tipPenetration.subtitle}
+            expandLabel={text.sections.expandSection}
+            collapseLabel={text.sections.collapseSection}
+            defaultOpen={false}
+          >
+            <TipPenetrationPanel
+              series={series}
+              dimensionalScales={dimensionalMapping?.scales}
+              text={text}
             />
           </CollapsibleSection>
           <CollapsibleSection

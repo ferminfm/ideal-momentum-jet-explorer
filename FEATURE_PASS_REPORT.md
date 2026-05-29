@@ -324,3 +324,16 @@ The GitHub Pages app responded with HTTP 200 at `https://ferminfm.github.io/idea
 - Added fitted-curve preview traces on the relevant active plot variable.
 - Preserved the scientific caveat: calibration is exploratory parameter fitting, not validation of breakup, losses, droplet size, vortex dynamics, or composite density.
 - Validation before commit: `npm run test` passed with 20 test files and 91 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server.
+
+## 2026-05-29 Tip Penetration Module Branch
+
+- Start time: `2026-05-29T21:48:50+09:00`.
+- Starting commit: `74e04f7`.
+- Branch: `feature/tip-penetration-module`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Added a quasi-steady penetration model that integrates `tau(zeta)=integral_0^zeta dxi/vhat(xi)` from the existing steady velocity field and inverts it to estimate `zeta_tip(tau)`.
+- Added dimensional conversion to `t` and `Z` when engineering scales `D_e` and `v0` are available.
+- Added a tip-penetration UI panel with normalized/dimensional summary values, compact Plotly curve, resolution control, show/hide plot control, and CSV export.
+- Added tests for constant-velocity behavior, circular/equal-density analytic behavior, monotonicity, invalid velocities, dimensionalization, and CSV output.
+- Scientific scope: this is a kinematic quasi-steady estimate, not a full transient spray-tip model or validated engineering design prediction.
+- Validation before commit: `npm run test` passed with 22 test files and 98 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server; targeted browser check passed for normalized and dimensional penetration-panel output.

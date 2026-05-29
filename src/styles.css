@@ -968,6 +968,65 @@ main {
   font-size: 0.95rem;
 }
 
+.tip-penetration-panel {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.tip-penetration-controls {
+  align-items: center;
+  border: 1px solid #dce7ef;
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  padding: 0.75rem;
+}
+
+.tip-penetration-controls .field {
+  flex: 1 1 15rem;
+}
+
+.tip-penetration-controls strong {
+  color: #1d2a35;
+  font-variant-numeric: tabular-nums;
+}
+
+.tip-penetration-summary {
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.tip-penetration-summary-item {
+  background: #f8fbfd;
+  border: 1px solid #dce7ef;
+  border-radius: 8px;
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.65rem;
+}
+
+.tip-penetration-summary-item span {
+  color: #5d7182;
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.tip-penetration-summary-item strong {
+  color: #132334;
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.subdued-warning {
+  background: #fffaf0;
+  border: 1px solid #edd8a2;
+  border-radius: 8px;
+  padding: 0.65rem 0.75rem;
+}
+
 .icon-button {
   align-items: center;
   background: #ffffff;
@@ -1466,10 +1525,11 @@ main {
 
   .control-grid,
   .data-overlay-import-grid,
-  .calibration-grid,
-  .calibration-bounds,
-  .calibration-result-grid,
-  .preset-grid,
+    .calibration-grid,
+    .calibration-bounds,
+    .calibration-result-grid,
+    .tip-penetration-summary,
+    .preset-grid,
   .metrics-strip,
   .engineering-summary-grid,
   .regime-groups,

@@ -240,3 +240,14 @@
 - Added a calibration panel with fit results, fitted-curve preview, apply fitted parameters, and add fitted curve to saved model cases.
 - Calibration remains explicitly scoped as exploratory parameter fitting, not physical validation.
 - Validation before commit: `npm run test` passed with 20 test files and 91 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server.
+
+## Tip Penetration Module Branch
+
+- Branch: `feature/tip-penetration-module`.
+- Starting commit: `74e04f7`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Added a quasi-steady kinematic tip-penetration estimate based on `d zeta / d tau = vhat(zeta)`.
+- Added dimensional display and CSV fields when dimensional engineering scales are available.
+- Added a compact panel below the main plots with penetration summary values, Plotly curve, and penetration CSV export.
+- The module is explicitly scoped as a research/visualization estimate, not a full transient spray model or validation claim.
+- Validation before commit: `npm run test` passed with 22 test files and 98 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server; targeted browser check passed for normalized and dimensional penetration-panel output.
