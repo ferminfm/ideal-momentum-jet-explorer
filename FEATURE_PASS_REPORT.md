@@ -337,3 +337,18 @@ The GitHub Pages app responded with HTTP 200 at `https://ferminfm.github.io/idea
 - Added tests for constant-velocity behavior, circular/equal-density analytic behavior, monotonicity, invalid velocities, dimensionalization, and CSV output.
 - Scientific scope: this is a kinematic quasi-steady estimate, not a full transient spray-tip model or validated engineering design prediction.
 - Validation before commit: `npm run test` passed with 22 test files and 98 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server; targeted browser check passed for normalized and dimensional penetration-panel output.
+
+## 2026-05-29 CFD Configuration Export Branch
+
+- Start time: `2026-05-29T22:04:49+09:00`.
+- Starting commit: `4cf0f47`.
+- Branch: `feature/cfd-config-export`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Added `src/model/cfdExport.ts` with a typed payload builder for solver-agnostic configuration exports.
+- Added `src/utils/cfdExportSerializers.ts` for JSON, YAML-like text, Markdown, and OpenFOAM-oriented notes downloads.
+- Added `src/components/CfdExportPanel.tsx` in the reproducibility section, with format selection, include/exclude options, state-sample stride, and setup-aid warnings.
+- Export options can include sampled normalized states, dimensional states, regime assessment, quasi-steady tip penetration, data overlays by explicit opt-in, and saved comparison cases.
+- OpenFOAM output is explicitly notes-only and not a solver-ready case generator.
+- Validation before commit: `npm run test` passed with 25 test files and 109 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server.
+- Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
+- Next recommended unit: Unit 9 report generator.

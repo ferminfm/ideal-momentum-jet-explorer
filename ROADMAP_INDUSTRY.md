@@ -88,6 +88,11 @@ requires independent validation.
 - Expected files/components: export utilities and schema tests.
 - Dependencies: dimensional UI and validated parameter naming.
 - Risk level: medium. Must avoid implying solver-ready CFD completeness.
+- Status: implemented on `feature/cfd-config-export`.
+- Notes: exports JSON, YAML-like text, Markdown summaries, and
+  OpenFOAM-oriented notes. The OpenFOAM output is intentionally a setup note, not
+  a complete case, mesh, solver dictionary, boundary-condition set, or validated
+  CFD workflow.
 
 ## 9. Report Generator
 
@@ -96,6 +101,7 @@ requires independent validation.
 - Expected files/components: browser-side report builder, print CSS, citation helpers.
 - Dependencies: dimensional UI, plot export, and regime checks.
 - Risk level: medium. Wording must remain conservative.
+- Status: next recommended unit.
 
 ## 10. Performance / Tutorial / Showcase Polish
 

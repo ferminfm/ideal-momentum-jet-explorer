@@ -196,6 +196,28 @@ const ENGLISH_TEXT = {
       'URLs encode the model configuration, plot options, built-in data overlays, saved model cases, and cross-section controls. CSV exports include the current curve and visible saved cases.',
     copied: 'Shareable URL copied.',
   },
+  cfdExport: {
+    eyebrow: 'CFD setup aid',
+    title: 'CFD / configuration export',
+    download: 'Download configuration',
+    format: 'Export format',
+    formatOptions: {
+      json: 'JSON',
+      yaml: 'YAML-like',
+      markdown: 'Markdown',
+      'openfoam-notes': 'OpenFOAM notes',
+    },
+    includeSampledStates: 'Include sampled normalized states',
+    includeDimensionalStates: 'Include dimensional states',
+    includeRegimeAssessment: 'Include regime assessment',
+    includeTipPenetration: 'Include tip penetration',
+    includeDataOverlays: 'Include data overlays',
+    includeComparisonCases: 'Include comparison cases',
+    stateSampleStride: 'State sample stride',
+    warning: 'Setup aid only; not a solver-ready CFD case. Verify all solver settings independently.',
+    dataOverlayPrivacyWarning:
+      'Data overlays may include user-imported local data. Include them only when the exported file is safe to share.',
+  },
   comparison: {
     addEyebrow: 'Model comparisons',
     addTitle: 'Saved model cases',
@@ -793,6 +815,29 @@ export const TRANSLATIONS: Record<Language, UiText> = {
         'URLにはモデル設定、プロットオプション、組み込みデータオーバーレイ、保存したモデルケース、断面表示設定が含まれます。CSVには現在の曲線と表示中の保存ケースが含まれます。',
       copied: '共有URLをコピーしました。',
     },
+    cfdExport: {
+      eyebrow: 'CFD 設定補助',
+      title: 'CFD / 設定エクスポート',
+      download: '設定をダウンロード',
+      format: 'エクスポート形式',
+      formatOptions: {
+        json: 'JSON',
+        yaml: 'YAML 風',
+        markdown: 'Markdown',
+        'openfoam-notes': 'OpenFOAM 用メモ',
+      },
+      includeSampledStates: 'サンプルした無次元状態を含める',
+      includeDimensionalStates: '次元付き状態を含める',
+      includeRegimeAssessment: '適用性評価を含める',
+      includeTipPenetration: '先端到達距離を含める',
+      includeDataOverlays: 'データ重ね合わせを含める',
+      includeComparisonCases: '比較ケースを含める',
+      stateSampleStride: '状態サンプル間隔',
+      warning:
+        '設定補助であり，CFD の完全なケースではありません。すべてのソルバー設定を独立に確認してください。',
+      dataOverlayPrivacyWarning:
+        'データ重ね合わせにはユーザーがインポートしたローカルデータが含まれる場合があります。共有して安全な場合のみ含めてください。',
+    },
     comparison: {
       addEyebrow: 'モデル比較',
       addTitle: '保存したモデルケース',
@@ -1386,6 +1431,29 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       helper:
         'Las URL codifican la configuración del modelo, opciones de gráfica, superposiciones de datos incluidas, casos guardados y controles de sección. Los CSV incluyen la curva actual y los casos guardados visibles.',
       copied: 'URL reproducible copiada.',
+    },
+    cfdExport: {
+      eyebrow: 'Ayuda para configuración CFD',
+      title: 'CFD / exportación de configuración',
+      download: 'Descargar configuración',
+      format: 'Formato de exportación',
+      formatOptions: {
+        json: 'JSON',
+        yaml: 'Tipo YAML',
+        markdown: 'Markdown',
+        'openfoam-notes': 'Notas para OpenFOAM',
+      },
+      includeSampledStates: 'Incluir estados normalizados muestreados',
+      includeDimensionalStates: 'Incluir estados dimensionales',
+      includeRegimeAssessment: 'Incluir evaluación de aplicabilidad',
+      includeTipPenetration: 'Incluir penetración de la punta',
+      includeDataOverlays: 'Incluir datos superpuestos',
+      includeComparisonCases: 'Incluir casos de comparación',
+      stateSampleStride: 'Intervalo de muestreo de estados',
+      warning:
+        'Es una ayuda de configuración, no un caso CFD listo para resolver. Verifique todos los ajustes del solver independientemente.',
+      dataOverlayPrivacyWarning:
+        'Los datos superpuestos pueden incluir datos locales importados por el usuario. Inclúyalos solo si el archivo exportado es seguro para compartir.',
     },
     comparison: {
       addEyebrow: 'Comparaciones del modelo',
