@@ -310,3 +310,17 @@ The GitHub Pages app responded with HTTP 200 at `https://ferminfm.github.io/idea
 - Post-merge main validation: `npm run test` passed with 18 test files and 81 tests; `npm run build` passed with the expected large-bundle warning; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile.
 - Scope check: Unit 5 calibration code was not merged; Unit 6 lossy model remains deferred.
 - Deployment status: pending push to `origin/main` and GitHub Pages workflow.
+
+## 2026-05-29 Calibration Mode Branch
+
+- Start time: `2026-05-29T21:22:12+09:00`.
+- Starting commit: `7a645ce`.
+- Branch: `feature/calibration-mode`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Added a browser-side calibration model for fitting prescribed spreading half-angles to selected built-in or user-imported data overlays.
+- Implemented symmetric-angle, two-angle, theta-only, and phi-only modes with bounded coarse-grid search followed by coordinate refinement.
+- Supported calibration targets: normalized area, velocity, composite density, dynamic pressure, gas entrainment, and entrainment coefficient.
+- Added a calibration UI panel with overlay selection, target selection, bounds, fit results, apply-fitted-parameters action, and add-fitted-curve-to-comparison action.
+- Added fitted-curve preview traces on the relevant active plot variable.
+- Preserved the scientific caveat: calibration is exploratory parameter fitting, not validation of breakup, losses, droplet size, vortex dynamics, or composite density.
+- Validation before commit: `npm run test` passed with 20 test files and 91 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server.

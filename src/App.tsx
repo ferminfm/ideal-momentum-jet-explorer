@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { CalibrationPanel } from './components/CalibrationPanel'
 import { CitationPanel } from './components/CitationPanel'
 import { CollapsibleSection } from './components/CollapsibleSection'
 import { ComparisonAddPanel, ComparisonPanel } from './components/ComparisonPanel'
@@ -16,6 +17,7 @@ import { SymbolsGlossary } from './components/SymbolsGlossary'
 import { TRANSLATIONS, type Language } from './i18n/translations'
 import { cloneDataOverlay } from './data/dataOverlays'
 import type { DataOverlay } from './data/dataOverlayTypes'
+import type { CalibrationResult } from './model/calibration'
 import {
   MAX_COMPARISON_CASES,
   clearComparisonCases,
@@ -56,6 +58,10 @@ function App() {
   })
   const [shareStatus, setShareStatus] = useState('')
   const [comparisonNotice, setComparisonNotice] = useState('')
+  const [calibrationPreview, setCalibrationPreview] = useState<{
+    signature: string
+    result: CalibrationResult
+  } | null>(null)
   const { params } = appState
   const text = TRANSLATIONS[appState.language]
   const dimensionalMapping = useMemo(
@@ -66,6 +72,10 @@ function App() {
     [appState.dimensionalSettings, appState.inputMode, params],
   )
   const effectiveParams = dimensionalMapping?.normalizedParams ?? params
+  const effectiveParamsSignature = useMemo(
+    () => JSON.stringify(effectiveParams),
+    [effectiveParams],
+  )
   const series = useMemo(
     () => dimensionalMapping?.normalizedSeries ?? generateJetSeries(effectiveParams),
     [dimensionalMapping, effectiveParams],
@@ -101,6 +111,11 @@ function App() {
     document.documentElement.lang = appState.language
     document.title = text.layout.title
   }, [appState.language, text.layout.title])
+
+  const activeCalibrationPreview =
+    calibrationPreview?.signature === effectiveParamsSignature
+      ? calibrationPreview.result
+      : null
 
   function updateParams(nextParams: JetParameters, presetId = PRESET_CUSTOM) {
     setAppState((current) => ({
@@ -184,6 +199,43 @@ function App() {
         overlayId: overlay.sourceKind === 'synthetic-demo' ? overlay.id : current.overlayId,
       }
     })
+  }
+
+  function applyFittedCalibrationParams(result: CalibrationResult) {
+    updateParams({
+      ...appState.params,
+      thetaDeg: result.fittedThetaDeg,
+      phiDeg: result.fittedPhiDeg,
+      geometry: { ...appState.params.geometry },
+    })
+  }
+
+  function addFittedCalibrationComparison(
+    result: CalibrationResult,
+    overlayLabel: string,
+  ) {
+    setAppState((current) => {
+      if (current.comparisonCases.length >= MAX_COMPARISON_CASES) {
+        return current
+      }
+
+      return {
+        ...current,
+        comparisonCases: [
+          ...current.comparisonCases,
+          createComparisonCase(result.fittedSeries.params, {
+            label: `${text.calibration.fitComparisonLabelPrefix} ${overlayLabel}`,
+            index: current.comparisonCases.length,
+          }),
+        ],
+      }
+    })
+
+    if (appState.comparisonCases.length >= MAX_COMPARISON_CASES) {
+      showComparisonNotice(text.comparison.maxWarning)
+    } else {
+      showComparisonNotice(text.calibration.addedFittedCurve)
+    }
   }
 
   return (
@@ -309,6 +361,25 @@ function App() {
                   overlayId: 'none',
                 }))
               }
+            />
+          </CollapsibleSection>
+          <CollapsibleSection
+            title={text.sections.calibration}
+            expandLabel={text.sections.expandSection}
+            collapseLabel={text.sections.collapseSection}
+            defaultOpen={false}
+          >
+            <CalibrationPanel
+              overlays={appState.dataOverlays}
+              baseParams={effectiveParams}
+              text={text}
+              onPreviewChange={(result) =>
+                setCalibrationPreview(
+                  result ? { signature: effectiveParamsSignature, result } : null,
+                )
+              }
+              onApplyFittedParams={applyFittedCalibrationParams}
+              onAddFittedComparison={addFittedCalibrationComparison}
             />
           </CollapsibleSection>
           <CollapsibleSection
@@ -438,7 +509,8 @@ function App() {
             <Plots
               series={series}
               comparisonCases={appState.comparisonCases}
-              dataOverlays={appState.dataOverlays}
+            dataOverlays={appState.dataOverlays}
+            calibrationPreview={activeCalibrationPreview}
               densityLogScale={appState.densityLogScale}
               text={text}
               onDensityLogScaleChange={(densityLogScale) =>

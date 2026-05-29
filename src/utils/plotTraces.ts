@@ -1,4 +1,5 @@
 import type { DataOverlay, OverlayVariable } from '../data/dataOverlayTypes'
+import { getTargetValue, type CalibrationResult } from '../model/calibration'
 import type { ComparisonCase } from '../model/comparisonCases'
 import type {
   EntrainmentCoefficientLimits,
@@ -162,6 +163,36 @@ export function buildDataOverlayTraces(
           `${escapeHoverText(overlay.source)}<br>${escapeHoverText(overlay.notes)}<extra>${escapeHoverText(overlay.label)}</extra>`,
       }
     })
+}
+
+export function buildCalibrationPreviewTrace(
+  result: CalibrationResult | null,
+  variable: OverlayVariable,
+  label: string,
+): Array<Record<string, unknown>> {
+  if (!result?.success || result.targetVariable !== variable) {
+    return []
+  }
+
+  return [
+    {
+      x: result.fittedSeries.states.map((state) => state.axialZeta),
+      y: result.fittedSeries.states.map((state) =>
+        getTargetValue(state, result.targetVariable),
+      ),
+      type: 'scatter',
+      mode: 'lines',
+      name: label,
+      line: {
+        color: '#6f5bb7',
+        width: 2.6,
+        dash: 'dashdot',
+      },
+      hovertemplate: `${toMathPlainText('zeta')}=%{x:.3f}<br>${toMathPlainText(
+        result.targetVariable,
+      )}=%{y:.5g}<extra>${escapeHoverText(label)}</extra>`,
+    },
+  ]
 }
 
 function formatHoverNumber(value: number): string {

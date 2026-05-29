@@ -904,6 +904,70 @@ main {
   color: #6d5312;
 }
 
+.calibration-panel {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.calibration-grid,
+.calibration-bounds,
+.calibration-result-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.calibration-bounds {
+  border-top: 1px solid #e3ebf1;
+  padding-top: 0.85rem;
+}
+
+.calibration-bounds .control-label {
+  grid-column: span 2;
+}
+
+.calibration-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.calibration-result {
+  background: #f6fafc;
+  border: 1px solid #d7e5ee;
+  border-radius: 8px;
+  display: grid;
+  gap: 0.7rem;
+  padding: 0.85rem;
+}
+
+.calibration-result.warning {
+  background: #fff7df;
+  border-color: #e0c46f;
+}
+
+.calibration-result-grid div {
+  background: #ffffff;
+  border: 1px solid #dce7ef;
+  border-radius: 6px;
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.55rem;
+}
+
+.calibration-result-grid span {
+  color: #5d7182;
+  font-size: 0.75rem;
+  font-weight: 750;
+  text-transform: uppercase;
+}
+
+.calibration-result-grid strong {
+  color: #1d2a35;
+  font-size: 0.95rem;
+}
+
 .icon-button {
   align-items: center;
   background: #ffffff;
@@ -1402,6 +1466,9 @@ main {
 
   .control-grid,
   .data-overlay-import-grid,
+  .calibration-grid,
+  .calibration-bounds,
+  .calibration-result-grid,
   .preset-grid,
   .metrics-strip,
   .engineering-summary-grid,
@@ -1420,7 +1487,8 @@ main {
   }
 
   .data-overlay-import-grid .field:nth-last-child(-n + 3),
-  .data-overlay-import-grid .primary-action {
+  .data-overlay-import-grid .primary-action,
+  .calibration-bounds .control-label {
     grid-column: auto;
   }
 

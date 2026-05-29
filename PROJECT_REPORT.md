@@ -227,3 +227,16 @@
 - Validation on merged main: `npm run test` passed with 18 test files and 81 tests; `npm run build` passed with the expected large-bundle warning; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile.
 - Scope check: Unit 5 calibration code was not merged; Unit 6 lossy model remains deferred.
 - Deployment status: pending push to `origin/main` and GitHub Pages workflow.
+
+## Calibration Mode Branch
+
+- Branch: `feature/calibration-mode`.
+- Starting commit: `7a645ce`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Added a browser-side calibration model for fitting prescribed spreading half-angles to selected built-in or user-imported overlays.
+- Implemented symmetric-angle, two-angle, theta-only, and phi-only calibration modes.
+- Optimizer strategy: bounded coarse-grid search followed by coordinate refinement of the active angle parameters.
+- Supported targets: normalized `Ahat`, `vhat`, `rhohat`, `phat`, `mhat_g`, and `K_A`.
+- Added a calibration panel with fit results, fitted-curve preview, apply fitted parameters, and add fitted curve to saved model cases.
+- Calibration remains explicitly scoped as exploratory parameter fitting, not physical validation.
+- Validation before commit: `npm run test` passed with 20 test files and 91 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server.
