@@ -82,7 +82,7 @@ describe('URL state helpers', () => {
 
   it('round-trips built-in data overlay visibility without serializing user imports', () => {
     const state = createDefaultExplorerState()
-    const builtin = getBuiltinDataOverlay('synthetic-equal-density-reference')
+    const builtin = getBuiltinDataOverlay('synthetic-calibration-square-velocity-theta8')
     expect(builtin).toBeDefined()
     state.dataOverlays = [{ ...cloneDataOverlay(builtin!), visible: false }]
     state.dataOverlays.push({
@@ -102,7 +102,9 @@ describe('URL state helpers', () => {
     } satisfies DataOverlay)
 
     const query = encodeStateToQuery(state)
-    expect(query.toString()).toContain('dataOverlays=synthetic-equal-density-reference%3A0')
+    expect(query.toString()).toContain(
+      'dataOverlays=synthetic-calibration-square-velocity-theta8%3A0',
+    )
     expect(query.toString()).not.toContain('imported-private-data')
     expect(query.toString()).not.toContain('Private+lab+data')
     expect(query.toString()).not.toContain('Session-local+data')
@@ -112,7 +114,9 @@ describe('URL state helpers', () => {
     )
 
     expect(sanitized.dataOverlays).toHaveLength(1)
-    expect(sanitized.dataOverlays[0].id).toBe('synthetic-equal-density-reference')
+    expect(sanitized.dataOverlays[0].id).toBe(
+      'synthetic-calibration-square-velocity-theta8',
+    )
     expect(sanitized.dataOverlays[0].visible).toBe(false)
   })
 

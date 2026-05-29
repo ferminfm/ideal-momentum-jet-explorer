@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   buildOverlayFromCsvSelection,
   getNumericColumns,
+  inferOverlayVariableFromColumnName,
   parseCsvText,
 } from './dataOverlayCsv'
 
@@ -19,6 +20,16 @@ describe('data overlay CSV utilities', () => {
     const table = parseCsvText('zeta,vhat,label\n0,1,a\n5,0.8,b')
 
     expect(getNumericColumns(table)).toEqual(['zeta', 'vhat'])
+  })
+
+  it('infers overlay variables from common normalized column names', () => {
+    expect(inferOverlayVariableFromColumnName('Ahat')).toBe('area')
+    expect(inferOverlayVariableFromColumnName('vhat')).toBe('velocity')
+    expect(inferOverlayVariableFromColumnName('rhohat')).toBe('density')
+    expect(inferOverlayVariableFromColumnName('phat')).toBe('pressure')
+    expect(inferOverlayVariableFromColumnName('mhat_g')).toBe('entrainment')
+    expect(inferOverlayVariableFromColumnName('K_A')).toBe('coefficient')
+    expect(inferOverlayVariableFromColumnName('unknown')).toBeNull()
   })
 
   it('builds an overlay from selected numeric columns', () => {

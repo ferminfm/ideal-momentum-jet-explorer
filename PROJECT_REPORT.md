@@ -388,3 +388,35 @@ repository URL below.
     dev server. A first smoke attempt failed before the server was running.
 - Known warning: local Vite/browser logging still reports the existing
   `THREE.Clock` deprecation warning from the 3D dependency stack.
+
+## Built-In Synthetic Calibration Overlays And CSV Help
+
+- Branch: `fix/builtin-calibration-overlays-and-help`.
+- Starting commit: `23bda8a`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded
+  in the final report.
+- Added compact built-in synthetic calibration overlays for square velocity,
+  rectangular area, elliptical density, rectangular entrainment, and noisy
+  weighted velocity examples.
+- Added downloadable synthetic CSV fixtures under
+  `public/examples/calibration-overlays/`; these are generated from the app
+  model and are not measured or validation data.
+- Improved the CSV overlay import guide, x/y column labels, target-variable
+  helper text, and optional error-column guidance.
+- Added simple variable auto-suggestion from common CSV column names such as
+  `Ahat`, `vhat`, `rhohat`, `phat`, `mhat_g`, and `K_A`.
+- Updated public-data discovery notes to keep measured public datasets as a
+  future curated/provenance task.
+- Unit 6 remains deferred; no lossy-model code or unverified public dataset was
+  added.
+- Validation:
+  - `npm run test` passed with 33 files and 135 tests.
+  - `npm run build` passed with the expected large Plotly chunk warning.
+  - `npm run lint` passed.
+  - `npm run analyze:assets` passed; largest chunks were Plotly
+    `4535.12 kB` raw / `1345.08 kB` gzip and Three `904.27 kB` raw /
+    `240.25 kB` gzip.
+  - `npm run smoke:visual` passed on desktop and mobile after starting the Vite
+    dev server.
+- Known warning: local Vite/browser logging still reports the existing
+  `THREE.Clock` deprecation warning from the 3D dependency stack.

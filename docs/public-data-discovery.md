@@ -5,8 +5,13 @@ that can be used as documented comparison overlays for the Ideal Momentum Jet
 Explorer.
 
 No measured public numerical dataset is bundled with the app yet. The current
-built-in overlay is a synthetic demo only and must not be interpreted as
-validation data.
+built-in overlays are synthetic examples generated from the app model. They are
+not measured data, public validation data, experimental data, literature data,
+or CFD data.
+
+The future task is to identify permissible datasets for velocity, width/height,
+area growth, liquid volume fraction, density/concentration, entrainment,
+X-ray mass distribution, PIV, PLIF, and PDPA comparisons.
 
 Do not add digitized literature points unless the numerical dataset is
 public/permissible and citation, provenance, and license or permission

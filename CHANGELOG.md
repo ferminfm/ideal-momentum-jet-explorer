@@ -13,6 +13,12 @@
   quick-start examples remain the single visible example mechanism.
 - Added public-data discovery and analytics-option documentation without
   bundling unverified datasets or enabling tracking.
+- Added built-in synthetic calibration overlay examples and downloadable
+  synthetic CSV fixtures. These are generated from the app model and are not
+  measured or validation data.
+- Improved CSV overlay import guidance with normalized x/y mapping help,
+  target-variable explanations, optional error-column notes, and variable
+  auto-suggestion from common column names.
 - Added the dimensional engineering core foundation with SI-unit scales,
   dimensional state conversion, fluid presets, and nondimensional groups.
 - Added dimensional engineering mode with material presets, physical nozzle

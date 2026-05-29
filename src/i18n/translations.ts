@@ -302,16 +302,37 @@ const ENGLISH_TEXT = {
   dataOverlays: {
     eyebrow: 'Data overlays',
     title: 'Measured / CFD / imported overlays',
-    builtinOverlays: 'Built-in overlays',
+    builtinOverlays: 'Built-in synthetic examples',
+    builtinSyntheticHelp:
+      'These are synthetic examples for testing overlay import and calibration. They are generated from the app model, not measured validation data.',
     importCsv: 'Import CSV overlay',
+    csvGuideTitle: 'CSV import guide',
+    csvGuideIntro:
+      'The importer creates a local overlay from numeric CSV columns. It does not infer units.',
+    csvGuideHeader: 'The CSV must have a header row.',
+    csvGuideXColumn:
+      'The x column is usually zeta, the normalized axial distance zeta = z / De.',
+    csvGuideYColumn:
+      'The y column should match the selected overlay variable: Ahat, vhat, rhohat, phat, mhat_g, or K_A.',
+    csvGuideErrors:
+      'Optional y-error columns can be selected and are used as calibration weights when present.',
+    csvGuideNondimensional:
+      'Columns are assumed to be already nondimensionalized; no unit conversion is performed.',
+    csvGuideWorkflow:
+      'Workflow: import CSV, choose x and y columns, choose the matching variable, add overlay, then run calibration.',
+    csvGuideVariableMap:
+      'Variable map: Ahat -> Area, vhat -> Velocity, rhohat -> Composite density, phat -> Pressure, mhat_g -> Gas entrainment, K_A -> Coefficient.',
+    downloadExampleCsvs: 'Download example CSVs',
     activeOverlays: 'Active data overlays',
     addOverlay: 'Add overlay',
     none: 'None',
-    xColumn: 'X column',
-    yColumn: 'Y column',
+    xColumn: 'X column - normalized distance (zeta)',
+    yColumn: 'Y column - plotted quantity',
     xErrorColumn: 'X-error column',
     yErrorColumn: 'Y-error column',
-    targetVariable: 'Target variable',
+    targetVariable: 'Overlay variable / plot target',
+    targetVariableHelp:
+      'Choose the variable represented by the Y column. This controls which plot receives the overlay and which calibration target is used.',
     label: 'Label',
     defaultImportedLabel: 'Imported data overlay',
     sourceNotes: 'Source / notes',
@@ -328,6 +349,22 @@ const ENGLISH_TEXT = {
       'No measured public dataset is bundled yet. Public overlays are included only when numerical data are documented and permissible.',
     builtinLabels: {
       'synthetic-equal-density-reference': 'Synthetic demo only - not data',
+      'synthetic-calibration-square-velocity-theta8':
+        'Square velocity, theta=phi=8° (synthetic)',
+      'synthetic-calibration-rectangular-area-theta9p61-phi5p75':
+        'Rectangular area, theta=9.61°, phi=5.75° (synthetic)',
+      'synthetic-calibration-elliptical-density-theta9p61-phi5p75':
+        'Elliptical density, theta=9.61°, phi=5.75° (synthetic)',
+      'synthetic-calibration-rectangular-entrainment-theta9p61-phi5p75':
+        'Rectangular entrainment, theta=9.61°, phi=5.75° (synthetic)',
+      'synthetic-calibration-noisy-velocity-with-error':
+        'Noisy velocity with error bars (synthetic)',
+    },
+    exampleCsvLinks: {
+      squareVelocity: 'Square velocity',
+      rectangularArea: 'Rectangular area',
+      ellipticalDensity: 'Elliptical density',
+      noisyVelocity: 'Noisy velocity + errors',
     },
     variableOptions: {
       area: 'Area',
@@ -352,6 +389,10 @@ const ENGLISH_TEXT = {
     title: 'Calibration / fit spreading angles',
     helper:
       'Fit prescribed half-angles to selected overlay data. This is exploratory parameter fitting, not model validation.',
+    overlayAssumptionHelp:
+      'Calibration assumes the overlay x-axis is zeta and the y-axis already matches the selected normalized target variable.',
+    syntheticOverlayNotice:
+      'Synthetic example; use this for interface testing, not validation.',
     overlayToFit: 'Overlay to fit',
     targetVariable: 'Target variable',
     parameterMode: 'Parameter mode',
@@ -989,16 +1030,37 @@ export const TRANSLATIONS: Record<Language, UiText> = {
     dataOverlays: {
       eyebrow: 'データオーバーレイ',
       title: '実測・CFD・インポートデータ',
-      builtinOverlays: '組み込みオーバーレイ',
+      builtinOverlays: '組み込み合成例',
+      builtinSyntheticHelp:
+        'これらはオーバーレイ読み込みとキャリブレーションを試すための合成例です。アプリのモデルから生成したもので，実測の検証データではありません。',
       importCsv: 'CSVオーバーレイをインポート',
+      csvGuideTitle: 'CSVインポートガイド',
+      csvGuideIntro:
+        '数値CSV列からローカルなオーバーレイを作成します。単位は推定しません。',
+      csvGuideHeader: 'CSVにはヘッダー行が必要です。',
+      csvGuideXColumn:
+        'x列は通常 zeta で，無次元軸方向距離 zeta = z / De を表します。',
+      csvGuideYColumn:
+        'y列は選択したオーバーレイ変数 Ahat, vhat, rhohat, phat, mhat_g, K_A のいずれかに対応させます。',
+      csvGuideErrors:
+        '任意のy誤差列を選択できます。存在する場合はキャリブレーションの重みに使います。',
+      csvGuideNondimensional:
+        '列はすでに無次元化されていると仮定します。単位変換は行いません。',
+      csvGuideWorkflow:
+        '手順: CSVを読み込み，x列とy列を選び，対応する変数を選択してオーバーレイを追加し，キャリブレーションを実行します。',
+      csvGuideVariableMap:
+        '変数対応: Ahat -> 面積，vhat -> 速度，rhohat -> 複合密度，phat -> 圧力，mhat_g -> 気相エントレインメント，K_A -> 係数。',
+      downloadExampleCsvs: 'サンプルCSVをダウンロード',
       activeOverlays: '有効なデータオーバーレイ',
       addOverlay: 'オーバーレイを追加',
       none: 'なし',
-      xColumn: 'X列',
-      yColumn: 'Y列',
+      xColumn: 'X列 - 無次元距離 (zeta)',
+      yColumn: 'Y列 - プロット量',
       xErrorColumn: 'X誤差列',
       yErrorColumn: 'Y誤差列',
-      targetVariable: '対象変数',
+      targetVariable: 'オーバーレイ変数 / プロット対象',
+      targetVariableHelp:
+        'Y列が表す変数を選んでください。この選択により，表示されるプロットとキャリブレーション対象が決まります。',
       label: 'ラベル',
       defaultImportedLabel: 'インポートしたデータオーバーレイ',
       sourceNotes: '出典・メモ',
@@ -1016,6 +1078,22 @@ export const TRANSLATIONS: Record<Language, UiText> = {
         '公開実測データセットはまだ同梱していません。公開オーバーレイは、数値データが文書化され利用可能な場合にのみ追加します。',
       builtinLabels: {
         'synthetic-equal-density-reference': '合成デモのみ - データではありません',
+        'synthetic-calibration-square-velocity-theta8':
+          '正方形速度 theta=phi=8° (合成)',
+        'synthetic-calibration-rectangular-area-theta9p61-phi5p75':
+          '矩形面積 theta=9.61°, phi=5.75° (合成)',
+        'synthetic-calibration-elliptical-density-theta9p61-phi5p75':
+          '楕円密度 theta=9.61°, phi=5.75° (合成)',
+        'synthetic-calibration-rectangular-entrainment-theta9p61-phi5p75':
+          '矩形エントレインメント theta=9.61°, phi=5.75° (合成)',
+        'synthetic-calibration-noisy-velocity-with-error':
+          '誤差付きノイズ速度 (合成)',
+      },
+      exampleCsvLinks: {
+        squareVelocity: '正方形速度',
+        rectangularArea: '矩形面積',
+        ellipticalDensity: '楕円密度',
+        noisyVelocity: 'ノイズ速度 + 誤差',
       },
       variableOptions: {
         area: '面積',
@@ -1040,6 +1118,10 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       title: 'キャリブレーション / 拡がり角のフィット',
       helper:
         '選択したデータに対して規定した半角をフィットします。これは探索的なパラメータフィットであり、モデル検証ではありません。',
+      overlayAssumptionHelp:
+        'キャリブレーションでは，オーバーレイのx軸がzetaで，y軸が選択した無次元対象変数に一致していると仮定します。',
+      syntheticOverlayNotice:
+        '合成例です。インターフェース確認用であり，検証データではありません。',
       overlayToFit: 'フィットするデータ',
       targetVariable: '対象変数',
       parameterMode: 'パラメータモード',
@@ -1673,16 +1755,37 @@ export const TRANSLATIONS: Record<Language, UiText> = {
     dataOverlays: {
       eyebrow: 'Superposiciones de datos',
       title: 'Datos medidos / CFD / importados',
-      builtinOverlays: 'Superposiciones incluidas',
+      builtinOverlays: 'Ejemplos sintéticos incluidos',
+      builtinSyntheticHelp:
+        'Estos ejemplos sintéticos sirven para probar la importación y la calibración. Fueron generados con el modelo de la app; no son datos medidos ni de validación.',
       importCsv: 'Importar superposición CSV',
+      csvGuideTitle: 'Guía para importar CSV',
+      csvGuideIntro:
+        'El importador crea una superposición local a partir de columnas CSV numéricas. No infiere unidades.',
+      csvGuideHeader: 'El CSV debe tener una fila de encabezados.',
+      csvGuideXColumn:
+        'La columna x normalmente es zeta, la distancia axial normalizada zeta = z / De.',
+      csvGuideYColumn:
+        'La columna y debe coincidir con la variable seleccionada: Ahat, vhat, rhohat, phat, mhat_g o K_A.',
+      csvGuideErrors:
+        'Las columnas opcionales de error en y se pueden seleccionar y se usan como pesos de calibración.',
+      csvGuideNondimensional:
+        'Se asume que las columnas ya están adimensionalizadas; no se hace conversión de unidades.',
+      csvGuideWorkflow:
+        'Flujo: importe CSV, elija columnas x/y, elija la variable correspondiente, agregue la superposición y ejecute la calibración.',
+      csvGuideVariableMap:
+        'Mapa de variables: Ahat -> Área, vhat -> Velocidad, rhohat -> Densidad compuesta, phat -> Presión, mhat_g -> Arrastre de gas, K_A -> Coeficiente.',
+      downloadExampleCsvs: 'Descargar CSV de ejemplo',
       activeOverlays: 'Superposiciones de datos activas',
       addOverlay: 'Agregar superposición',
       none: 'Ninguna',
-      xColumn: 'Columna X',
-      yColumn: 'Columna Y',
+      xColumn: 'Columna X - distancia normalizada (zeta)',
+      yColumn: 'Columna Y - cantidad graficada',
       xErrorColumn: 'Columna de error X',
       yErrorColumn: 'Columna de error Y',
-      targetVariable: 'Variable objetivo',
+      targetVariable: 'Variable de superposición / gráfica',
+      targetVariableHelp:
+        'Elija la variable representada por la columna Y. Esto controla qué gráfica recibe la superposición y qué objetivo usa la calibración.',
       label: 'Etiqueta',
       defaultImportedLabel: 'Superposición de datos importados',
       sourceNotes: 'Fuente / notas',
@@ -1700,6 +1803,22 @@ export const TRANSLATIONS: Record<Language, UiText> = {
         'Aún no se incluye un conjunto público de datos medidos. Las superposiciones públicas se agregan solo cuando los datos numéricos están documentados y son permisibles.',
       builtinLabels: {
         'synthetic-equal-density-reference': 'Demo sintética solamente - no son datos',
+        'synthetic-calibration-square-velocity-theta8':
+          'Velocidad cuadrada, theta=phi=8° (sintética)',
+        'synthetic-calibration-rectangular-area-theta9p61-phi5p75':
+          'Área rectangular, theta=9.61°, phi=5.75° (sintética)',
+        'synthetic-calibration-elliptical-density-theta9p61-phi5p75':
+          'Densidad elíptica, theta=9.61°, phi=5.75° (sintética)',
+        'synthetic-calibration-rectangular-entrainment-theta9p61-phi5p75':
+          'Arrastre rectangular, theta=9.61°, phi=5.75° (sintética)',
+        'synthetic-calibration-noisy-velocity-with-error':
+          'Velocidad con ruido y barras de error (sintética)',
+      },
+      exampleCsvLinks: {
+        squareVelocity: 'Velocidad cuadrada',
+        rectangularArea: 'Área rectangular',
+        ellipticalDensity: 'Densidad elíptica',
+        noisyVelocity: 'Velocidad con ruido + errores',
       },
       variableOptions: {
         area: 'Área',
@@ -1724,6 +1843,10 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       title: 'Calibración / ajuste de ángulos de apertura',
       helper:
         'Ajusta semiángulos prescritos a los datos seleccionados. Es un ajuste exploratorio de parámetros, no validación del modelo.',
+      overlayAssumptionHelp:
+        'La calibración asume que el eje x de la superposición es zeta y que el eje y ya coincide con la variable normalizada seleccionada.',
+      syntheticOverlayNotice:
+        'Ejemplo sintético; úselo para probar la interfaz, no como validación.',
       overlayToFit: 'Datos para ajustar',
       targetVariable: 'Variable objetivo',
       parameterMode: 'Modo de parámetros',
