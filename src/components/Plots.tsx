@@ -2,6 +2,7 @@ import { useMemo, useState, type ComponentType } from 'react'
 import PlotModule from 'react-plotly.js'
 import type { DataOverlay } from '../data/dataOverlayTypes'
 import type { UiText } from '../i18n/translations'
+import type { CalibrationResult } from '../model/calibration'
 import type { ComparisonCase } from '../model/comparisonCases'
 import {
   computeEntrainmentCoefficientLimits,
@@ -11,6 +12,7 @@ import {
 import { formatNumber } from '../utils/format'
 import { toMathPlainText } from '../utils/mathPlainText'
 import {
+  buildCalibrationPreviewTrace,
   buildDataOverlayTraces,
   buildEntrainmentReferenceTraces,
   buildModelCurveTraces,
@@ -22,6 +24,7 @@ interface PlotsProps {
   series: JetSeries
   comparisonCases: ComparisonCase[]
   dataOverlays: DataOverlay[]
+  calibrationPreview: CalibrationResult | null
   densityLogScale: boolean
   text: UiText
   onDensityLogScaleChange: (value: boolean) => void
@@ -73,6 +76,7 @@ export function Plots({
   series,
   comparisonCases,
   dataOverlays,
+  calibrationPreview,
   densityLogScale,
   text,
   onDensityLogScaleChange,
@@ -103,6 +107,13 @@ export function Plots({
     })
 
     traces.push(...buildDataOverlayTraces(dataOverlays, activePlot.id))
+    traces.push(
+      ...buildCalibrationPreviewTrace(
+        calibrationPreview,
+        activePlot.id,
+        text.calibration.previewLabel,
+      ),
+    )
 
     if (activePlot.id === 'coefficient') {
       traces.push(
@@ -118,9 +129,11 @@ export function Plots({
     activePlot,
     comparisonCases,
     coefficientLimits,
+    calibrationPreview,
     dataOverlays,
     series,
     text.comparison.currentLabel,
+    text.calibration.previewLabel,
     text.plots.hoverValue,
     text.plots.hoverZeta,
     text.plots.referenceValues.farFieldLimit,

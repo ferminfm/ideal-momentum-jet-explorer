@@ -298,3 +298,17 @@ The GitHub Pages app responded with HTTP 200 at `https://ferminfm.github.io/idea
 - Polished imported overlay default labels to use neutral data-overlay wording.
 - Validation before commit: `npm run test` passed with 18 test files and 81 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server.
 - Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
+
+## 2026-05-29 Calibration Mode Branch
+
+- Start time: `2026-05-29T21:22:12+09:00`.
+- Starting commit: `7a645ce`.
+- Branch: `feature/calibration-mode`.
+- Feature commit: branch `HEAD` after this report update; exact hash recorded in the final report.
+- Added a browser-side calibration model for fitting prescribed spreading half-angles to selected built-in or user-imported data overlays.
+- Implemented symmetric-angle, two-angle, theta-only, and phi-only modes with bounded coarse-grid search followed by coordinate refinement.
+- Supported calibration targets: normalized area, velocity, composite density, dynamic pressure, gas entrainment, and entrainment coefficient.
+- Added a calibration UI panel with overlay selection, target selection, bounds, fit results, apply-fitted-parameters action, and add-fitted-curve-to-comparison action.
+- Added fitted-curve preview traces on the relevant active plot variable.
+- Preserved the scientific caveat: calibration is exploratory parameter fitting, not validation of breakup, losses, droplet size, vortex dynamics, or composite density.
+- Validation before commit: `npm run test` passed with 20 test files and 91 tests; `npm run build` passed with the expected large-bundle warning from Plotly/Three/KaTeX; `npm run lint` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server.

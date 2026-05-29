@@ -146,6 +146,31 @@ zeta,vhat
 Use normalized variables unless you have applied the dimensional conversion
 consistently outside the app.
 
+## Calibration / Fitting Of Prescribed Spreading Angles
+
+The calibration panel fits prescribed spreading half-angles to selected built-in
+or user-imported overlay data. It supports symmetric-angle fitting
+`theta=phi`, two-angle fitting, `theta`-only fitting, and `phi`-only fitting.
+Supported targets are normalized `Ahat`, `vhat`, `rhohat`, `phat`, `mhat_g`,
+and `K_A`.
+
+The optimizer is a browser-side bounded least-squares search: a coarse grid
+finds a stable starting point, followed by coordinate refinement of the active
+angle parameters. The result can be previewed on the relevant plot, applied to
+the current controls, or added as a saved model case for comparison.
+
+Calibration here means fitting prescribed area-growth/spreading parameters. It
+does not fit breakup, losses, droplet-size distribution, vortex dynamics, or
+composite-density validation. A good numerical fit is not automatic physical
+validation.
+
+Example workflow:
+
+1. Import a CSV overlay with columns such as `zeta,vhat`.
+2. Select the overlay in the calibration panel.
+3. Fit `theta` and/or `phi` within bounded angle ranges.
+4. Apply the fitted parameters or add the fitted curve to saved model cases.
+
 ## Interactive Features
 
 - English, Japanese, and Spanish interface controls for public teaching and research use.
@@ -154,6 +179,7 @@ consistently outside the app.
 - Dimensional engineering mode with fluid presets, physical nozzle dimensions, velocity/pressure-drop operating point, and nondimensional spray/nozzle groups.
 - Regime/applicability checker with conservative heuristic warnings for Reynolds, Weber, Ohnesorge, Mach estimate, density ratio, aspect ratio, and spreading angles.
 - Data-overlay manager for built-in comparison aids and user-imported CSV curves. Imported CSV overlays stay local in the browser and are not encoded in shareable URLs.
+- Calibration aid for fitting prescribed spreading half-angles to selected overlay data, with fitted-curve preview and optional saved comparison case.
 - 3D-first layout with a desktop sticky parameter sidebar and collapsible sections to reduce scrolling while inspecting the jet geometry.
 - Saved model-case comparisons: click **Add current case to comparison** to freeze the current curve, then move the sliders to compare the live case against saved model-generated curves.
 - Entrainment-coefficient references: the `K_A` plot shows horizontal lines for the near-field value `K_A(0)` and the far-field asymptote `K_A(∞)` for the current settings.

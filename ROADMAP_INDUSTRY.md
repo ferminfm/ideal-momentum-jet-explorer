@@ -52,7 +52,9 @@ requires independent validation.
 - Expected files/components: fitting utilities, objective-function tests, calibration UI.
 - Dependencies: public/user data import and robust dimensional state outputs.
 - Risk level: high. Optimization results need uncertainty and validation caveats.
-- Status: next recommended unit after review of the data-overlay foundation.
+- Status: implemented on `feature/calibration-mode`.
+- Notes: fits prescribed half-angles only. It is an exploratory parameter-fitting
+  aid, not automatic physical validation.
 
 ## 6. Lossy Model Extensions — deferred
 
