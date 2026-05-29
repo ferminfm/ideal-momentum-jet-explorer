@@ -1,7 +1,7 @@
 {
   "name": "ideal-momentum-jet-explorer",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.2.0",
   "description": "Browser-based scientific computing app for a reduced-order atomizing jet model.",
   "author": "Fermín Franco-Medrano — Ensenada Campus, Autonomous University of Baja California / Institute of Mathematics for Industry, Kyushu University",
   "license": "MIT",

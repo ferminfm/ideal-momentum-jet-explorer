@@ -116,6 +116,20 @@ requires independent validation.
 - Notes: added dependency-free asset reporting, lazy-loaded heavy panels, manual
   Plotly/Three/React chunking, quick-start examples, and public README polish.
 
+## 11. Final Integration / Release Hardening
+
+- Goal: integrate the reviewed industry feature branches, stabilize the public
+  release branch, update release documentation, run full validation, and prepare
+  deployment through the existing GitHub Pages workflow.
+- Expected files/components: integration branch, changelog/release notes,
+  project report, version metadata, full test/build/lint/smoke validation.
+- Dependencies: implemented Units 1-5 and 7-10. Unit 6 remains deferred and is
+  not part of this release.
+- Risk level: medium. Main risk is branch-integration drift rather than new
+  scientific behavior.
+- Status: implemented on `integration/industry-features-release`.
+- Notes: this unit does not add physics or change the reduced-order equations.
+
 ## Future Follow-Ups
 
 - Add documented public validation datasets when numerical data are permissible.

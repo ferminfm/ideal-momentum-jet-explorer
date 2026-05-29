@@ -35,7 +35,10 @@ engineering design software.
 
 ## Roadmap Status
 
-- Units 1-5 and 7-10 are implemented on feature branches.
+- Units 1-5 and 7-10 are implemented and collected for release on
+  `integration/industry-features-release`.
+- Unit 11 is the integration/release-hardening pass; it should not add new
+  physics or major features.
 - Unit 6 lossy model extensions are deferred until the governing equations,
   assumptions, and validation strategy are formally documented.
 - Future public validation datasets must have documented provenance and

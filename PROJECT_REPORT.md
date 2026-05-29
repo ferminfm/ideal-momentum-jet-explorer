@@ -1,8 +1,9 @@
 # Project Report
 
-## Local Path
+## Local Repository
 
-`/home/franco/Documents/GitHub/ideal-momentum-jet-explorer`
+Use the project root on the local workstation or clone from the public
+repository URL below.
 
 ## Public URLs
 
@@ -19,13 +20,13 @@
 - Visual smoke test: `npm run smoke:visual`
 - Production preview: `npm run preview -- --host 127.0.0.1`
 
-## Current Deployment Status
+## Current Deployment Status Before Unit 11 Release PR
 
 - Branch: `main`
 - Remote: `origin` -> `https://github.com/ferminfm/ideal-momentum-jet-explorer.git`
 - GitHub Pages workflow: `.github/workflows/deploy.yml`
 - Vite project base: `/ideal-momentum-jet-explorer/`
-- Latest deployed feature commit: `32b8e74`
+- Latest deployed main before Unit 11 integration branch: `0adad3c`.
 - Latest verified deployment run: GitHub Actions run `26618729298`, completed successfully.
 - Live Pages check: `curl -I https://ferminfm.github.io/ideal-momentum-jet-explorer/` returned HTTP 200.
 
@@ -294,3 +295,41 @@
 - Validation before commit: `npm run test` passed with 30 test files and 119 tests; `npm run build` passed with the expected large Plotly/Three chunk warning; `npm run lint` passed; `npm run analyze:assets` passed; local `npm run smoke:visual` passed on desktop and mobile after starting the required Vite dev server; targeted browser check passed for applying a quick-start example.
 - Known warning: local Vite/browser logging still reports the existing `THREE.Clock` deprecation warning from the 3D stack.
 - Next recommended action: merge reviewed feature branches into main in order or open PRs.
+
+## Unit 11 Integration Release Branch
+
+- Branch: `integration/industry-features-release`.
+- Starting main commit: `0adad3c`.
+- Units 1-4 were already present on `main` before this integration branch.
+- Merged feature branches:
+  - `origin/feature/calibration-mode` at `74e04f7`.
+  - `origin/feature/tip-penetration-module` at `4cf0f47`.
+  - `origin/feature/cfd-config-export` at `78e15cf`.
+  - `origin/feature/report-generator` at `4e2a4cb`.
+  - `origin/feature/performance-showcase-polish` at `189fb30`.
+- Unit 6 lossy model branch was not found and was not merged; the roadmap keeps
+  Unit 6 deferred until the governing equations, assumptions, and validation
+  strategy are formally documented.
+- Conflicts encountered: `FEATURE_PASS_REPORT.md` and `PROJECT_REPORT.md`
+  during the Unit 5 merge. The resolution kept both the Units 1-4 main-merge
+  notes and the Unit 5 calibration notes. Later merges were automatic.
+- Version metadata updated to `0.2.0` in `package.json` and `package-lock.json`.
+- Added `CHANGELOG.md` with the industry feature integration summary.
+- Public-safety scan: no committed PDF files were found. Local absolute paths
+  were removed from public documentation. Remaining `private`, `token`, and
+  related hits are package metadata/dependency names, safety instructions, or
+  tests for HTML escaping and URL privacy.
+- Validation:
+  - `npm run test` passed with 30 files and 119 tests.
+  - `npm run build` passed with the expected large Plotly chunk warning.
+  - `npm run lint` passed.
+  - `npm run analyze:assets` passed; largest chunks were Plotly
+    `4535.12 kB` raw / `1345.08 kB` gzip and Three `904.27 kB` raw /
+    `240.25 kB` gzip.
+  - `npm run smoke:visual` passed on desktop and mobile after starting the Vite
+    dev server.
+  - `npm audit --omit=dev` reported 0 vulnerabilities.
+- Known warning: local Vite/browser logging still reports the existing
+  `THREE.Clock` deprecation warning from the 3D dependency stack.
+- Deployment status: integration branch prepared for PR; `main` is not changed
+  by this pass until the PR is reviewed and merged.
