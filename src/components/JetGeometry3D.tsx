@@ -327,22 +327,26 @@ interface GeometryViewControlsProps {
   text: UiText
   showAxes: boolean
   showNozzle: boolean
+  showJetEnclosure: boolean
   captureStatus: string
   onCapture: () => void
   onCameraPreset: (preset: CameraPreset) => void
   onShowAxesChange: (value: boolean) => void
   onShowNozzleChange: (value: boolean) => void
+  onShowJetEnclosureChange: (value: boolean) => void
 }
 
 export function GeometryViewControls({
   text,
   showAxes,
   showNozzle,
+  showJetEnclosure,
   captureStatus,
   onCapture,
   onCameraPreset,
   onShowAxesChange,
   onShowNozzleChange,
+  onShowJetEnclosureChange,
 }: GeometryViewControlsProps) {
   return (
     <div className="viewer-action-controls">
@@ -389,6 +393,14 @@ export function GeometryViewControls({
           onChange={(event) => onShowNozzleChange(event.target.checked)}
         />
         {text.geometry.showNozzle}
+      </label>
+      <label className="toggle-control">
+        <input
+          type="checkbox"
+          checked={showJetEnclosure}
+          onChange={(event) => onShowJetEnclosureChange(event.target.checked)}
+        />
+        {text.geometry.showJetEnclosure}
       </label>
       {captureStatus ? <span className="copy-status">{captureStatus}</span> : null}
     </div>
@@ -584,6 +596,7 @@ interface JetMeshProps {
   showAxisSwitchingSection: boolean
   showAxes: boolean
   showNozzle: boolean
+  showJetEnclosure: boolean
   axisSwitchingZeta: number | null
   elementAnimation: FluidElementAnimationProps
   cameraPreset: CameraPreset
@@ -606,6 +619,7 @@ function JetMesh({
   showAxisSwitchingSection,
   showAxes,
   showNozzle,
+  showJetEnclosure,
   axisSwitchingZeta,
   elementAnimation,
   cameraPreset,
@@ -647,31 +661,35 @@ function JetMesh({
     <>
       <ambientLight intensity={0.65} />
       <directionalLight position={[3, -4, 5]} intensity={1.5} />
-      <mesh geometry={surfaceGeometry} renderOrder={0}>
-        <meshStandardMaterial
-          color="#4e89ae"
-          opacity={elementAnimation.isAnimating ? 0.2 : 0.26}
-          transparent
-          depthWrite={false}
-          side={THREE.DoubleSide}
-          roughness={0.55}
-          metalness={0.05}
-        />
-      </mesh>
-      <lineSegments renderOrder={1}>
-        <wireframeGeometry args={[surfaceGeometry]} />
-        <lineBasicMaterial color="#355f7a" transparent opacity={0.24} depthWrite={false} />
-      </lineSegments>
-      <points geometry={dropletGeometry} renderOrder={2}>
-        <pointsMaterial
-          color={series.params.densityRatio < 0.01 ? '#b96332' : '#2a6f88'}
-          size={0.035}
-          sizeAttenuation
-          transparent
-          opacity={elementAnimation.showDroplets ? 0.42 : 0.72}
-          depthWrite={false}
-        />
-      </points>
+      {showJetEnclosure ? (
+        <>
+          <mesh geometry={surfaceGeometry} renderOrder={0}>
+            <meshStandardMaterial
+              color="#4e89ae"
+              opacity={elementAnimation.isAnimating ? 0.2 : 0.26}
+              transparent
+              depthWrite={false}
+              side={THREE.DoubleSide}
+              roughness={0.55}
+              metalness={0.05}
+            />
+          </mesh>
+          <lineSegments renderOrder={1}>
+            <wireframeGeometry args={[surfaceGeometry]} />
+            <lineBasicMaterial color="#355f7a" transparent opacity={0.24} depthWrite={false} />
+          </lineSegments>
+          <points geometry={dropletGeometry} renderOrder={2}>
+            <pointsMaterial
+              color={series.params.densityRatio < 0.01 ? '#b96332' : '#2a6f88'}
+              size={0.035}
+              sizeAttenuation
+              transparent
+              opacity={elementAnimation.showDroplets ? 0.42 : 0.72}
+              depthWrite={false}
+            />
+          </points>
+        </>
+      ) : null}
       <MovingFluidElement
         series={series}
         scale={scale}
@@ -725,6 +743,7 @@ export function JetGeometry3D({
   const [resetNonce, setResetNonce] = useState(0)
   const [showAxes, setShowAxes] = useState(true)
   const [showNozzle, setShowNozzle] = useState(true)
+  const [showJetEnclosure, setShowJetEnclosure] = useState(true)
   const [cameraPreset, setCameraPreset] = useState<CameraPreset>('reset')
   const [cameraCommand, setCameraCommand] = useState(0)
   const [captureStatus, setCaptureStatus] = useState('')
@@ -813,11 +832,13 @@ export function JetGeometry3D({
         text={text}
         showAxes={showAxes}
         showNozzle={showNozzle}
+        showJetEnclosure={showJetEnclosure}
         captureStatus={captureStatus}
         onCapture={capture3DView}
         onCameraPreset={requestCameraPreset}
         onShowAxesChange={setShowAxes}
         onShowNozzleChange={setShowNozzle}
+        onShowJetEnclosureChange={setShowJetEnclosure}
       />
       <div className="element-animation-controls">
         <button
@@ -913,6 +934,7 @@ export function JetGeometry3D({
             showAxisSwitchingSection={showAxisSwitchingSection}
             showAxes={showAxes}
             showNozzle={showNozzle}
+            showJetEnclosure={showJetEnclosure}
             axisSwitchingZeta={axisSwitchingZeta}
             cameraPreset={cameraPreset}
             cameraCommand={cameraCommand}
@@ -928,7 +950,7 @@ export function JetGeometry3D({
         </Canvas>
         <div className="viewer-overlay" aria-hidden="true">
           <span>{text.geometry.zAxis}</span>
-          <span>{text.geometry.surface}</span>
+          {showJetEnclosure ? <span>{text.geometry.surface}</span> : null}
           {showAxes ? <span>{text.geometry.axesLegend}</span> : null}
           <span>{text.geometry.controlsHint}</span>
           <span>

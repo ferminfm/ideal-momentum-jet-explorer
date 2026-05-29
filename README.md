@@ -99,7 +99,7 @@ For `rho* < 1e-8`, the implementation uses the limiting behavior `vhat ~= 1`, `r
 - Velocity overlays: the app includes overlay infrastructure and one disabled-by-default synthetic example curve. No measured/literature numeric dataset is bundled yet, so overlays must not be interpreted as validation unless a documented public dataset is added later.
 - Citation panel: copy references in plain text, BibTeX, LaTeX snippet, or Word/APA-style format.
 - 3D cross-section tools: inspect a selected downstream cross-section and highlight the computed axis-switching section when it exists.
-- 3D capture and camera tools: save the current 3D view as a PNG, switch between x/y/z/oblique/reset views, and toggle visible axes and nozzle geometry.
+- 3D capture and camera tools: save the current 3D view as a PNG, switch between x/y/z/oblique/reset views, and toggle visible axes, nozzle geometry, and the outer jet enclosure.
 - Traveling fluid-element animation: the 3D view can play a conceptual LHF element that expands with the prescribed local cross-section while conserved liquid markers redistribute through the growing control volume.
 
 ## What It Does Not Compute

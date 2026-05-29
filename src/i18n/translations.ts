@@ -321,6 +321,7 @@ const ENGLISH_TEXT = {
     resetViewTitle: 'Reset camera',
     showAxes: 'Show axes',
     showNozzle: 'Show nozzle',
+    showJetEnclosure: 'Show jet enclosure',
     axesLegend: 'Axes: x red · y green · z blue',
     animationHelp:
       'Conceptual LHF element: conserved liquid markers redistributed inside the expanding control volume.',
@@ -674,6 +675,7 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       resetViewTitle: 'カメラをリセット',
       showAxes: '軸を表示',
       showNozzle: 'ノズルを表示',
+      showJetEnclosure: '噴流外形を表示',
       axesLegend: '軸: x 赤 · y 緑 · z 青',
       animationHelp:
         'LHF の概念図：保存された液体マーカーが拡大する制御体積内に再分布します。',
@@ -1030,6 +1032,7 @@ export const TRANSLATIONS: Record<Language, UiText> = {
       resetViewTitle: 'Reiniciar cámara',
       showAxes: 'Mostrar ejes',
       showNozzle: 'Mostrar boquilla',
+      showJetEnclosure: 'Mostrar envolvente del chorro',
       axesLegend: 'Ejes: x rojo · y verde · z azul',
       animationHelp:
         'Elemento LHF conceptual: marcadores líquidos conservados redistribuidos dentro del volumen de control en expansión.',
