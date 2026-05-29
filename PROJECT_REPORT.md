@@ -333,3 +333,26 @@ repository URL below.
   `THREE.Clock` deprecation warning from the 3D dependency stack.
 - Deployment status: integration branch prepared for PR; `main` is not changed
   by this pass until the PR is reviewed and merged.
+
+## Pre-Merge Calibration Cleanup
+
+- Branch: `integration/industry-features-release`.
+- Starting commit: `3e78f21`.
+- Fixed calibration target synchronization so the selected target follows the
+  active overlay variable when overlays first appear or when the selected
+  overlay changes.
+- Added a translated mismatch warning when the user intentionally fits a target
+  variable different from the overlay variable.
+- Localized calibration failure display in the UI; raw model-layer messages are
+  available only under a technical-details disclosure.
+- Unit 6 remains deferred; no lossy-model code was added.
+- Validation:
+  - `npm run test` passed with 30 files and 123 tests.
+  - `npm run build` passed with the expected large Plotly chunk warning.
+  - `npm run lint` passed.
+  - `npm run analyze:assets` passed.
+  - `npm run smoke:visual` passed on desktop and mobile after starting the Vite
+    dev server.
+- Integration checks: user-imported overlays remain session-local and are not
+  encoded in URLs; citations remain visible; the 3D section remains before
+  plots; no local absolute paths were found in public docs/source scans.

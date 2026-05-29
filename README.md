@@ -178,6 +178,9 @@ finds a stable starting point, followed by coordinate refinement of the active
 angle parameters. The result can be previewed on the relevant plot, applied to
 the current controls, or added as a saved model case for comparison.
 
+By default, the fit target follows the selected overlay variable; overriding it
+is allowed, but the app warns when the variables differ.
+
 Calibration here means fitting prescribed area-growth/spreading parameters. It
 does not fit breakup, losses, droplet-size distribution, vortex dynamics, or
 composite-density validation. A good numerical fit is not automatic physical

@@ -376,9 +376,13 @@ const ENGLISH_TEXT = {
       'No supported data overlay is active. Add or import an overlay for Ahat, vhat, rhohat, phat, mhat_g, or K_A.',
     unsupportedOverlayVariable:
       'Calibration currently supports Ahat, vhat, rhohat, phat, mhat_g, and K_A overlays.',
+    targetMismatchWarning:
+      'The selected overlay is marked as {overlay}, but the fit target is {target}. Confirm that the imported columns are normalized consistently.',
     exploratoryWarning:
       'Calibration is exploratory and does not validate breakup, losses, droplet size, vortex dynamics, or the composite-density closure.',
     fitComplete: 'Least-squares fit completed.',
+    fitFailed: 'Calibration failed because the objective could not be evaluated.',
+    technicalMessage: 'Technical message',
     previewLabel: 'Fitted preview',
     fitComparisonLabelPrefix: 'Fit to',
     addedFittedCurve: 'Fitted curve added to comparison.',
@@ -1056,9 +1060,13 @@ export const TRANSLATIONS: Record<Language, UiText> = {
         '対応するデータオーバーレイが有効ではありません。Ahat, vhat, rhohat, phat, mhat_g, K_A のオーバーレイを追加またはインポートしてください。',
       unsupportedOverlayVariable:
         'キャリブレーションは Ahat, vhat, rhohat, phat, mhat_g, K_A のオーバーレイに対応しています。',
+      targetMismatchWarning:
+        '選択したデータは {overlay} として登録されていますが，フィット対象は {target} です。読み込んだ列の無次元化が一致していることを確認してください。',
       exploratoryWarning:
         'これは探索的なフィットであり、分裂、損失、液滴サイズ、渦力学、混合密度クロージャの検証ではありません。',
       fitComplete: '最小二乗フィットが完了しました。',
+      fitFailed: '目的関数を評価できなかったため、キャリブレーションに失敗しました。',
+      technicalMessage: '技術的なメッセージ',
       previewLabel: 'フィットプレビュー',
       fitComparisonLabelPrefix: 'フィット対象',
       addedFittedCurve: 'フィット曲線を比較に追加しました。',
@@ -1732,9 +1740,13 @@ export const TRANSLATIONS: Record<Language, UiText> = {
         'No hay una superposición compatible activa. Agregue o importe una superposición para Ahat, vhat, rhohat, phat, mhat_g o K_A.',
       unsupportedOverlayVariable:
         'La calibración actualmente admite superposiciones de Ahat, vhat, rhohat, phat, mhat_g y K_A.',
+      targetMismatchWarning:
+        'El conjunto seleccionado está marcado como {overlay}, pero la variable de ajuste es {target}. Verifique que las columnas importadas estén normalizadas de forma consistente.',
       exploratoryWarning:
         'La calibración es exploratoria; no valida ruptura, pérdidas, tamaño de gotas, dinámica vorticial ni el cierre de densidad compuesta.',
       fitComplete: 'Ajuste por mínimos cuadrados completado.',
+      fitFailed: 'La calibración falló porque no se pudo evaluar la función objetivo.',
+      technicalMessage: 'Mensaje técnico',
       previewLabel: 'Vista previa ajustada',
       fitComparisonLabelPrefix: 'Ajuste a',
       addedFittedCurve: 'Curva ajustada agregada a comparación.',

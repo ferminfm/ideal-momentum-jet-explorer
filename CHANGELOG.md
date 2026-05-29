@@ -21,5 +21,8 @@
 - Improved performance and onboarding with lazy-loaded heavy panels, manual
   React/Plotly/Three chunks, asset reporting, quick-start examples, and public
   README polish.
+- Fixed pre-merge calibration target synchronization so selected overlays
+  default the fit target correctly and warn when the user intentionally fits a
+  different target variable.
 - Kept Unit 6 lossy model extensions deferred until the governing equations,
   assumptions, and validation strategy are formally documented.

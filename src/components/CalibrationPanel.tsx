@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { DataOverlay } from '../data/dataOverlayTypes'
 import type { UiText } from '../i18n/translations'
 import {
@@ -48,13 +48,8 @@ export function CalibrationPanel({
   const [selectedOverlayId, setSelectedOverlayId] = useState(
     supportedOverlays[0]?.id ?? '',
   )
-  const activeSelectedOverlayId = supportedOverlays.some(
-    (overlay) => overlay.id === selectedOverlayId,
-  )
-    ? selectedOverlayId
-    : supportedOverlays[0]?.id ?? ''
   const selectedOverlay =
-    supportedOverlays.find((overlay) => overlay.id === activeSelectedOverlayId) ?? null
+    supportedOverlays.find((overlay) => overlay.id === selectedOverlayId) ?? null
   const [targetVariable, setTargetVariable] = useState<CalibrationTargetVariable>(
     supportedOverlays[0]?.variable && isCalibrationTargetVariable(supportedOverlays[0].variable)
       ? supportedOverlays[0].variable
@@ -70,9 +65,38 @@ export function CalibrationPanel({
     onPreviewChange(null)
   }
 
+  /* eslint-disable react-hooks/set-state-in-effect -- Overlay data can be added after
+     this lazy panel is mounted; this effect resets stale fit state only when the
+     selected overlay becomes invalid or first becomes available. */
+  useEffect(() => {
+    if (supportedOverlays.length === 0) {
+      if (selectedOverlayId !== '') {
+        setSelectedOverlayId('')
+        setResult(null)
+        onPreviewChange(null)
+      }
+      return
+    }
+
+    const selectedExists = supportedOverlays.some(
+      (overlay) => overlay.id === selectedOverlayId,
+    )
+
+    if (!selectedExists) {
+      const nextOverlay = supportedOverlays[0]
+      setSelectedOverlayId(nextOverlay.id)
+      if (isCalibrationTargetVariable(nextOverlay.variable)) {
+        setTargetVariable(nextOverlay.variable)
+      }
+      setResult(null)
+      onPreviewChange(null)
+    }
+  }, [supportedOverlays, selectedOverlayId, onPreviewChange])
+  /* eslint-enable react-hooks/set-state-in-effect */
+
   function handleOverlayChange(overlayId: string) {
     const nextOverlay = supportedOverlays.find((overlay) => overlay.id === overlayId)
-    setSelectedOverlayId(overlayId)
+    setSelectedOverlayId(nextOverlay?.id ?? '')
     if (nextOverlay && isCalibrationTargetVariable(nextOverlay.variable)) {
       setTargetVariable(nextOverlay.variable)
     }
@@ -116,6 +140,12 @@ export function CalibrationPanel({
   const selectedPointCount = selectedOverlay
     ? overlayToCalibrationPoints(selectedOverlay, baseParams.zetaMax).length
     : 0
+  const selectedOverlayTarget =
+    selectedOverlay !== null && isCalibrationTargetVariable(selectedOverlay.variable)
+      ? selectedOverlay.variable
+      : null
+  const targetDiffersFromOverlay =
+    selectedOverlayTarget !== null && selectedOverlayTarget !== targetVariable
 
   return (
     <section className="panel calibration-panel" aria-labelledby="calibration-title">
@@ -138,7 +168,7 @@ export function CalibrationPanel({
             <label className="field">
               <span>{text.calibration.overlayToFit}</span>
               <select
-                value={activeSelectedOverlayId}
+                value={selectedOverlayId}
                 onChange={(event) => handleOverlayChange(event.target.value)}
               >
                 {supportedOverlays.map((overlay) => (
@@ -228,6 +258,12 @@ export function CalibrationPanel({
             </label>
           </div>
 
+          {targetDiffersFromOverlay && selectedOverlayTarget ? (
+            <p className="warning-text">
+              {formatTargetMismatchWarning(selectedOverlayTarget, targetVariable, text)}
+            </p>
+          ) : null}
+
           <div className="calibration-actions">
             <button
               type="button"
@@ -269,7 +305,13 @@ export function CalibrationPanel({
               value={result.iterations.toString()}
             />
           </div>
-          <p>{result.success ? text.calibration.fitComplete : result.message}</p>
+          <p>{getResultMessage(result, text)}</p>
+          {!result.success ? (
+            <details className="technical-message">
+              <summary>{text.calibration.technicalMessage}</summary>
+              <p>{result.message}</p>
+            </details>
+          ) : null}
           <p className="helper-text">{text.calibration.exploratoryWarning}</p>
           {result.success && selectedOverlay ? (
             <div className="calibration-actions">
@@ -306,4 +348,26 @@ function ResultItem({ label, value }: { label: string; value: string }) {
 
 function formatMetric(value: number): string {
   return Number.isFinite(value) ? value.toPrecision(5) : 'n/a'
+}
+
+function getResultMessage(result: CalibrationResult, text: UiText): string {
+  if (result.success) {
+    return text.calibration.fitComplete
+  }
+
+  if (result.pointCount < 2) {
+    return text.calibration.notEnoughPoints
+  }
+
+  return text.calibration.fitFailed
+}
+
+function formatTargetMismatchWarning(
+  overlayVariable: CalibrationTargetVariable,
+  targetVariable: CalibrationTargetVariable,
+  text: UiText,
+): string {
+  return text.calibration.targetMismatchWarning
+    .replace('{overlay}', text.dataOverlays.variableOptions[overlayVariable])
+    .replace('{target}', text.dataOverlays.variableOptions[targetVariable])
 }
