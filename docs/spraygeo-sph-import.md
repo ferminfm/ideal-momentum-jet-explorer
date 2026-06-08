@@ -2,7 +2,8 @@
 
 This note defines the current bridge from SprayGeo into the Ideal Momentum Jet
 Explorer. It is intentionally an import/data-contract workflow, not a new model
-or duplicated fitting surface.
+or duplicated fitting surface. The current checked-in file is a sample
+synthetic geometry overlay.
 
 ## Existing App Surface
 
@@ -38,9 +39,9 @@ y-error column: Ahat_error
 variable: area
 ```
 
-The current sample is synthetic SprayGeo geometry data. It validates the bridge
-format only; it is not measured data, not a stationary DualSPHysics jet, and not
-atomization validation.
+The current sample is synthetic SprayGeo geometry data. It exercises the bridge
+format only; it is not measured data, not DualSPHysics-generated, not
+statistically stationary, and not atomization validation or production CFD.
 
 ## Future SPH Handoff
 
@@ -48,8 +49,9 @@ For a future DualSPHysics-generated jet/spray-geometry proxy, SprayGeo should
 first aggregate particle slices into a metric table:
 
 ```text
-z, time/frame, particle_count, area, major_extent, minor_extent,
-aspect_ratio, orientation_unwrapped_rad, quality_flags
+z, time, frame, post_transient, stationarity_window_id, particle_count,
+area, major_extent, minor_extent, aspect_ratio, orientation_unwrapped_rad,
+u_axial_mean, u_axial_std, mass_or_particle_flux_proxy, quality_flags
 ```
 
 After transient rejection and time averaging, SprayGeo should export:
@@ -60,7 +62,8 @@ zeta, Ahat, Ahat_error
 
 The Ideal Momentum Jet Explorer can then import the file through the existing
 Data Overlay panel and use the existing calibration panel to fit prescribed
-area-growth/spreading parameters.
+area-growth/spreading parameters. The app should not duplicate SprayGeo's
+geometry extraction or stationarity filtering.
 
 ## Caveat
 

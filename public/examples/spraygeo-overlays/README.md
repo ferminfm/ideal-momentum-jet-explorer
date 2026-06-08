@@ -1,10 +1,11 @@
-# SprayGeo Overlay Example
+# SprayGeo Sample Synthetic Overlay Example
 
 These files are small CSV/JSON examples exported from the SprayGeo geometry
 workflow for testing the Ideal Momentum Jet Explorer import path.
 
-They are not measured data and not DualSPHysics validation data. The current
-sample comes from a synthetic SprayGeo ellipse-family geometry table.
+They are not measured data, not DualSPHysics-generated data, not statistically
+stationary, and not physical validation data. The current sample comes from a
+synthetic SprayGeo ellipse-family geometry table.
 
 Use in the app:
 
