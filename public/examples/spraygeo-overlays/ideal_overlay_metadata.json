@@ -1,0 +1,17 @@
+{
+  "caveat": "Geometry-to-model overlay only. Do not treat the source metrics as validated atomization or production CFD evidence.",
+  "equivalent_diameter": 0.4149391913238062,
+  "ideal_import_columns": {
+    "x": "zeta",
+    "y": "Ahat",
+    "y_error": "Ahat_error"
+  },
+  "initial_area": 0.13522556160652943,
+  "output_csv": "ideal_overlay_area.csv",
+  "overlay_variable": "area",
+  "quality_ok_only": true,
+  "row_count": 41,
+  "source_label": "SprayGeo synthetic ellipse metrics",
+  "source_metrics_path": "results/family_comparison/metrics_ellipse.csv",
+  "z_reference": 0.0
+}

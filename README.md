@@ -163,6 +163,10 @@ Public dataset discovery is tracked in
 for local, private, or unpublished comparisons.
 Synthetic CSV examples are also available under
 `public/examples/calibration-overlays/` for checking the import workflow.
+SprayGeo geometry-overlay examples are available under
+`public/examples/spraygeo-overlays/`; see
+[`docs/spraygeo-sph-import.md`](docs/spraygeo-sph-import.md). These examples
+exercise the import bridge only and are not measured validation data.
 
 Example normalized CSV format:
 
