@@ -20,3 +20,9 @@ Use in the app:
 
 Do not add a second fitting workflow for this file. The app already owns the
 reduced-model visualization, local overlay import, and calibration surfaces.
+
+## Metadata Gate
+
+The companion metadata should be treated as part of the import. The checked-in
+sample is `fit_readiness=bridge_smoke_only`; it is useful for UI import testing
+but not for quantitative physical comparison.

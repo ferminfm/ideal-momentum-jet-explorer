@@ -87,3 +87,20 @@ is performed in the Ideal Momentum Jet Explorer.
 This app remains an exploratory reduced-order model. Importing an SPH-generated
 or synthetic overlay does not create production CFD validation, experimental
 agreement, or a fully atomized spray simulation.
+
+## Stationary Overlay Gate
+
+For future SprayGeo/DualSPHysics or SprayGeo/VOF imports, check the companion
+metadata before quantitative comparison:
+
+- `fit_readiness=bridge_smoke_only`: import-path exercise only.
+- `fit_readiness=blocked_pending_stationary_window`: do not fit; stationarity is
+  not documented.
+- `fit_readiness=overlay_ready_for_exploratory_fit_only`: acceptable only as an
+  exploratory reduced-model overlay, not validation.
+- `fit_readiness=overlay_ready_with_validation_protocol`: reserved for future
+  datasets with documented provenance, uncertainty, and validation protocol.
+
+The app should consume `zeta,Ahat,Ahat_error` overlays and use its existing
+calibration surface. It should not duplicate SprayGeo's contour extraction,
+post-transient filtering, or stationary-window aggregation.
