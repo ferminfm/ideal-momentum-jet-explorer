@@ -5,6 +5,11 @@ Explorer. It is intentionally an import/data-contract workflow, not a new model
 or duplicated fitting surface. The current checked-in file is a sample
 synthetic geometry overlay.
 
+The canonical producer-side contract is maintained in SprayGeo as
+`docs/stationary_jet_geometry_contract.md`. This app consumes the reduced
+overlay form of that contract; it does not own raw solver or stationary-window
+metric extraction.
+
 ## Existing App Surface
 
 The app already provides:
@@ -49,9 +54,11 @@ For a future DualSPHysics-generated jet/spray-geometry proxy, SprayGeo should
 first aggregate particle slices into a metric table:
 
 ```text
-z, time, frame, post_transient, stationarity_window_id, particle_count,
-area, major_extent, minor_extent, aspect_ratio, orientation_unwrapped_rad,
-u_axial_mean, u_axial_std, mass_or_particle_flux_proxy, quality_flags
+source_id, source_type, simulation_source, physical_validation, z, time, frame,
+post_transient, stationarity_window_id, particle_count, area or area_proxy,
+Ahat or Ahat_error, centroid_x, centroid_y, aspect_ratio,
+orientation_unwrapped_rad, u_axial_mean, u_axial_std,
+mass_or_particle_flux_proxy, quality_flags
 ```
 
 After transient rejection and time averaging, SprayGeo should export:
@@ -64,6 +71,16 @@ The Ideal Momentum Jet Explorer can then import the file through the existing
 Data Overlay panel and use the existing calibration panel to fit prescribed
 area-growth/spreading parameters. The app should not duplicate SprayGeo's
 geometry extraction or stationarity filtering.
+
+Recommended metadata fields for the companion JSON:
+
+```text
+source_type, stationarity, simulation_source, physical_validation,
+model_fit_performed, intended_use, caveat
+```
+
+`model_fit_performed` should usually be `false` before import, because fitting
+is performed in the Ideal Momentum Jet Explorer.
 
 ## Caveat
 
