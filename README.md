@@ -35,6 +35,31 @@ Quick-start examples in the app provide one-click starting cases for circular,
 rectangular, elliptical, dimensional water-air, and equal-density scenarios. They
 are illustrative starting points, not validated design cases.
 
+## Why This Project Is Relevant To Google AI / Cloud AI
+
+This repository is a compact public example of scientific AI readiness: domain
+equations, interactive visualization, reproducible exports, and careful caveats
+are packaged into a browser-based tool that technical users can inspect, run,
+and extend.
+
+- Google AI relevance: demonstrates evaluation discipline for physical-system
+  reasoning, numerical consistency, multilingual technical communication, and
+  explicit model-boundary documentation.
+- Cloud AI / developer education relevance: provides a teachable static web app
+  with TypeScript model code, sample-style CSV workflows, report generation, and
+  workshop-ready paths for explaining scientific-computing concepts to mixed
+  technical audiences.
+- Public demo value: runs on GitHub Pages with no backend, no private data, and
+  a documented local validation loop for tests, lint, build, asset reporting,
+  and visual smoke checks.
+
+Reviewer-oriented notes are available in:
+
+- [`SHOWCASE_SUMMARY.md`](SHOWCASE_SUMMARY.md)
+- [`docs/google-ai-cloud-showcase.md`](docs/google-ai-cloud-showcase.md)
+- [`docs/devrel-walkthrough.md`](docs/devrel-walkthrough.md)
+- [`docs/scientific-ai-evaluation-notes.md`](docs/scientific-ai-evaluation-notes.md)
+
 ## Scientific Model
 
 The model uses a top-hat control volume and a prescribed area-growth history. The user selects a rectangular or elliptical nozzle exit, density ratio, initial dimensions, directional spreading half-angles, and normalized downstream range.
@@ -163,6 +188,10 @@ Public dataset discovery is tracked in
 for local, private, or unpublished comparisons.
 Synthetic CSV examples are also available under
 `public/examples/calibration-overlays/` for checking the import workflow.
+SprayGeo sample synthetic geometry-overlay examples are available under
+`public/examples/spraygeo-overlays/`; see
+[`docs/spraygeo-sph-import.md`](docs/spraygeo-sph-import.md). These examples
+exercise the import bridge only and are not measured validation data.
 
 Example normalized CSV format:
 

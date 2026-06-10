@@ -1,0 +1,30 @@
+{
+  "area_uncertainty_source": "ci_half_width",
+  "caveat": "Sample synthetic geometry-to-model overlay only. Do not treat the source metrics as DualSPHysics-generated data, statistically stationary evidence, physical atomization validation, or production CFD evidence.",
+  "contract": "stationary_jet_geometry_metrics_v1",
+  "equivalent_diameter": 0.4149391913238062,
+  "fit_readiness": "bridge_smoke_only",
+  "fitting_owner": "Ideal Momentum Jet Explorer",
+  "geometry_owner": "SprayGeo",
+  "ideal_import_columns": {
+    "x": "zeta",
+    "y": "Ahat",
+    "y_error": "Ahat_error"
+  },
+  "initial_area": 0.13522556160652943,
+  "intended_use": "Ideal Momentum Jet Explorer overlay/calibration smoke test",
+  "model_fit_performed": false,
+  "output_csv": "ideal_overlay_area.csv",
+  "overlay_role": "model_ready_area_overlay",
+  "overlay_variable": "area",
+  "physical_validation": false,
+  "quality_ok_only": true,
+  "row_count": 41,
+  "simulation_source": "none",
+  "source_label": "SprayGeo sample synthetic ellipse metrics",
+  "source_metrics_path": "results/family_comparison/metrics_ellipse.csv",
+  "source_type": "synthetic",
+  "stationarity": "not_time_averaged",
+  "statistical_stationarity_required_for_fit": true,
+  "z_reference": 0.0
+}

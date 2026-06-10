@@ -2,6 +2,8 @@
 
 ## Unreleased / Industry Feature Integration
 
+- Added Google AI / Cloud AI showcase notes, developer-education walkthrough,
+  scientific AI evaluation notes, and public screenshot hygiene guidance.
 - Post-v0.2.0 polish: app version is visible in the UI and shared metadata.
 - Fixed CFD/config export and report-generator option layout so checkbox labels
   wrap without overlap on narrow panels.
